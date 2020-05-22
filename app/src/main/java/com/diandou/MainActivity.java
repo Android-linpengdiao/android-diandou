@@ -19,6 +19,10 @@ import com.diandou.fragment.MessageFragment;
 import com.diandou.fragment.MineFragment;
 import com.diandou.fragment.ReleaseFragment;
 import com.diandou.utils.ViewUtils;
+import com.okhttp.SendRequest;
+import com.okhttp.callbacks.StringCallback;
+
+import okhttp3.Call;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
 
@@ -45,6 +49,19 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 CameraActivity.startCameraActivity(MainActivity.this, minTime, maxTime, "#44bf19", type, REQUEST_WXCAMERA);
             }
         });
+
+        SendRequest.commonStartUp(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+
+            }
+        });
+
     }
 
     @Override

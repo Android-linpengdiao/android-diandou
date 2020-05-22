@@ -10,13 +10,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baselibrary.UserInfo;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
+import com.baselibrary.utils.ToastUtils;
+import com.diandou.MainActivity;
+import com.diandou.MyApplication;
+import com.diandou.NavData;
 import com.diandou.R;
+import com.diandou.activity.LoginActivity;
 import com.diandou.activity.SearchActivity;
 import com.diandou.activity.TabTypeActivity;
 import com.diandou.adapter.PagerAdapter;
 import com.diandou.databinding.FragmentHomeBinding;
+import com.okhttp.SendRequest;
+import com.okhttp.callbacks.GenericsCallback;
+import com.okhttp.callbacks.StringCallback;
+import com.okhttp.sample_okhttp.JsonGenericsSerializator;
+
+import okhttp3.Call;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "HomeFragment";
@@ -33,17 +45,32 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         setStatusBarHeight(binding.getRoot());
 
-        PagerAdapter mainHomePagerAdapter = new PagerAdapter(getChildFragmentManager());
-        for (int i = 0; i < CommonUtil.getTextTabListString().size(); i++) {
-            mainHomePagerAdapter.addFragment(CommonUtil.getTextTabListString().get(i), HomeItemFragment.newInstance());
-        }
-        binding.viewPager.setAdapter(mainHomePagerAdapter);
-        binding.viewPager.setOffscreenPageLimit(1);
-        binding.viewPager.setCurrentItem(0);
-        binding.tabLayout.setupWithViewPager(binding.viewPager);
-
         binding.search.setOnClickListener(this);
         binding.tabType.setOnClickListener(this);
+
+        SendRequest.commonNav(new GenericsCallback<NavData>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(NavData response, int id) {
+                if (response.getCode() == 200) {
+                    PagerAdapter mainHomePagerAdapter = new PagerAdapter(getChildFragmentManager());
+                    for (int i = 0; i < response.getData().size(); i++) {
+                        mainHomePagerAdapter.addFragment(response.getData().get(i).getName(), HomeItemFragment.newInstance());
+                    }
+                    binding.viewPager.setAdapter(mainHomePagerAdapter);
+                    binding.viewPager.setOffscreenPageLimit(1);
+                    binding.viewPager.setCurrentItem(0);
+                    binding.tabLayout.setupWithViewPager(binding.viewPager);
+                } else {
+                    ToastUtils.showShort(getActivity(), response.getMsg());
+                }
+            }
+
+        });
 
         return binding.getRoot();
     }

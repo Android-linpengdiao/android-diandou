@@ -133,6 +133,34 @@ public class SendRequest {
 
     }
 
+    public static void commonStartUp(Callback call) {
+        Map<String, String> map = new HashMap<>();
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_commonStartUp).build().execute(call);
+
+    }
+
+    /**
+     * 获取轮播图
+     *
+     * @param call
+     */
+    public static void commonBanner(Callback call) {
+        Map<String, String> map = new HashMap<>();
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_commonBanner).build().execute(call);
+
+    }
+
+    /**
+     * 获取首页导航分类
+     *
+     * @param call
+     */
+    public static void commonNav(Callback call) {
+        Map<String, String> map = new HashMap<>();
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_commonNav).build().execute(call);
+
+    }
+
     /**
      * 修改个人信息
      *

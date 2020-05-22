@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
+import com.diandou.NavData;
 import com.diandou.R;
 import com.diandou.activity.VideoInfoActivity;
 import com.diandou.databinding.ItemTabTypeLayoutBinding;
@@ -13,7 +14,7 @@ import com.diandou.databinding.ItemVideoListLayoutBinding;
 import com.diandou.view.OnClickListener;
 
 
-public class TabTypeAdapter extends BaseRecyclerAdapter<String, ItemTabTypeLayoutBinding> {
+public class TabTypeAdapter extends BaseRecyclerAdapter<NavData.DataBean, ItemTabTypeLayoutBinding> {
 
     private OnClickListener onClickListener;
 
@@ -31,9 +32,9 @@ public class TabTypeAdapter extends BaseRecyclerAdapter<String, ItemTabTypeLayou
     }
 
     @Override
-    protected void onBindItem(final ItemTabTypeLayoutBinding binding, final String str, final int position) {
+    protected void onBindItem(final ItemTabTypeLayoutBinding binding, final NavData.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            binding.name.setText(str);
+            binding.name.setText(dataBean.getName());
             GlideLoader.LoderImage(mContext, CommonUtil.getImageListString().get(position), binding.icon, 100);
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
