@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_input_item"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_alignParentBottom="true"
+    android:background="@color/white"
+    android:focusable="false"
+    android:focusableInTouchMode="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/padding">
+
+        <EditText
+            android:id="@+id/et_message_input"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_radius_gray"
+            android:gravity="left|center_vertical"
+            android:hint="说点什么吧"
+            android:imeOptions="flagNoExtractUi|actionSend"
+            android:inputType="text"
+            android:maxLength="300"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:singleLine="true"
+            android:textColor="@color/textColor"
+            android:textColorHint="#BBBBBB"
+            android:textCursorDrawable="@null"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_message_send"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="@dimen/padding"
+            android:text="发送"
+            android:textColor="#ff00c8fa"
+            android:textSize="18sp" />
+
+
+    </LinearLayout>
+</RelativeLayout>

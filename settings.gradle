@@ -1,0 +1,7 @@
+include ':app',
+        ':okhttp',
+        ':base',
+        ':camera',
+        ':videocompressor',
+        ':media'
+rootProject.name = 'diandou'

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CameraLibrary</string>
+    <string name="str_updata_wait">正在压缩%s</string>
+</resources>

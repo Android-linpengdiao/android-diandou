@@ -1,0 +1,26 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation externalAndroidTestRunner
+    androidTestImplementation externalAndroidTestEspressoCore
+    testImplementation externalJunit
+    api externalAndroidAppCompatV7
+    api externalAndroidRecyclerView
+    api externalAndroidCardview
+    api externalGlide
+    api externalEventBus
+}

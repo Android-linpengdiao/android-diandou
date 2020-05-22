@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cjt2325.cameralibrary.CameraActivity">
+
+    <com.cjt2325.cameralibrary.JCameraView
+        android:id="@+id/jcameraview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:duration_max="60000"
+        app:iconLeft="@drawable/ic_photo"
+        app:iconMargin="20dp"
+        app:iconRight="@null"
+        app:iconSize="30dp"
+        app:iconSrc="@drawable/ic_camera" />
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_back"
+        android:padding="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"/>
+
+</RelativeLayout>

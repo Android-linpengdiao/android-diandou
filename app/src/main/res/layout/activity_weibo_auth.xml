@@ -1,0 +1,78 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/obtain_token_via_sso"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="SSO 授权（仅客户端）" />
+
+    <Button
+        android:id="@+id/obtain_token_via_web"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="left|center_vertical"
+        android:text="SSO 授权（Web）" />
+
+    <Button
+        android:id="@+id/obtain_token_via_signature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="left|center_vertical"
+        android:text="SSO 授权（ALL IN ONE）" />
+
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="left|center_vertical"
+        android:text="用户登出" />
+
+    <Button
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="left|center_vertical"
+        android:text="更新token" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Token 信息："
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/token_text_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp" />
+
+
+    <TextView
+        android:id="@+id/obtain_token_hint"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:maxLines="1000"
+        android:scrollbars="vertical"
+        android:text="请注意：\nSSO 登录需要微博客户端的支持，目前仅 3.0.0 及以上微博客户端版本支持 SSO；如果未安装，将自动转为 Oauth2.0 Web 授权认证（即第一种认证方式）如果您通过方式一和方式二获取不到 Token，而是获取到 code，那说明您的包名和签名存在问题，请到开放平台注册包名和签名。详情请查看 FAQ 文档"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/user_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/test" />
+
+</LinearLayout>
