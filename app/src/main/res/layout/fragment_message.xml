@@ -94,15 +94,15 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginLeft="@dimen/padding"
-            android:layout_marginRight="@dimen/padding"
             android:layout_marginTop="35dp"
+            android:layout_marginRight="@dimen/padding"
             android:background="#DCDCDC" />
-
 
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingBottom="20dp" />
 
     </LinearLayout>
 </layout>

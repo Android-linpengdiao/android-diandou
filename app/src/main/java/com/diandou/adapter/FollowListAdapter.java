@@ -6,7 +6,7 @@ import android.view.View;
 
 import com.baselibrary.utils.GlideLoader;
 import com.diandou.R;
-import com.diandou.activity.VideoInfoActivity;
+import com.diandou.activity.WorkInfoActivity;
 import com.diandou.databinding.ItemWorkLayoutBinding;
 import com.diandou.model.FollowData;
 
@@ -30,7 +30,7 @@ public class FollowListAdapter extends BaseRecyclerAdapter<FollowData.DataBeanX.
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mContext.startActivity(new Intent(mContext, VideoInfoActivity.class));
+                    mContext.startActivity(new Intent(mContext, WorkInfoActivity.class));
                 }
             });
         }

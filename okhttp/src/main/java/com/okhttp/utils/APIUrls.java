@@ -25,9 +25,19 @@ public class APIUrls {
     public final static String url_commonBanner = url_domain + "api/common/banner";
 
     //用户搜索作品
-    public final static String url_commonSearchWork = url_domain + "api/center/searchWork";
+    public final static String url_searchWork = url_domain + "api/center/searchWork";
+    //获取作品详情
+    public final static String url_workDetail = url_domain + "api/center/workDetail";
     //获取我关注的人
     public final static String url_centerConcern = url_domain + "api/center/concern";
+    //查看谁评论了我
+    public final static String url_centerDiscuss = url_domain + "api/center/discuss";
+    // 查看谁赞了我我的作品
+    public final static String url_centerFabulous = url_domain + "api/center/fabulous";
+    // 获取关注我的人
+    public final static String url_centerAttention = url_domain + "api/center/attention";
+    //获取系统消息
+    public final static String url_commonMessage = url_domain + "api/common/message";
 
 
 }

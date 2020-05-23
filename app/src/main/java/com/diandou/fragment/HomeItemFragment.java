@@ -11,10 +11,17 @@ import android.view.ViewGroup;
 
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
+import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
 import com.diandou.activity.SearchActivity;
 import com.diandou.adapter.PagerAdapter;
 import com.diandou.databinding.FragmentHomeItemBinding;
+import com.diandou.model.BannerData;
+import com.okhttp.SendRequest;
+import com.okhttp.callbacks.GenericsCallback;
+import com.okhttp.sample_okhttp.JsonGenericsSerializator;
+
+import okhttp3.Call;
 
 public class HomeItemFragment extends BaseFragment implements View.OnClickListener {
 
@@ -51,8 +58,6 @@ public class HomeItemFragment extends BaseFragment implements View.OnClickListen
         binding.viewPager.setOffscreenPageLimit(1);
         binding.viewPager.setCurrentItem(0);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
-
-        GlideLoader.LoderImage(getActivity(), CommonUtil.getImageListString().get(3), binding.cover, 10);
 
         return binding.getRoot();
     }

@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.TabTypeActivity"></activity>
-        <activity android:name=".activity.VideoInfoActivity" />
+        <activity android:name=".activity.WorkInfoActivity" />
         <activity android:name=".activity.SearchActivity" />
 
         <uses-library

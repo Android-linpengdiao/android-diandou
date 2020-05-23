@@ -13,13 +13,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.baselibrary.utils.CommonUtil;
+import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
 import com.diandou.adapter.MessageAdapter;
 import com.diandou.databinding.FragmentLikeBinding;
+import com.diandou.model.MessageData;
+import com.okhttp.SendRequest;
+import com.okhttp.callbacks.GenericsCallback;
+import com.okhttp.sample_okhttp.JsonGenericsSerializator;
+
+import okhttp3.Call;
 
 public class LikeFragment extends BaseFragment {
 
     private FragmentLikeBinding binding;
+    private MessageAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,24 +41,39 @@ public class LikeFragment extends BaseFragment {
         setStatusBarHeight(binding.getRoot());
         setStatusBarDarkTheme(true);
 
-        MessageAdapter adapter = new MessageAdapter(getActivity());
+        adapter = new MessageAdapter(getActivity(),1);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recyclerView.setAdapter(adapter);
-        adapter.refreshData(CommonUtil.getImageListString());
 
         binding.swipeRefreshLayout.setColorSchemeColors(Color.BLUE);
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 3000);
+                initData();
             }
         });
+        binding.swipeRefreshLayout.setRefreshing(true);
+        initData();
 
         return binding.getRoot();
+    }
+    private void initData() {
+        SendRequest.centerFabulous(getUserInfo().getData().getId(), new GenericsCallback<MessageData>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                binding.swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onResponse(MessageData response, int id) {
+                binding.swipeRefreshLayout.setRefreshing(false);
+                if (response.getCode() == 200 && response.getData() != null) {
+                    adapter.refreshData(response.getData());
+                } else {
+                    ToastUtils.showShort(getActivity(), response.getMsg());
+                }
+            }
+
+        });
     }
 }

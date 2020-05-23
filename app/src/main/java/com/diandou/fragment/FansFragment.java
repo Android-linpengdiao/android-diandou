@@ -13,13 +13,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.baselibrary.utils.CommonUtil;
+import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
+import com.diandou.adapter.FansAdapter;
 import com.diandou.adapter.MessageAdapter;
 import com.diandou.databinding.FragmentLikeBinding;
+import com.diandou.model.FansData;
+import com.diandou.model.FollowData;
+import com.diandou.model.NoticeData;
+import com.okhttp.SendRequest;
+import com.okhttp.callbacks.GenericsCallback;
+import com.okhttp.sample_okhttp.JsonGenericsSerializator;
+
+import okhttp3.Call;
 
 public class FansFragment extends BaseFragment {
 
     private FragmentLikeBinding binding;
+    private FansAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,24 +44,41 @@ public class FansFragment extends BaseFragment {
         setStatusBarHeight(binding.getRoot());
         setStatusBarDarkTheme(true);
 
-        MessageAdapter adapter = new MessageAdapter(getActivity(), 1);
+        adapter = new FansAdapter(getActivity());
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recyclerView.setAdapter(adapter);
-        adapter.refreshData(CommonUtil.getImageListString());
+//        adapter.refreshData(CommonUtil.getImageListString());
 
         binding.swipeRefreshLayout.setColorSchemeColors(Color.BLUE);
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 3000);
+                initData();
             }
         });
+        binding.swipeRefreshLayout.setRefreshing(true);
+        initData();
 
         return binding.getRoot();
+    }
+
+    private void initData() {
+        SendRequest.centerConcern(String.valueOf(getUserInfo().getData().getId()), String.valueOf(10), String.valueOf(1), new GenericsCallback<FansData>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                binding.swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onResponse(FansData response, int id) {
+                binding.swipeRefreshLayout.setRefreshing(false);
+                if (response.getCode() == 200 && response.getData() != null && response.getData().getData() != null) {
+                    adapter.refreshData(response.getData().getData());
+                } else {
+                    ToastUtils.showShort(getActivity(), response.getMsg());
+                }
+            }
+
+        });
     }
 }

@@ -8,21 +8,37 @@ import android.view.View;
 
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
+import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
 import com.diandou.adapter.WorkAdapter;
-import com.diandou.databinding.ActivityVideoInfoBinding;
+import com.diandou.databinding.ActivityWorkInfoBinding;
+import com.diandou.model.WorkData;
+import com.diandou.model.WorkDetail;
 import com.diandou.view.CommentListPopupWindow;
 import com.diandou.view.GridItemDecoration;
 import com.diandou.view.OnClickListener;
+import com.okhttp.SendRequest;
+import com.okhttp.callbacks.GenericsCallback;
+import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 
-public class VideoInfoActivity extends BaseActivity implements View.OnClickListener {
+import okhttp3.Call;
 
-    private ActivityVideoInfoBinding binding;
+public class WorkInfoActivity extends BaseActivity implements View.OnClickListener {
+
+    private ActivityWorkInfoBinding binding;
+    private WorkAdapter adapter;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_video_info);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_work_info);
+
+        if (getIntent().hasExtra("id")) {
+            id = getIntent().getIntExtra("id", 0);
+        } else {
+            finish();
+        }
 
         binding.back.setOnClickListener(this);
         binding.tvLike.setOnClickListener(this);
@@ -31,7 +47,7 @@ public class VideoInfoActivity extends BaseActivity implements View.OnClickListe
         binding.tvShare.setOnClickListener(this);
         GlideLoader.LoderImage(this, CommonUtil.getImageListString().get(5), binding.thumbnails);
 
-        WorkAdapter adapter = new WorkAdapter(this);
+        adapter = new WorkAdapter(this);
         binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         binding.recyclerView.setNestedScrollingEnabled(false);
         GridItemDecoration.Builder builder = new GridItemDecoration.Builder(this);
@@ -39,7 +55,31 @@ public class VideoInfoActivity extends BaseActivity implements View.OnClickListe
         builder.size(CommonUtil.dip2px(this, 10));
         binding.recyclerView.addItemDecoration(new GridItemDecoration(builder));
         binding.recyclerView.setAdapter(adapter);
-//        adapter.refreshData(CommonUtil.getImageListString());
+
+        SendRequest.workDetail(id, new GenericsCallback<WorkDetail>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(WorkDetail response, int id) {
+                if (response.getCode() == 200 && response.getData() != null) {
+                    initView(response.getData());
+                } else {
+                    ToastUtils.showShort(WorkInfoActivity.this, response.getMsg());
+                }
+            }
+
+        });
+
+    }
+
+    private void initView(WorkDetail.DataBean data) {
+        binding.tvDesc.setText(data.getDesc());
+        binding.tvAddr.setText(data.getAddr());
+        binding.tvTime.setText(data.getUpdated_at());
+        GlideLoader.LoderImage(WorkInfoActivity.this, data.getImg(), binding.thumbnails);
     }
 
     @Override
@@ -55,7 +95,7 @@ public class VideoInfoActivity extends BaseActivity implements View.OnClickListe
                 binding.tvAppreciate.setSelected(!binding.tvAppreciate.isSelected());
                 break;
             case R.id.tv_comment:
-                CommentListPopupWindow commentListPopupWindow = new CommentListPopupWindow(VideoInfoActivity.this);
+                CommentListPopupWindow commentListPopupWindow = new CommentListPopupWindow(WorkInfoActivity.this);
                 commentListPopupWindow.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view, Object object) {

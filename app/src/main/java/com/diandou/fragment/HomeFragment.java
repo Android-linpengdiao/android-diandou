@@ -23,10 +23,17 @@ import com.diandou.activity.SearchActivity;
 import com.diandou.activity.TabTypeActivity;
 import com.diandou.adapter.PagerAdapter;
 import com.diandou.databinding.FragmentHomeBinding;
+import com.diandou.model.BannerData;
+import com.diandou.utils.GlideImageLoader;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.callbacks.StringCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 
@@ -56,7 +63,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
             @Override
             public void onResponse(NavData response, int id) {
-                if (response.getCode() == 200) {
+                if (response.getCode() == 200 && response.getData() != null) {
                     PagerAdapter mainHomePagerAdapter = new PagerAdapter(getChildFragmentManager());
                     for (int i = 0; i < response.getData().size(); i++) {
                         mainHomePagerAdapter.addFragment(response.getData().get(i).getName(), HomeItemFragment.newInstance(response.getData().get(i).getId()));
@@ -72,7 +79,42 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
         });
 
+        SendRequest.commonBanner(new GenericsCallback<BannerData>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(BannerData response, int id) {
+                if (response.getCode() == 200 && response.getData() != null && response.getData().size() > 0) {
+                    initBanner(response.getData());
+                } else {
+                    ToastUtils.showShort(getActivity(), response.getMsg());
+                }
+            }
+
+        });
+
         return binding.getRoot();
+    }
+
+    private void initBanner(List<BannerData.DataBean> data) {
+        binding.banner.setImageLoader(new GlideImageLoader(10));
+        binding.banner.setDelayTime(5000);
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+            list.add(data.get(i).getImg());
+        }
+        binding.banner.setImages(list);
+        binding.banner.setIndicatorGravity(BannerConfig.RIGHT)
+                .setOnBannerListener(new OnBannerListener() {
+                    @Override
+                    public void OnBannerClick(int position) {
+
+                    }
+                })
+                .start();
     }
 
     @Override

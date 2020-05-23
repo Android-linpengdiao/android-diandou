@@ -7,7 +7,7 @@ public class NavData {
     /**
      * code : 200
      * msg : 成功
-     * data : [{"id":6,"created_at":"2019-10-14 16:03:00","updated_at":"2020-03-22 16:23:50","name":"音乐","sort":1},{"id":1,"created_at":"2019-09-23 23:40:00","updated_at":"2020-03-22 16:24:56","name":"棋类","sort":2},{"id":5,"created_at":"2019-10-14 16:02:00","updated_at":"2020-03-22 16:23:58","name":"故事","sort":3},{"id":3,"created_at":"2019-10-08 13:43:00","updated_at":"2020-03-22 16:25:23","name":"运动","sort":4},{"id":4,"created_at":"2019-10-14 16:02:00","updated_at":"2020-03-22 16:24:08","name":"美术","sort":5},{"id":2,"created_at":"2019-09-23 23:40:00","updated_at":"2020-03-22 16:25:30","name":"书法","sort":6},{"id":7,"created_at":"2020-03-22 16:25:56","updated_at":"2020-03-22 16:25:56","name":"曲艺","sort":7},{"id":8,"created_at":"2020-03-22 16:26:12","updated_at":"2020-03-22 16:26:12","name":"方言","sort":8},{"id":10,"created_at":"2020-03-22 16:34:00","updated_at":"2020-03-22 17:01:05","name":"国学","sort":9},{"id":9,"created_at":"2020-03-22 16:27:06","updated_at":"2020-03-22 16:27:06","name":"心声","sort":10}]
+     * data : [{"id":6,"created_at":"2019-10-14 16:03:00","updated_at":"2020-03-22 16:23:50","name":"音乐","sort":1,"image":null},{"id":1,"created_at":"2019-09-23 23:40:00","updated_at":"2020-03-22 16:24:56","name":"棋类","sort":2,"image":null},{"id":5,"created_at":"2019-10-14 16:02:00","updated_at":"2020-03-22 16:23:58","name":"故事","sort":3,"image":null},{"id":3,"created_at":"2019-10-08 13:43:00","updated_at":"2020-03-22 16:25:23","name":"运动","sort":4,"image":null},{"id":4,"created_at":"2019-10-14 16:02:00","updated_at":"2020-03-22 16:24:08","name":"美术","sort":5,"image":null},{"id":2,"created_at":"2019-09-23 23:40:00","updated_at":"2020-03-22 16:25:30","name":"书法","sort":6,"image":null},{"id":7,"created_at":"2020-03-22 16:25:56","updated_at":"2020-03-22 16:25:56","name":"曲艺","sort":7,"image":null},{"id":8,"created_at":"2020-03-22 16:26:12","updated_at":"2020-03-22 16:26:12","name":"方言","sort":8,"image":null},{"id":10,"created_at":"2020-03-22 16:34:00","updated_at":"2020-05-23 13:32:08","name":"国学","sort":9,"image":"navs/May2020/DyYFB85UhAc3B4lxwzgS.jpg"},{"id":9,"created_at":"2020-03-22 16:27:06","updated_at":"2020-03-22 16:27:06","name":"心声","sort":10,"image":null}]
      */
 
     private int code;
@@ -45,6 +45,7 @@ public class NavData {
          * updated_at : 2020-03-22 16:23:50
          * name : 音乐
          * sort : 1
+         * image : null
          */
 
         private int id;
@@ -52,6 +53,7 @@ public class NavData {
         private String updated_at;
         private String name;
         private int sort;
+        private String image;
 
         public int getId() {
             return id;
@@ -91,6 +93,14 @@ public class NavData {
 
         public void setSort(int sort) {
             this.sort = sort;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
         }
     }
 }

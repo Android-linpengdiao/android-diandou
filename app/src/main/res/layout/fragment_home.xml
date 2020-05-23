@@ -78,6 +78,28 @@
                 app:tabTextColor="@color/white" />
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@color/colorPrimary" />
+
+            <com.youth.banner.Banner
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:paddingLeft="@dimen/padding"
+                android:paddingRight="@dimen/padding"
+                app:indicator_drawable_selected="@drawable/indicator_white"
+                app:indicator_drawable_unselected="@drawable/indicator_gray"
+                app:indicator_height="4dp"
+                app:indicator_margin="3dp"
+                app:indicator_width="4dp" />
+
+        </RelativeLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"

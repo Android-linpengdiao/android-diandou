@@ -56,6 +56,7 @@ dependencies {
     implementation externalAndroidCnstraint
     implementation externalAndroidMultiDex
     implementation externalEasypermissions
+    implementation externalBanner
     implementation project(':base')
     implementation project(':okhttp')
     implementation project(':camera')

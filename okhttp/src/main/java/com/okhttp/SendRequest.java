@@ -173,7 +173,7 @@ public class SendRequest {
      * @param page       页数(非必填 默认1)
      * @param call
      */
-    public static void commonSearchWork(String tourist_id, int type, int nav_id, String word, int per_page, int page, Callback call) {
+    public static void searchWork(String tourist_id, int type, int nav_id, String word, int per_page, int page, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", tourist_id);
         map.put("type", String.valueOf(type));
@@ -183,7 +183,20 @@ public class SendRequest {
         }
         map.put("per_page", String.valueOf(per_page));
         map.put("page", String.valueOf(page));
-        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_commonSearchWork).build().execute(call);
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_searchWork).build().execute(call);
+
+    }
+
+    /**
+     * 获取作品详情
+     *
+     * @param content_id 作品ID
+     * @param call
+     */
+    public static void workDetail(int content_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("content_id", String.valueOf(content_id));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_workDetail).build().execute(call);
 
     }
 
@@ -203,6 +216,36 @@ public class SendRequest {
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_centerConcern).build().execute(call);
 
     }
+
+    public static void centerAttention(String tourist_id, String per_page, String page, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", tourist_id);
+        map.put("per_page", per_page);
+        map.put("page", page);
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_centerAttention).build().execute(call);
+
+    }
+
+    public static void centerDiscuss(int tourist_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_centerDiscuss).build().execute(call);
+
+    }
+
+    public static void centerFabulous(int tourist_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_centerFabulous).build().execute(call);
+
+    }
+
+    public static void commonMessage(Callback call) {
+        Map<String, String> map = new HashMap<>();
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_commonMessage).build().execute(call);
+
+    }
+
 
     /**
      * 修改个人信息

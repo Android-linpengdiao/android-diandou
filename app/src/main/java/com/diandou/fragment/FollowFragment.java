@@ -53,23 +53,26 @@ public class FollowFragment extends BaseFragment {
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 3000);
+                initData();
             }
         });
+        binding.swipeRefreshLayout.setRefreshing(true);
+        initData();
 
+
+        return binding.getRoot();
+    }
+
+    private void initData() {
         SendRequest.centerConcern(String.valueOf(getUserInfo().getData().getId()), String.valueOf(10), String.valueOf(1), new GenericsCallback<FollowData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
-
+                binding.swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onResponse(FollowData response, int id) {
+                binding.swipeRefreshLayout.setRefreshing(false);
                 if (response.getCode() == 200 && response.getData() != null && response.getData().getData() != null) {
                     adapter.refreshData(response.getData().getData());
                 } else {
@@ -78,8 +81,5 @@ public class FollowFragment extends BaseFragment {
             }
 
         });
-
-
-        return binding.getRoot();
     }
 }
