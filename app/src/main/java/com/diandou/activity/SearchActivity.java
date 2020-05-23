@@ -2,7 +2,6 @@ package com.diandou.activity;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.KeyEvent;
@@ -15,7 +14,7 @@ import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
 import com.diandou.adapter.SearchHistoryAdapter;
-import com.diandou.adapter.VideoListAdapter;
+import com.diandou.adapter.WorkAdapter;
 import com.diandou.databinding.ActivitySearchBinding;
 import com.diandou.db.DBManager;
 import com.diandou.view.FlowLayoutManager;
@@ -30,7 +29,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     private ActivitySearchBinding binding;
     private SearchHistoryAdapter searchHistoryAdapter;
-    private VideoListAdapter searchResultAdapter;
+    private WorkAdapter searchResultAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +47,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         binding.searchHistoryRecyclerView.setAdapter(searchHistoryAdapter);
         searchHistoryAdapter.refreshData(searchHistorys);
 
-        searchResultAdapter = new VideoListAdapter(this);
+        searchResultAdapter = new WorkAdapter(this);
         binding.searchResultRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         GridItemDecoration.Builder builder = new GridItemDecoration.Builder(this);
         builder.color(R.color.transparent);
@@ -95,7 +94,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private void initSearchView(String content) {
         binding.searchHistoryView.setVisibility(CommonUtil.isBlank(content) ? View.VISIBLE : View.GONE);
         binding.searchResultRecyclerView.setVisibility(CommonUtil.isBlank(content) ? View.GONE : View.VISIBLE);
-        searchResultAdapter.refreshData(CommonUtil.isBlank(content) ? new ArrayList<String>() : CommonUtil.getImageListString());
+//        searchResultAdapter.refreshData(CommonUtil.isBlank(content) ? new ArrayList<String>() : CommonUtil.getImageListString());
     }
 
     public void onClick(View v) {

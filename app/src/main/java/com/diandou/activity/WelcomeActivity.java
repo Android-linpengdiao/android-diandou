@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.baselibrary.utils.CommonUtil;
 import com.diandou.MainActivity;
@@ -19,7 +20,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class WelcomeActivity extends BaseActivity {
-
+    private static final String TAG = "WelcomeActivity";
     private ActivityWelcomeBinding welcomeBinding;
 
     private String[] permissions = {
@@ -33,7 +34,7 @@ public class WelcomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         welcomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_welcome);
-
+        Log.i(TAG, "onCreate: ");
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;
@@ -49,8 +50,10 @@ public class WelcomeActivity extends BaseActivity {
                 public void run() {
                     Intent intent;
                     if (CommonUtil.isBlank(getUserInfo().getData())) {
+                        Log.i(TAG, "run: 1");
                         intent = new Intent(WelcomeActivity.this, LoginActivity.class);
                     } else {
+                        Log.i(TAG, "run: 2");
                         intent = new Intent(WelcomeActivity.this, MainActivity.class);
                     }
                     startActivity(intent);

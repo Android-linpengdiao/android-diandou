@@ -12,15 +12,19 @@ import com.bumptech.glide.request.target.Target;
 
 public class GlideLoader {
 
+    public final static String domain = "http://admin.udiandou.com/";
+
     public static void LoderImage(Context context, String url, ImageView view) {
-        LoderImage(context,url,view,0);
+        LoderImage(context, url, view, 0);
     }
 
-    public static void LoderImage(Context context, String url, ImageView view,int round) {
+    public static void LoderImage(Context context, String url, ImageView view, int round) {
         Glide.with(context)
-                .load(url)
+                .load(domain + url)
                 .centerCrop()
                 .transform(new GlideRoundTransform(context, round))
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(view);
     }
@@ -35,14 +39,14 @@ public class GlideLoader {
     }
 
     public static void LoderImageOrGif(Context context, String url, ImageView view) {
-        if (url.endsWith("gif")){
+        if (url.endsWith("gif")) {
             Glide.with(context)
                     .asGif()
                     .load(url)
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(view);
-        }else {
+        } else {
             Glide.with(context)
                     .load(url)
                     .centerCrop()

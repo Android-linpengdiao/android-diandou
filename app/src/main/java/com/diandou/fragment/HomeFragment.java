@@ -59,7 +59,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 if (response.getCode() == 200) {
                     PagerAdapter mainHomePagerAdapter = new PagerAdapter(getChildFragmentManager());
                     for (int i = 0; i < response.getData().size(); i++) {
-                        mainHomePagerAdapter.addFragment(response.getData().get(i).getName(), HomeItemFragment.newInstance());
+                        mainHomePagerAdapter.addFragment(response.getData().get(i).getName(), HomeItemFragment.newInstance(response.getData().get(i).getId()));
                     }
                     binding.viewPager.setAdapter(mainHomePagerAdapter);
                     binding.viewPager.setOffscreenPageLimit(1);
@@ -85,7 +85,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.tab_type:
                 intent = new Intent(getActivity(), TabTypeActivity.class);
-                startActivityForResult(intent,100);
+                startActivityForResult(intent, 100);
                 break;
         }
     }
@@ -97,7 +97,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             switch (requestCode) {
                 case 100:
                     if (data != null) {
-                        int position = data.getIntExtra("position",0);
+                        int position = data.getIntExtra("position", 0);
                         binding.viewPager.setCurrentItem(position);
                     }
                     break;

@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 
 import com.baselibrary.UserInfo;
@@ -33,7 +34,7 @@ import okhttp3.Call;
 
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
-
+    private static final String TAG = "LoginActivity";
     private ActivityLoginBinding loginBinding;
     private WechatReceiver wxReceiver = null;
 
@@ -41,7 +42,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-
+        Log.i(TAG, "onCreate: ");
         loginBinding.loginConfirm.setOnClickListener(this);
         loginBinding.loginWx.setOnClickListener(this);
         loginBinding.loginQq.setOnClickListener(this);

@@ -9,7 +9,7 @@ import android.view.View;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
 import com.diandou.R;
-import com.diandou.adapter.VideoListAdapter;
+import com.diandou.adapter.WorkAdapter;
 import com.diandou.databinding.ActivityVideoInfoBinding;
 import com.diandou.view.CommentListPopupWindow;
 import com.diandou.view.GridItemDecoration;
@@ -31,7 +31,7 @@ public class VideoInfoActivity extends BaseActivity implements View.OnClickListe
         binding.tvShare.setOnClickListener(this);
         GlideLoader.LoderImage(this, CommonUtil.getImageListString().get(5), binding.thumbnails);
 
-        VideoListAdapter adapter = new VideoListAdapter(this);
+        WorkAdapter adapter = new WorkAdapter(this);
         binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         binding.recyclerView.setNestedScrollingEnabled(false);
         GridItemDecoration.Builder builder = new GridItemDecoration.Builder(this);
@@ -39,7 +39,7 @@ public class VideoInfoActivity extends BaseActivity implements View.OnClickListe
         builder.size(CommonUtil.dip2px(this, 10));
         binding.recyclerView.addItemDecoration(new GridItemDecoration(builder));
         binding.recyclerView.setAdapter(adapter);
-        adapter.refreshData(CommonUtil.getImageListString());
+//        adapter.refreshData(CommonUtil.getImageListString());
     }
 
     @Override

@@ -19,10 +19,12 @@ import com.diandou.databinding.FragmentHomeItemBinding;
 public class HomeItemFragment extends BaseFragment implements View.OnClickListener {
 
     private FragmentHomeItemBinding binding;
+    private int navId;
 
-    public static HomeItemFragment newInstance() {
+    public static HomeItemFragment newInstance(int navId) {
         HomeItemFragment fragment = new HomeItemFragment();
         Bundle args = new Bundle();
+        args.putInt("id",navId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -30,6 +32,9 @@ public class HomeItemFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            navId = getArguments().getInt("id");
+        }
     }
 
     @Nullable
@@ -40,8 +45,8 @@ public class HomeItemFragment extends BaseFragment implements View.OnClickListen
         setStatusBarDarkTheme(true);
 
         PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager());
-        pagerAdapter.addFragment("最热", HomeItemListFragment.newInstance());
-        pagerAdapter.addFragment("推荐", HomeItemListFragment.newInstance());
+        pagerAdapter.addFragment("最热", HomeItemListFragment.newInstance(navId,1));
+        pagerAdapter.addFragment("推荐", HomeItemListFragment.newInstance(navId,2));
         binding.viewPager.setAdapter(pagerAdapter);
         binding.viewPager.setOffscreenPageLimit(1);
         binding.viewPager.setCurrentItem(0);

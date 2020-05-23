@@ -1,5 +1,6 @@
 package com.okhttp;
 
+import com.baselibrary.utils.CommonUtil;
 import com.okhttp.callbacks.Callback;
 import com.okhttp.utils.APIUrls;
 import com.okhttp.utils.OkHttpUtils;
@@ -158,6 +159,48 @@ public class SendRequest {
     public static void commonNav(Callback call) {
         Map<String, String> map = new HashMap<>();
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_commonNav).build().execute(call);
+
+    }
+
+    /**
+     * 用户搜索作品
+     *
+     * @param tourist_id 搜索人id(非必填)
+     * @param type       1 最热 ；2 推荐
+     * @param nav_id     分类id(非必填)
+     * @param word       关键词搜索(非必填)
+     * @param per_page   每页条数(非必填 默认10)
+     * @param page       页数(非必填 默认1)
+     * @param call
+     */
+    public static void commonSearchWork(String tourist_id, int type, int nav_id, String word, int per_page, int page, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", tourist_id);
+        map.put("type", String.valueOf(type));
+        map.put("nav_id", String.valueOf(nav_id));
+        if (!CommonUtil.isBlank(word)) {
+            map.put("word", word);
+        }
+        map.put("per_page", String.valueOf(per_page));
+        map.put("page", String.valueOf(page));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_commonSearchWork).build().execute(call);
+
+    }
+
+    /**
+     * 获取我关注的人
+     *
+     * @param tourist_id 用户id（必填）.
+     * @param per_page   每页条数（非必填 默认10）.
+     * @param page       页数（非必填 默认1）.
+     * @param call
+     */
+    public static void centerConcern(String tourist_id, String per_page, String page, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", tourist_id);
+        map.put("per_page", per_page);
+        map.put("page", page);
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_centerConcern).build().execute(call);
 
     }
 

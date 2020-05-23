@@ -8,9 +8,7 @@ import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
 import com.diandou.NavData;
 import com.diandou.R;
-import com.diandou.activity.VideoInfoActivity;
 import com.diandou.databinding.ItemTabTypeLayoutBinding;
-import com.diandou.databinding.ItemVideoListLayoutBinding;
 import com.diandou.view.OnClickListener;
 
 

@@ -38,7 +38,7 @@ public class UserInfo implements Serializable {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * id : 2
          * name : 3v8bpk

@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +15,7 @@ import android.view.ViewGroup;
 import com.baselibrary.utils.CommonUtil;
 import com.diandou.R;
 import com.diandou.adapter.MessageAdapter;
-import com.diandou.adapter.VideoListAdapter;
-import com.diandou.databinding.FragmentFollowBinding;
 import com.diandou.databinding.FragmentLikeBinding;
-import com.diandou.view.GridItemDecoration;
 
 public class FansFragment extends BaseFragment {
 

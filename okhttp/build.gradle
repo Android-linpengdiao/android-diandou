@@ -28,4 +28,5 @@ dependencies {
     api externalOkhttp
     api externalOkhttpInterceptor
     implementation externalGson
+    implementation project(':base')
 }

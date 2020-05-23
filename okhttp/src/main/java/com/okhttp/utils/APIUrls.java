@@ -24,5 +24,10 @@ public class APIUrls {
     public final static String url_commonNav = url_domain + "api/common/nav";
     public final static String url_commonBanner = url_domain + "api/common/banner";
 
+    //用户搜索作品
+    public final static String url_commonSearchWork = url_domain + "api/center/searchWork";
+    //获取我关注的人
+    public final static String url_centerConcern = url_domain + "api/center/concern";
+
 
 }
