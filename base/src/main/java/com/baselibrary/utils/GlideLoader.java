@@ -31,9 +31,11 @@ public class GlideLoader {
 
     public static void LoderClipImage(Context context, String url, ImageView view) {
         Glide.with(context)
-                .load(url)
-                .fitCenter()
-                .thumbnail(0.1f)
+                .load(domain + url)
+                .centerCrop()
+                .transform(new GlideRoundTransform(context, 100))
+                .placeholder(R.drawable.head)
+                .error(R.drawable.head)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(view);
     }

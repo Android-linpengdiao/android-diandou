@@ -39,5 +39,10 @@ public class APIUrls {
     //获取系统消息
     public final static String url_commonMessage = url_domain + "api/common/message";
 
+    //获取用户作品
+    public final static String url_centerSelfWork = url_domain + "api/center/selfWork";
+    //获取用户最爱的作品
+    public final static String url_favouriteContent = url_domain + "api/center/favouriteContent";
+
 
 }

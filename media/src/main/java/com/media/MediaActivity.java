@@ -120,7 +120,7 @@ public class MediaActivity extends AppCompatActivity implements View.OnClickList
         confirm.setText("发送");
 
         type = getIntent().getStringExtra("type");
-        number = getIntent().getIntExtra("maxstr", 9);
+        number = getIntent().getIntExtra("number", 9);
 
 
         mImageWork = new ImageWork(this);
@@ -518,11 +518,13 @@ public class MediaActivity extends AppCompatActivity implements View.OnClickList
                         imgsArray.put(sendList.get(i).getPath());
                         thumbnailsArray.put(sendList.get(i).getThumb());
                     }
-                    jsonObject.put("imgsList", imgsArray);
+                    jsonObject.put("imageList", imgsArray);
                     jsonObject.put("thumbnailsList", thumbnailsArray);
+                    jsonObject.put("type", ImageModel.TYPE_IMAGE);
                 } else if (type.equals(ImageModel.TYPE_VIDEO)) {
                     jsonObject.put("video", sendList.get(0).getPath());
                     jsonObject.put("cover", sendList.get(0).getThumb());
+                    jsonObject.put("type", ImageModel.TYPE_VIDEO);
                 }
             }
             Intent intent = new Intent();

@@ -17,7 +17,13 @@ import com.baselibrary.UserInfo;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.MsgCache;
 import com.baselibrary.utils.StatusBarUtil;
+import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
+import com.diandou.model.MineWorkData;
+import com.okhttp.SendRequest;
+import com.okhttp.callbacks.GenericsCallback;
+import com.okhttp.callbacks.StringCallback;
+import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
@@ -25,7 +31,11 @@ import com.sina.weibo.sdk.share.WbShareHandler;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 
+import org.json.JSONObject;
+
 import java.io.File;
+
+import okhttp3.Call;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -67,6 +77,22 @@ public class BaseActivity extends AppCompatActivity {
             intent.putExtras(mBundle);
         }
         startActivity(intent);
+    }
+
+    public void baseInfo() {
+        SendRequest.baseInfo(getUserInfo().getData().getId(), new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+            }
+
+            @Override
+            public void onResponse(UserInfo response, int id) {
+                if (response.getCode() == 200 && response.getData() != null) {
+                    setUserInfo(response);
+                }
+            }
+
+        });
     }
 
     public void setUserInfo(UserInfo userInfo) {

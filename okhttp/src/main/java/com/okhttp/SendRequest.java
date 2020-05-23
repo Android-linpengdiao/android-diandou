@@ -109,10 +109,10 @@ public class SendRequest {
      * @param tourist_id 类型下的唯一标识
      * @param call
      */
-    public static void baseInfo(String tourist_id, Callback call) {
+    public static void baseInfo(int tourist_id, Callback call) {
         Map<String, String> map = new HashMap<>();
-        map.put("tourist_id", tourist_id);
-        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_baseInfo).build().execute(call);
+        map.put("tourist_id", String.valueOf(tourist_id));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_baseInfo).build().execute(call);
 
     }
 
@@ -246,6 +246,20 @@ public class SendRequest {
 
     }
 
+    public static void centerSelfWork(int tourist_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_centerSelfWork).build().execute(call);
+    }
+
+    public static void url_favouriteContent(int tourist_id, int per_page, int page, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("per_page", String.valueOf(per_page));
+        map.put("page", String.valueOf(page));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_favouriteContent).build().execute(call);
+    }
+
 
     /**
      * 修改个人信息
@@ -266,6 +280,16 @@ public class SendRequest {
         map.put("sex", sex);
         map.put("autograph", autograph);
         map.put("weibo", weibo);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_editPersonal).build().execute(call);
+
+    }
+
+    public static void editPersonal(int tourist_id, int base_id, String avatar, String name, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("base_id", String.valueOf(base_id));
+        map.put("avatar", avatar);
+        map.put("name", name);
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_editPersonal).build().execute(call);
 
     }
@@ -311,8 +335,8 @@ public class SendRequest {
      * @param file
      * @param call
      */
-    public static void fileUpload(String file, Callback call) {
-        OkHttpUtils.getInstance().post().addFile("file", file, new File(file)).url(APIUrls.url_fileUpload).build().execute(call);
+    public static void fileUpload(String file, String name, Callback call) {
+        OkHttpUtils.getInstance().post().addFile("file", name, new File(file)).url(APIUrls.url_fileUpload).build().execute(call);
 
     }
 }

@@ -7,7 +7,7 @@ public class UserInfo implements Serializable {
     /**
      * code : 200
      * msg : 登录成功
-     * data : {"id":2,"name":"3v8bpk","phone":"13521614827","avatar":"users/default.png","password":"$2y$10$MTmB8DKF7rJaALu/n7zVu.kPVYskE0DqZzFRuf4YmeT8lW1Ps0CNS","remember_token":null,"settings":null,"created_at":"2020-03-24 11:54:40","updated_at":"2020-03-24 11:54:40","tourist_id":"72858237","sex":1,"birth":null,"openid":null,"headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"","qq_id":null,"weibo_id":null,"liker":0,"followers":0,"comment":0,"profile":null}
+     * data : {"id":3,"name":"xu","phone":"13699162862","avatar":"upload/20200324084143gKEBF.jpg","password":"$2y$10$hoZjKOg.nwZ72VWGQDFukeCvzV8UfEVWUR3l47kdDPXm7JFHRibA2","remember_token":null,"settings":null,"created_at":"2020-03-24 12:24:42","updated_at":"2020-04-11 16:39:17","tourist_id":"64796762","sex":2,"birth":"2020-3-27","openid":"oH48X0_S-Uhjp-C-m4nK0S-bunRU","headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":"加油加油","weibo":"","reg":"","qq_id":"CFA10663BDA8EFA1D50D09101CB74A8F","weibo_id":"1189548407","liker":0,"followers":0,"comment":0,"profile":{"id":1,"created_at":"2020-03-26 17:58:00","updated_at":"2020-03-27 19:06:05","face_photo":"upload/20200327070531Isgtu.jpg","back_photo":"upload/20200327070531u6HNg.jpg","status":2,"tourist_id":3}}
      */
 
     private int code;
@@ -40,32 +40,32 @@ public class UserInfo implements Serializable {
 
     public static class DataBean implements Serializable{
         /**
-         * id : 2
-         * name : 3v8bpk
-         * phone : 13521614827
-         * avatar : users/default.png
-         * password : $2y$10$MTmB8DKF7rJaALu/n7zVu.kPVYskE0DqZzFRuf4YmeT8lW1Ps0CNS
+         * id : 3
+         * name : xu
+         * phone : 13699162862
+         * avatar : upload/20200324084143gKEBF.jpg
+         * password : $2y$10$hoZjKOg.nwZ72VWGQDFukeCvzV8UfEVWUR3l47kdDPXm7JFHRibA2
          * remember_token : null
          * settings : null
-         * created_at : 2020-03-24 11:54:40
-         * updated_at : 2020-03-24 11:54:40
-         * tourist_id : 72858237
-         * sex : 1
-         * birth : null
-         * openid : null
+         * created_at : 2020-03-24 12:24:42
+         * updated_at : 2020-04-11 16:39:17
+         * tourist_id : 64796762
+         * sex : 2
+         * birth : 2020-3-27
+         * openid : oH48X0_S-Uhjp-C-m4nK0S-bunRU
          * headimgurl : null
          * city : null
          * province : null
          * cancel : 1
-         * autograph : null
-         * weibo : null
+         * autograph : 加油加油
+         * weibo :
          * reg :
-         * qq_id : null
-         * weibo_id : null
+         * qq_id : CFA10663BDA8EFA1D50D09101CB74A8F
+         * weibo_id : 1189548407
          * liker : 0
          * followers : 0
          * comment : 0
-         * profile : null
+         * profile : {"id":1,"created_at":"2020-03-26 17:58:00","updated_at":"2020-03-27 19:06:05","face_photo":"upload/20200327070531Isgtu.jpg","back_photo":"upload/20200327070531u6HNg.jpg","status":2,"tourist_id":3}
          */
 
         private int id;
@@ -79,21 +79,21 @@ public class UserInfo implements Serializable {
         private String updated_at;
         private String tourist_id;
         private int sex;
-        private Object birth;
-        private Object openid;
+        private String birth;
+        private String openid;
         private Object headimgurl;
         private Object city;
         private Object province;
         private int cancel;
-        private Object autograph;
-        private Object weibo;
+        private String autograph;
+        private String weibo;
         private String reg;
-        private Object qq_id;
-        private Object weibo_id;
+        private String qq_id;
+        private String weibo_id;
         private int liker;
         private int followers;
         private int comment;
-        private Object profile;
+        private ProfileBean profile;
 
         public int getId() {
             return id;
@@ -183,19 +183,19 @@ public class UserInfo implements Serializable {
             this.sex = sex;
         }
 
-        public Object getBirth() {
+        public String getBirth() {
             return birth;
         }
 
-        public void setBirth(Object birth) {
+        public void setBirth(String birth) {
             this.birth = birth;
         }
 
-        public Object getOpenid() {
+        public String getOpenid() {
             return openid;
         }
 
-        public void setOpenid(Object openid) {
+        public void setOpenid(String openid) {
             this.openid = openid;
         }
 
@@ -231,19 +231,19 @@ public class UserInfo implements Serializable {
             this.cancel = cancel;
         }
 
-        public Object getAutograph() {
+        public String getAutograph() {
             return autograph;
         }
 
-        public void setAutograph(Object autograph) {
+        public void setAutograph(String autograph) {
             this.autograph = autograph;
         }
 
-        public Object getWeibo() {
+        public String getWeibo() {
             return weibo;
         }
 
-        public void setWeibo(Object weibo) {
+        public void setWeibo(String weibo) {
             this.weibo = weibo;
         }
 
@@ -255,19 +255,19 @@ public class UserInfo implements Serializable {
             this.reg = reg;
         }
 
-        public Object getQq_id() {
+        public String getQq_id() {
             return qq_id;
         }
 
-        public void setQq_id(Object qq_id) {
+        public void setQq_id(String qq_id) {
             this.qq_id = qq_id;
         }
 
-        public Object getWeibo_id() {
+        public String getWeibo_id() {
             return weibo_id;
         }
 
-        public void setWeibo_id(Object weibo_id) {
+        public void setWeibo_id(String weibo_id) {
             this.weibo_id = weibo_id;
         }
 
@@ -295,12 +295,88 @@ public class UserInfo implements Serializable {
             this.comment = comment;
         }
 
-        public Object getProfile() {
+        public ProfileBean getProfile() {
             return profile;
         }
 
-        public void setProfile(Object profile) {
+        public void setProfile(ProfileBean profile) {
             this.profile = profile;
+        }
+
+        public static class ProfileBean implements Serializable{
+            /**
+             * id : 1
+             * created_at : 2020-03-26 17:58:00
+             * updated_at : 2020-03-27 19:06:05
+             * face_photo : upload/20200327070531Isgtu.jpg
+             * back_photo : upload/20200327070531u6HNg.jpg
+             * status : 2
+             * tourist_id : 3
+             */
+
+            private int id;
+            private String created_at;
+            private String updated_at;
+            private String face_photo;
+            private String back_photo;
+            private int status;
+            private int tourist_id;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getCreated_at() {
+                return created_at;
+            }
+
+            public void setCreated_at(String created_at) {
+                this.created_at = created_at;
+            }
+
+            public String getUpdated_at() {
+                return updated_at;
+            }
+
+            public void setUpdated_at(String updated_at) {
+                this.updated_at = updated_at;
+            }
+
+            public String getFace_photo() {
+                return face_photo;
+            }
+
+            public void setFace_photo(String face_photo) {
+                this.face_photo = face_photo;
+            }
+
+            public String getBack_photo() {
+                return back_photo;
+            }
+
+            public void setBack_photo(String back_photo) {
+                this.back_photo = back_photo;
+            }
+
+            public int getStatus() {
+                return status;
+            }
+
+            public void setStatus(int status) {
+                this.status = status;
+            }
+
+            public int getTourist_id() {
+                return tourist_id;
+            }
+
+            public void setTourist_id(int tourist_id) {
+                this.tourist_id = tourist_id;
+            }
         }
     }
 }
