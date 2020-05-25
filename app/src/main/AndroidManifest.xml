@@ -17,7 +17,16 @@
         android:roundIcon="@mipmap/ic_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.UpdataNicknameActivity"></activity>
+        <activity android:name=".activity.NoticeListActivity"></activity>
+        <activity android:name=".activity.UserHomeActivity" />
+        <activity android:name=".activity.BindPhoneActivity" />
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.ResetPasswordActivity" />
+        <activity android:name=".activity.FeedbackActivity" />
+        <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.MineFansActivity" />
+        <activity android:name=".activity.MineFollowActivity" />
+        <activity android:name=".activity.UpdataNicknameActivity" />
         <activity android:name=".activity.EditorActivity" />
         <activity android:name=".activity.SettingsActivity" />
         <activity android:name=".activity.TabTypeActivity" />

@@ -34,7 +34,7 @@ public class NoticeAdapter extends BaseRecyclerAdapter<NoticeData.DataBean, Item
         if (mList != null && mList.size() > 0) {
             binding.tvTitle.setText(dataBean.getTitle());
             binding.tvDesc.setText(dataBean.getDesc());
-            binding.tvTime.setText("·"+dataBean.getUpdated_at());
+            binding.tvTime.setText(dataBean.getUpdated_at());
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

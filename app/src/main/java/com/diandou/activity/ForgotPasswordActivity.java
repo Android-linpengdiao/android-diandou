@@ -5,8 +5,6 @@ import android.os.CountDownTimer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 
 import com.baselibrary.utils.CommonUtil;
@@ -30,7 +28,7 @@ public class ForgotPasswordActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         forgotPasswordBinding = DataBindingUtil.setContentView(this, R.layout.activity_forgot_password);
 
-        forgotPasswordBinding.ivBack.setOnClickListener(new View.OnClickListener() {
+        forgotPasswordBinding.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -47,24 +45,6 @@ public class ForgotPasswordActivity extends BaseActivity {
             public void onClick(View v) {
                 updatePasswordAndLogin();
             }
-        });
-
-        forgotPasswordBinding.ivShowPassword.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (forgotPasswordBinding.ivShowPassword.isSelected()) {
-                    forgotPasswordBinding.ivShowPassword.setSelected(false);
-                    //从密码可见模式变为密码不可见模式
-                    forgotPasswordBinding.etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                } else {
-                    forgotPasswordBinding.ivShowPassword.setSelected(true);
-                    //从密码不可见模式变为密码可见模式
-                    forgotPasswordBinding.etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                }
-                forgotPasswordBinding.etPassword.setSelection(forgotPasswordBinding.etPassword.getText().length());
-            }
-
         });
 
         forgotPasswordBinding.etPhone.addTextChangedListener(new TextWatcher() {
@@ -95,7 +75,7 @@ public class ForgotPasswordActivity extends BaseActivity {
             ToastUtils.showShort(ForgotPasswordActivity.this, "手机号码不正确");
             return;
         }
-        SendRequest.phoneCode(phone, new StringCallback() {
+        SendRequest.phoneCode(phone, "forget.password", new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
 
@@ -105,8 +85,7 @@ public class ForgotPasswordActivity extends BaseActivity {
             public void onResponse(String response, int id) {
                 try {
                     JSONObject json = new JSONObject(response);
-                    boolean success = json.getBoolean("success");
-                    if (success) {
+                    if (json.optInt("code") == 200) {
                         forgotPasswordBinding.tvSendCode.setEnabled(false);
                         timer = new CountDownTimer(60000, 1000) {
                             @Override
@@ -120,9 +99,9 @@ public class ForgotPasswordActivity extends BaseActivity {
                                 forgotPasswordBinding.tvSendCode.setText("获取验证码");
                             }
                         }.start();
-                        ToastUtils.showShort(ForgotPasswordActivity.this, "验证码成功");
+                        ToastUtils.showShort(ForgotPasswordActivity.this, "验证码发送成功");
                     } else {
-                        String msg = json.getString("msg");
+                        String msg = json.optString("msg");
                         ToastUtils.showShort(getApplication(), msg);
                     }
                 } catch (JSONException e) {
@@ -134,22 +113,27 @@ public class ForgotPasswordActivity extends BaseActivity {
 
     private void updatePasswordAndLogin() {
         String phone = forgotPasswordBinding.etPhone.getText().toString().trim();
-        String code = forgotPasswordBinding.etCode.getText().toString().trim();
+        String authCode = forgotPasswordBinding.etCode.getText().toString().trim();
         String password = forgotPasswordBinding.etPassword.getText().toString().trim();
+        String confirmPassword = forgotPasswordBinding.etConfirmPassword.getText().toString().trim();
 
         if (phone.length() < 11) {
             ToastUtils.showShort(ForgotPasswordActivity.this, "手机号码不正确");
             return;
         }
-        if (CommonUtil.isBlank(code)) {
+        if (CommonUtil.isBlank(authCode)) {
             ToastUtils.showShort(ForgotPasswordActivity.this, "验证码不能为空");
             return;
         }
-        if (password.length() < 8) {
-            ToastUtils.showShort(ForgotPasswordActivity.this, "密码不能小于8位");
+        if (password.length() < 8 || confirmPassword.length() < 6) {
+            ToastUtils.showShort(ForgotPasswordActivity.this, "密码不能小于6位");
             return;
         }
-        SendRequest.updatePasswordAndLogin(phone, code, password, password, new StringCallback() {
+        if (!password.equals(confirmPassword)) {
+            ToastUtils.showShort(ForgotPasswordActivity.this, "密码不一致");
+            return;
+        }
+        SendRequest.forgetPassword(phone, authCode, password, password, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
 
@@ -159,8 +143,7 @@ public class ForgotPasswordActivity extends BaseActivity {
             public void onResponse(String response, int id) {
                 try {
                     JSONObject json = new JSONObject(response);
-                    int code = json.optInt("code");
-                    if (code == 200) {
+                    if (json.optInt("code") == 200) {
                         ToastUtils.showShort(ForgotPasswordActivity.this, "修改密码成功");
                         finish();
                     } else {

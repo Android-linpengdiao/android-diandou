@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.baselibrary.UserInfo;
+import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.ToastUtils;
 import com.diandou.MainActivity;
 import com.diandou.MyApplication;
@@ -23,12 +26,16 @@ import com.diandou.weibo.Constants;
 import com.diandou.weibo.WBAuthActivity;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
+import com.okhttp.callbacks.StringCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import okhttp3.Call;
 
@@ -37,17 +44,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private static final String TAG = "LoginActivity";
     private ActivityLoginBinding loginBinding;
     private WechatReceiver wxReceiver = null;
+    private CountDownTimer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        Log.i(TAG, "onCreate: ");
-        loginBinding.loginConfirm.setOnClickListener(this);
+
+        loginBinding.sendCode.setOnClickListener(this);
+        loginBinding.login.setOnClickListener(this);
+        loginBinding.switchLogin.setOnClickListener(this);
+        loginBinding.passwordLoginLayout.passwordLoginView.setOnClickListener(this);
+        loginBinding.passwordLoginLayout.back.setOnClickListener(this);
+        loginBinding.passwordLoginLayout.passwordLogin.setOnClickListener(this);
         loginBinding.loginWx.setOnClickListener(this);
         loginBinding.loginQq.setOnClickListener(this);
         loginBinding.loginWb.setOnClickListener(this);
+        loginBinding.register.setOnClickListener(this);
         loginBinding.forgotPassword.setOnClickListener(this);
+        loginBinding.passwordLoginLayout.register.setOnClickListener(this);
+        loginBinding.passwordLoginLayout.forgotPassword.setOnClickListener(this);
 
         wxReceiver = new WechatReceiver();
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(wxReceiver, new IntentFilter(Config.wechat_get_token_success));
@@ -57,8 +73,60 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.login_confirm:
+            case R.id.send_code:
+                String phone = loginBinding.phone.getText().toString().trim();
+                if (phone.length() < 11) {
+                    ToastUtils.showShort(LoginActivity.this, "手机号码不正确");
+                    return;
+                }
+                SendRequest.phoneCode(phone, "phone.login", new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.optInt("code") == 200) {
+                                loginBinding.sendCode.setEnabled(false);
+                                timer = new CountDownTimer(60000, 1000) {
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+                                        loginBinding.sendCode.setText(millisUntilFinished / 1000 + "");
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        loginBinding.sendCode.setEnabled(true);
+                                        loginBinding.sendCode.setText("获取验证码");
+                                    }
+                                }.start();
+                                ToastUtils.showShort(LoginActivity.this, "验证码成功");
+                            } else {
+                                ToastUtils.showShort(getApplication(), jsonObject.optString("msg"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                break;
+            case R.id.login:
+                phoneLogin();
+                break;
+            case R.id.switch_login:
+                loginBinding.passwordLoginLayout.passwordLoginView.setVisibility(View.VISIBLE);
+                break;
+            case R.id.back:
+                loginBinding.passwordLoginLayout.passwordLoginView.setVisibility(View.GONE);
+                break;
+            case R.id.password_login:
                 passwordLogin();
+                break;
+            case R.id.register:
+                openActivity(RegisterActivity.class);
                 break;
             case R.id.forgot_password:
                 openActivity(ForgotPasswordActivity.class);
@@ -112,12 +180,49 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     /**
+     * ****************************** 短信登录 **********************************
+     */
+
+    private void phoneLogin() {
+        String phone = loginBinding.phone.getText().toString().trim();
+        String phoneCode = loginBinding.authCode.getText().toString().trim();
+
+        if (phone.length() < 11) {
+            ToastUtils.showShort(LoginActivity.this, "手机号码不正确");
+            return;
+        }
+
+        if (phoneCode.length() <= 0) {
+            ToastUtils.showShort(LoginActivity.this, "请输入验证码");
+            return;
+        }
+        SendRequest.phoneLogin(phone, phoneCode, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(UserInfo response, int id) {
+                if (response.getCode() == 200) {
+                    MyApplication.getInstance().setUserInfo(response);
+                    openActivity(MainActivity.class);
+                    finish();
+                } else {
+                    ToastUtils.showShort(LoginActivity.this, response.getMsg());
+                }
+            }
+
+        });
+    }
+
+    /**
      * ****************************** 密码登录 **********************************
      */
 
     private void passwordLogin() {
-        String phone = loginBinding.loginUsername.getText().toString().trim();
-        String password = loginBinding.loginPassword.getText().toString().trim();
+        String phone = loginBinding.passwordLoginLayout.loginUsername.getText().toString().trim();
+        String password = loginBinding.passwordLoginLayout.loginPassword.getText().toString().trim();
 
         if (phone.length() < 11) {
             ToastUtils.showShort(LoginActivity.this, "手机号码不正确");
@@ -125,14 +230,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
 
         if (password.length() < 6) {
-            ToastUtils.showShort(LoginActivity.this, "密码不能小于8位");
+            ToastUtils.showShort(LoginActivity.this, "密码不能小于6位");
             return;
         }
-
-//        if (!loginBinding.checkBox.isChecked()) {
-//            ToastUtils.showShort(getApplication(), "请同意服务协议和用户隐私政策");
-//            return;
-//        }
         SendRequest.login(phone, password, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -146,7 +246,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     openActivity(MainActivity.class);
                     finish();
                 } else {
-                    ToastUtils.showShort(LoginActivity.this, "获取用户信息失败," + response.getMsg());
+                    ToastUtils.showShort(LoginActivity.this, response.getMsg());
                 }
             }
 
@@ -163,10 +263,58 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             if (null != intent) {
                 String action = intent.getAction();
                 if (action.equals(Config.wechat_get_token_success)) {
-                    ToastUtils.showShort(getApplication(), "微信授权成功: Openid = " + WXManager.getOpenid());
+                    ToastUtils.showShort(getApplication(), "微信授权成功");
+                    WXManager.getUserInfo(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            finish();
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            try {
+                                JSONObject json = new JSONObject(response);
+                                String errorCode = json.optString("errcode");
+                                if (!CommonUtil.isBlank(errorCode)) {
+                                    ToastUtils.showShort(LoginActivity.this,"授权失败");
+                                } else {
+                                    String openid = json.optString("openid");
+                                    String nickname = json.optString("nickname");
+                                    String headimgurl = json.optString("headimgurl");
+                                    String sex = json.optString("sex");
+                                    String city = json.optString("city");
+                                    String province = json.optString("province");
+                                    WXLogin(openid,nickname,headimgurl,sex,city,province);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
             }
         }
+    }
+
+    private void WXLogin(String openid, String nickname, String headimgurl, String sex, String city, String province) {
+        SendRequest.WXLogin(openid,nickname, headimgurl,sex,city,province, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(UserInfo response, int id) {
+                if (response.getCode() == 200) {
+                    MyApplication.getInstance().setUserInfo(response);
+                    openActivity(MainActivity.class);
+                    finish();
+                } else {
+                    ToastUtils.showShort(LoginActivity.this, response.getMsg());
+                }
+            }
+
+        });
     }
 
     /**
@@ -215,10 +363,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (loginBinding.passwordLoginLayout.passwordLoginView.isShown()) {
+                loginBinding.passwordLoginLayout.passwordLoginView.setVisibility(View.GONE);
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (wxReceiver != null) {
             LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(wxReceiver);
+        }
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
         }
     }
 }

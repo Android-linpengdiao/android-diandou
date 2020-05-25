@@ -15,6 +15,11 @@ import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.MsgCache;
 import com.baselibrary.utils.StatusBarUtil;
 import com.diandou.R;
+import com.okhttp.SendRequest;
+import com.okhttp.callbacks.GenericsCallback;
+import com.okhttp.sample_okhttp.JsonGenericsSerializator;
+
+import okhttp3.Call;
 
 public class BaseFragment extends Fragment {
 
@@ -55,6 +60,22 @@ public class BaseFragment extends Fragment {
             intent.putExtras(mBundle);
         }
         startActivity(intent);
+    }
+
+    public void baseInfo() {
+        SendRequest.baseInfo(getUserInfo().getData().getId(), new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+            }
+
+            @Override
+            public void onResponse(UserInfo response, int id) {
+                if (response.getCode() == 200 && response.getData() != null) {
+                    setUserInfo(response);
+                }
+            }
+
+        });
     }
 
     public void setUserInfo(UserInfo userInfo) {

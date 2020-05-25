@@ -1,19 +1,20 @@
 package com.diandou.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
 import com.diandou.R;
+import com.diandou.activity.UserHomeActivity;
 import com.diandou.databinding.ItemMessageLayoutBinding;
 import com.diandou.model.MessageData;
 import com.diandou.view.OnClickListener;
 
 
 public class MessageAdapter extends BaseRecyclerAdapter<MessageData.DataBean, ItemMessageLayoutBinding> {
-    private static final String TAG = "MessageAdapter";
     private OnClickListener onClickListener;
 
     private int type = 0;
@@ -39,8 +40,7 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageData.DataBean, It
     @Override
     protected void onBindItem(final ItemMessageLayoutBinding binding, final MessageData.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            Log.i(TAG, "onBindItem: " + position);
-            binding.cover.setVisibility(type == 0 ? View.VISIBLE : View.GONE);
+            binding.cover.setVisibility(type == 2 ? View.GONE : View.VISIBLE);
             binding.tvTitle.setText(dataBean.getTourist().getName());
             if (type == 1) {
                 binding.tvDesc.setText("赞了你视频");
@@ -53,13 +53,14 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageData.DataBean, It
                 binding.tvTime.setText("评论了你的作品" + dataBean.getUpdated_at());
             }
             GlideLoader.LoderImage(mContext, dataBean.getTourist().getAvatar(), binding.userIcon, 100);
-//            GlideLoader.LoderImage(mContext, dataBean.getContents().getImg(), binding.cover, 2);
+            GlideLoader.LoderImage(mContext, dataBean.getContents().getImg(), binding.cover, 2);
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onClickListener != null) {
-                        onClickListener.onClick(v, position);
-                    }
+                    Intent intent = new Intent(mContext, UserHomeActivity.class);
+                    intent.putExtra("uid", dataBean.getTourist().getId());
+                    intent.putExtra("isFollow", false);
+                    mContext.startActivity(intent);
                 }
             });
         }

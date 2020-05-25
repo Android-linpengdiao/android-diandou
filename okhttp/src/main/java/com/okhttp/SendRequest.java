@@ -20,24 +20,41 @@ public class SendRequest {
      * @param password
      * @param password_confirmation
      * @param authCode
-     * @param is_register           第三方的身份 false:true
      * @param reg                   极光推送的regId
      * @param openid
      * @param qq_id
      * @param weibo_id
      * @param call
      */
-    public static void register(String phone, String password, String password_confirmation, String authCode, String is_register, String reg, String openid, String qq_id, String weibo_id, Callback call) {
+    public static void register(String phone, String password, String password_confirmation, String authCode, String reg, String openid, String qq_id, String weibo_id, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("phone", phone);
-        map.put("password", phone);
-        map.put("password_confirmation", phone);
-        map.put("authCode", "");
-        map.put("is_register", "");
-        map.put("reg", "");
-        map.put("openid", "");
-        map.put("qq_id", "");
-        map.put("weibo_id", "");
+        map.put("password", password);
+        map.put("password_confirmation", password_confirmation);
+        map.put("authCode", authCode);
+        map.put("reg", reg);
+        map.put("openid", openid);
+        map.put("qq_id", qq_id);
+        map.put("weibo_id", weibo_id);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_register).build().execute(call);
+
+    }
+
+    /**
+     * 手机注册
+     *
+     * @param phone
+     * @param password
+     * @param password_confirmation
+     * @param authCode
+     * @param call
+     */
+    public static void register(String phone, String password, String password_confirmation, String authCode, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("phone", phone);
+        map.put("password", password);
+        map.put("password_confirmation", password_confirmation);
+        map.put("authCode", password_confirmation);
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_register).build().execute(call);
 
     }
@@ -58,16 +75,55 @@ public class SendRequest {
     }
 
     /**
-     * 忘记密码 时获取验证码
+     * 用户第三方登录（微信）
      *
-     * @param phone
+     * @param openid
+     * @param nickname
+     * @param headimgurl
+     * @param sex
+     * @param city
+     * @param province
      * @param call
      */
-    public static void phoneCode(String phone, Callback call) {
+    public static void WXLogin(String openid, String nickname, String headimgurl, String sex, String city, String province, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("openid", openid);
+        map.put("nickname", nickname);
+        map.put("headimgurl", headimgurl);
+        map.put("sex", sex);
+        map.put("city", city);
+        map.put("province", province);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_thirdLogin).build().execute(call);
+
+    }
+
+    /**
+     * 发送短信验证码
+     *
+     * @param phone
+     * @param key   register.code=>注册/forget.password=>忘记密码/phone.login=>手机号验证码登录
+     * @param call
+     */
+    public static void phoneCode(String phone, String key, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("phone", phone);
-        map.put("key", "forget.password");
+        map.put("key", key);
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_phoneCode).build().execute(call);
+
+    }
+
+    /**
+     * 验证码登录
+     *
+     * @param phone
+     * @param authCode
+     * @param call
+     */
+    public static void phoneLogin(String phone, String authCode, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("phone", phone);
+        map.put("authCode", authCode);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_phoneLogin).build().execute(call);
 
     }
 
@@ -87,6 +143,25 @@ public class SendRequest {
         map.put("password", password);
         map.put("againPassword", againPassword);
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_updatePasswordAndLogin).build().execute(call);
+
+    }
+
+    /**
+     * 用户忘记密码
+     *
+     * @param phone
+     * @param authCode
+     * @param password
+     * @param password_confirmation
+     * @param call
+     */
+    public static void forgetPassword(String phone, String authCode, String password, String password_confirmation, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("phone", phone);
+        map.put("authCode", authCode);
+        map.put("password", password);
+        map.put("password_confirmation", password_confirmation);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_forgetPassword).build().execute(call);
 
     }
 
@@ -116,6 +191,14 @@ public class SendRequest {
 
     }
 
+    public static void isFollow(int tourist_id, int follow_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("follow_id", String.valueOf(follow_id));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_isFollow).build().execute(call);
+
+    }
+
     /**
      * 重置密码
      *
@@ -124,7 +207,7 @@ public class SendRequest {
      * @param password
      * @param call
      */
-    public static void resetPassword(String tourist_id, String old_password, String password, Callback call) {
+    public static void resetPassword(String tourist_id, String old_password, String password, String confirm_password, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", tourist_id);
         map.put("old_password", old_password);
@@ -173,11 +256,17 @@ public class SendRequest {
      * @param page       页数(非必填 默认1)
      * @param call
      */
-    public static void searchWork(String tourist_id, int type, int nav_id, String word, int per_page, int page, Callback call) {
+    public static void searchWork(int tourist_id, int type, int nav_id, String word, int per_page, int page, Callback call) {
         Map<String, String> map = new HashMap<>();
-        map.put("tourist_id", tourist_id);
-        map.put("type", String.valueOf(type));
-        map.put("nav_id", String.valueOf(nav_id));
+        if (!CommonUtil.isBlank(String.valueOf(type))) {
+            map.put("tourist_id", String.valueOf(tourist_id));
+        }
+        if (!CommonUtil.isBlank(String.valueOf(type))) {
+            map.put("type", String.valueOf(type));
+        }
+        if (!CommonUtil.isBlank(String.valueOf(type))) {
+            map.put("nav_id", String.valueOf(nav_id));
+        }
         if (!CommonUtil.isBlank(word)) {
             map.put("word", word);
         }
@@ -185,6 +274,29 @@ public class SendRequest {
         map.put("page", String.valueOf(page));
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_searchWork).build().execute(call);
 
+    }
+
+    public static void searchWorkType(int nav_id, int per_page, int page, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("nav_id", String.valueOf(nav_id));
+        map.put("per_page", String.valueOf(per_page));
+        map.put("page", String.valueOf(page));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_searchWork).build().execute(call);
+
+    }
+
+    public static void searchWorkWord(String word, int per_page, int page, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("word", word);
+        map.put("per_page", String.valueOf(per_page));
+        map.put("page", String.valueOf(page));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_searchWork).build().execute(call);
+    }
+
+    public static void showContentComment(int content_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("content_id", String.valueOf(content_id));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_showContentComment).build().execute(call);
     }
 
     /**
@@ -208,20 +320,28 @@ public class SendRequest {
      * @param page       页数（非必填 默认1）.
      * @param call
      */
-    public static void centerConcern(String tourist_id, String per_page, String page, Callback call) {
+    public static void centerConcern(int tourist_id, int per_page, int page, Callback call) {
         Map<String, String> map = new HashMap<>();
-        map.put("tourist_id", tourist_id);
-        map.put("per_page", per_page);
-        map.put("page", page);
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("per_page", String.valueOf(per_page));
+        map.put("page", String.valueOf(page));
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_centerConcern).build().execute(call);
 
     }
 
-    public static void centerAttention(String tourist_id, String per_page, String page, Callback call) {
+    /**
+     * 获取关注我的人
+     *
+     * @param tourist_id 用户id（必填）.
+     * @param per_page   每页条数（非必填 默认10）.
+     * @param page       页数（非必填 默认1）.
+     * @param call
+     */
+    public static void centerAttention(int tourist_id, int per_page, int page, Callback call) {
         Map<String, String> map = new HashMap<>();
-        map.put("tourist_id", tourist_id);
-        map.put("per_page", per_page);
-        map.put("page", page);
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("per_page", String.valueOf(per_page));
+        map.put("page", String.valueOf(page));
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_centerAttention).build().execute(call);
 
     }
@@ -258,6 +378,25 @@ public class SendRequest {
         map.put("per_page", String.valueOf(per_page));
         map.put("page", String.valueOf(page));
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_favouriteContent).build().execute(call);
+    }
+
+    public static void commonAbout(Callback call) {
+        Map<String, String> map = new HashMap<>();
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_commonAbout).build().execute(call);
+    }
+
+    public static void centerComment(int tourist_id, String comment, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("comment", comment);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_centerComment).build().execute(call);
+    }
+
+    public static void centerFollow(int tourist_id, int follow_id, String followUrl, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("follow_id", String.valueOf(follow_id));
+        OkHttpUtils.getInstance().post().params(map).url(followUrl).build().execute(call);
     }
 
 

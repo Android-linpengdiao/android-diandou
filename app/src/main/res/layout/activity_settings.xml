@@ -69,6 +69,7 @@
             android:background="#DCDCDC" />
 
         <LinearLayout
+            android:id="@+id/about"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -102,6 +103,7 @@
             android:background="#DCDCDC" />
 
         <LinearLayout
+            android:id="@+id/feedback"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -135,6 +137,7 @@
             android:background="#DCDCDC" />
 
         <LinearLayout
+            android:id="@+id/clear"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -168,6 +171,7 @@
             android:background="#DCDCDC" />
 
         <LinearLayout
+            android:id="@+id/resetPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -179,7 +183,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="退出登录"
+                android:text="密码设置"
                 android:textColor="#ff333333"
                 android:textSize="17sp" />
 
@@ -201,6 +205,7 @@
             android:background="#DCDCDC" />
 
         <LinearLayout
+            android:id="@+id/logout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -212,7 +217,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="软件更新"
+                android:text="退出登录"
                 android:textColor="#ff333333"
                 android:textSize="17sp" />
 

@@ -7,7 +7,7 @@ public class FansData {
     /**
      * code : 200
      * msg : 成功
-     * data : {"current_page":1,"data":[{"id":1,"name":"ooooo","phone":"17600201805","avatar":"upload/202003310557540Fpya.jpg","password":"$2y$10$CScwI.k6m12BSP547GGwF.RD/UrGHDP6zw9ZA8.UzzfJNgbMkBINe","remember_token":null,"settings":null,"created_at":"2020-03-23 10:05:31","updated_at":"2020-03-31 18:12:10","tourist_id":"13515786","sex":2,"birth":"2020-03-28","openid":null,"headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":"pppppo","weibo":"微博13pp","reg":"191e35f7e0ddb44139a","qq_id":"4EE4396DF3AFA7BA7D8EC90FA47091A2","weibo_id":"6027212432","liker":0,"followers":0,"comment":0,"pivot":{"liker_id":3,"likeable_id":1,"liker_type":"App\\Tourist","likeable_type":"App\\Tourist","created_at":"2020-03-25 16:10:56","updated_at":"2020-03-25 16:10:56"},"attention":1,"content_num":7},{"id":6,"name":"O9Cm8J","phone":"18611001339","avatar":"users/default.png","password":"$2y$10$juBfS1JzvkT6B6kl7O8R9uvWh/8aNK0yqFF.ZKXpIHpTy3HdiyPee","remember_token":null,"settings":null,"created_at":"2020-03-25 21:10:55","updated_at":"2020-03-25 21:23:10","tourist_id":"75567584","sex":1,"birth":null,"openid":"oH48X07cqrOuB_KLDXZbvgUk3wi4","headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"","qq_id":"73775B2E666798A1482423132B0E9CD2","weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"liker_id":3,"likeable_id":6,"liker_type":"App\\Tourist","likeable_type":"App\\Tourist","created_at":"2020-03-26 11:00:53","updated_at":"2020-03-26 11:00:53"},"attention":3,"content_num":1},{"id":7,"name":"M8wdFy","phone":"15935964770","avatar":"users/default.png","password":"$2y$10$7W0HtAjw9OrdS2YBcfVHn.867qETI1YeLn1JWoQT8AVPI7uuMSpdq","remember_token":null,"settings":null,"created_at":"2020-03-27 11:06:40","updated_at":"2020-03-27 11:06:40","tourist_id":"13602710","sex":1,"birth":null,"openid":null,"headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"1517bfd3f7454ae6742","qq_id":null,"weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"liker_id":3,"likeable_id":7,"liker_type":"App\\Tourist","likeable_type":"App\\Tourist","created_at":"2020-03-27 13:49:49","updated_at":"2020-03-27 13:49:49"},"attention":1,"content_num":2},{"id":10,"name":"嘟米宝贝","phone":"18911071170","avatar":"users/default.png","password":"$2y$10$y89FwtQzdYVF1DpL9i.Ad.lDT8jpud0h73PdmO.R5Shu4j1GV5NIW","remember_token":null,"settings":null,"created_at":"2020-03-27 19:02:00","updated_at":"2020-03-27 19:11:28","tourist_id":"25785415","sex":2,"birth":"2020-3-27","openid":null,"headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":"","weibo":"","reg":"","qq_id":null,"weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"liker_id":3,"likeable_id":10,"liker_type":"App\\Tourist","likeable_type":"App\\Tourist","created_at":"2020-03-27 19:14:42","updated_at":"2020-03-27 19:14:42"},"attention":4,"content_num":1}],"first_page_url":"http://admin.udiandou.com/api/center/concern?page=1","from":1,"last_page":1,"last_page_url":"http://admin.udiandou.com/api/center/concern?page=1","next_page_url":null,"path":"http://admin.udiandou.com/api/center/concern","per_page":"10","prev_page_url":null,"to":4,"total":4}
+     * data : {"current_page":1,"data":[{"id":5,"name":"8Zbu5V","phone":"18515692029","avatar":"users/default.png","password":"$2y$10$bjsecx2Rn4Jh9o8gJoUf3eO.jiZB6o5W1XAJOqFWDxUTw/FYZPSm.","remember_token":null,"settings":null,"created_at":"2020-03-24 20:32:27","updated_at":"2020-03-24 20:32:27","tourist_id":"92859738","sex":1,"birth":null,"openid":"oH48X03285sQPqnnRy2GYOKdYukc","headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"","qq_id":null,"weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"likeable_id":3,"liker_id":5,"likeable_type":"App\\Tourist","liker_type":"App\\Tourist","created_at":"2020-03-24 21:34:19","updated_at":"2020-03-24 21:34:19"},"attention":false,"attention_num":0,"content_num":2},{"id":6,"name":"O9Cm8J","phone":"18611001339","avatar":"users/default.png","password":"$2y$10$juBfS1JzvkT6B6kl7O8R9uvWh/8aNK0yqFF.ZKXpIHpTy3HdiyPee","remember_token":null,"settings":null,"created_at":"2020-03-25 21:10:55","updated_at":"2020-03-25 21:23:10","tourist_id":"75567584","sex":1,"birth":null,"openid":"oH48X07cqrOuB_KLDXZbvgUk3wi4","headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"","qq_id":"73775B2E666798A1482423132B0E9CD2","weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"likeable_id":3,"liker_id":6,"likeable_type":"App\\Tourist","liker_type":"App\\Tourist","created_at":"2020-03-25 21:20:31","updated_at":"2020-03-25 21:20:31"},"attention":true,"attention_num":3,"content_num":1},{"id":2,"name":"Android","phone":"13521614827","avatar":"users/default.png","password":"$2y$10$lRBWSdhAAOGTY4vzKQlUSucslsbWecLyXsZrgO2Jh1yDFKbQ4QeIq","remember_token":null,"settings":null,"created_at":"2020-03-24 11:54:40","updated_at":"2020-05-25 06:14:52","tourist_id":"72858237","sex":1,"birth":"","openid":null,"headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":"","weibo":"","reg":"","qq_id":null,"weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"likeable_id":3,"liker_id":2,"likeable_type":"App\\Tourist","liker_type":"App\\Tourist","created_at":"2020-05-23 08:51:26","updated_at":"2020-05-23 08:51:26"},"attention":true,"attention_num":1,"content_num":0}],"first_page_url":"http://admin.udiandou.com/api/center/attention?page=1","from":1,"last_page":1,"last_page_url":"http://admin.udiandou.com/api/center/attention?page=1","next_page_url":null,"path":"http://admin.udiandou.com/api/center/attention","per_page":"10","prev_page_url":null,"to":3,"total":3}
      */
 
     private int code;
@@ -41,17 +41,17 @@ public class FansData {
     public static class DataBeanX {
         /**
          * current_page : 1
-         * data : [{"id":1,"name":"ooooo","phone":"17600201805","avatar":"upload/202003310557540Fpya.jpg","password":"$2y$10$CScwI.k6m12BSP547GGwF.RD/UrGHDP6zw9ZA8.UzzfJNgbMkBINe","remember_token":null,"settings":null,"created_at":"2020-03-23 10:05:31","updated_at":"2020-03-31 18:12:10","tourist_id":"13515786","sex":2,"birth":"2020-03-28","openid":null,"headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":"pppppo","weibo":"微博13pp","reg":"191e35f7e0ddb44139a","qq_id":"4EE4396DF3AFA7BA7D8EC90FA47091A2","weibo_id":"6027212432","liker":0,"followers":0,"comment":0,"pivot":{"liker_id":3,"likeable_id":1,"liker_type":"App\\Tourist","likeable_type":"App\\Tourist","created_at":"2020-03-25 16:10:56","updated_at":"2020-03-25 16:10:56"},"attention":1,"content_num":7},{"id":6,"name":"O9Cm8J","phone":"18611001339","avatar":"users/default.png","password":"$2y$10$juBfS1JzvkT6B6kl7O8R9uvWh/8aNK0yqFF.ZKXpIHpTy3HdiyPee","remember_token":null,"settings":null,"created_at":"2020-03-25 21:10:55","updated_at":"2020-03-25 21:23:10","tourist_id":"75567584","sex":1,"birth":null,"openid":"oH48X07cqrOuB_KLDXZbvgUk3wi4","headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"","qq_id":"73775B2E666798A1482423132B0E9CD2","weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"liker_id":3,"likeable_id":6,"liker_type":"App\\Tourist","likeable_type":"App\\Tourist","created_at":"2020-03-26 11:00:53","updated_at":"2020-03-26 11:00:53"},"attention":3,"content_num":1},{"id":7,"name":"M8wdFy","phone":"15935964770","avatar":"users/default.png","password":"$2y$10$7W0HtAjw9OrdS2YBcfVHn.867qETI1YeLn1JWoQT8AVPI7uuMSpdq","remember_token":null,"settings":null,"created_at":"2020-03-27 11:06:40","updated_at":"2020-03-27 11:06:40","tourist_id":"13602710","sex":1,"birth":null,"openid":null,"headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"1517bfd3f7454ae6742","qq_id":null,"weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"liker_id":3,"likeable_id":7,"liker_type":"App\\Tourist","likeable_type":"App\\Tourist","created_at":"2020-03-27 13:49:49","updated_at":"2020-03-27 13:49:49"},"attention":1,"content_num":2},{"id":10,"name":"嘟米宝贝","phone":"18911071170","avatar":"users/default.png","password":"$2y$10$y89FwtQzdYVF1DpL9i.Ad.lDT8jpud0h73PdmO.R5Shu4j1GV5NIW","remember_token":null,"settings":null,"created_at":"2020-03-27 19:02:00","updated_at":"2020-03-27 19:11:28","tourist_id":"25785415","sex":2,"birth":"2020-3-27","openid":null,"headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":"","weibo":"","reg":"","qq_id":null,"weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"liker_id":3,"likeable_id":10,"liker_type":"App\\Tourist","likeable_type":"App\\Tourist","created_at":"2020-03-27 19:14:42","updated_at":"2020-03-27 19:14:42"},"attention":4,"content_num":1}]
-         * first_page_url : http://admin.udiandou.com/api/center/concern?page=1
+         * data : [{"id":5,"name":"8Zbu5V","phone":"18515692029","avatar":"users/default.png","password":"$2y$10$bjsecx2Rn4Jh9o8gJoUf3eO.jiZB6o5W1XAJOqFWDxUTw/FYZPSm.","remember_token":null,"settings":null,"created_at":"2020-03-24 20:32:27","updated_at":"2020-03-24 20:32:27","tourist_id":"92859738","sex":1,"birth":null,"openid":"oH48X03285sQPqnnRy2GYOKdYukc","headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"","qq_id":null,"weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"likeable_id":3,"liker_id":5,"likeable_type":"App\\Tourist","liker_type":"App\\Tourist","created_at":"2020-03-24 21:34:19","updated_at":"2020-03-24 21:34:19"},"attention":false,"attention_num":0,"content_num":2},{"id":6,"name":"O9Cm8J","phone":"18611001339","avatar":"users/default.png","password":"$2y$10$juBfS1JzvkT6B6kl7O8R9uvWh/8aNK0yqFF.ZKXpIHpTy3HdiyPee","remember_token":null,"settings":null,"created_at":"2020-03-25 21:10:55","updated_at":"2020-03-25 21:23:10","tourist_id":"75567584","sex":1,"birth":null,"openid":"oH48X07cqrOuB_KLDXZbvgUk3wi4","headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"","qq_id":"73775B2E666798A1482423132B0E9CD2","weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"likeable_id":3,"liker_id":6,"likeable_type":"App\\Tourist","liker_type":"App\\Tourist","created_at":"2020-03-25 21:20:31","updated_at":"2020-03-25 21:20:31"},"attention":true,"attention_num":3,"content_num":1},{"id":2,"name":"Android","phone":"13521614827","avatar":"users/default.png","password":"$2y$10$lRBWSdhAAOGTY4vzKQlUSucslsbWecLyXsZrgO2Jh1yDFKbQ4QeIq","remember_token":null,"settings":null,"created_at":"2020-03-24 11:54:40","updated_at":"2020-05-25 06:14:52","tourist_id":"72858237","sex":1,"birth":"","openid":null,"headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":"","weibo":"","reg":"","qq_id":null,"weibo_id":null,"liker":0,"followers":0,"comment":0,"pivot":{"likeable_id":3,"liker_id":2,"likeable_type":"App\\Tourist","liker_type":"App\\Tourist","created_at":"2020-05-23 08:51:26","updated_at":"2020-05-23 08:51:26"},"attention":true,"attention_num":1,"content_num":0}]
+         * first_page_url : http://admin.udiandou.com/api/center/attention?page=1
          * from : 1
          * last_page : 1
-         * last_page_url : http://admin.udiandou.com/api/center/concern?page=1
+         * last_page_url : http://admin.udiandou.com/api/center/attention?page=1
          * next_page_url : null
-         * path : http://admin.udiandou.com/api/center/concern
+         * path : http://admin.udiandou.com/api/center/attention
          * per_page : 10
          * prev_page_url : null
-         * to : 4
-         * total : 4
+         * to : 3
+         * total : 3
          */
 
         private int current_page;
@@ -165,34 +165,35 @@ public class FansData {
 
         public static class DataBean {
             /**
-             * id : 1
-             * name : ooooo
-             * phone : 17600201805
-             * avatar : upload/202003310557540Fpya.jpg
-             * password : $2y$10$CScwI.k6m12BSP547GGwF.RD/UrGHDP6zw9ZA8.UzzfJNgbMkBINe
+             * id : 5
+             * name : 8Zbu5V
+             * phone : 18515692029
+             * avatar : users/default.png
+             * password : $2y$10$bjsecx2Rn4Jh9o8gJoUf3eO.jiZB6o5W1XAJOqFWDxUTw/FYZPSm.
              * remember_token : null
              * settings : null
-             * created_at : 2020-03-23 10:05:31
-             * updated_at : 2020-03-31 18:12:10
-             * tourist_id : 13515786
-             * sex : 2
-             * birth : 2020-03-28
-             * openid : null
+             * created_at : 2020-03-24 20:32:27
+             * updated_at : 2020-03-24 20:32:27
+             * tourist_id : 92859738
+             * sex : 1
+             * birth : null
+             * openid : oH48X03285sQPqnnRy2GYOKdYukc
              * headimgurl : null
              * city : null
              * province : null
              * cancel : 1
-             * autograph : pppppo
-             * weibo : 微博13pp
-             * reg : 191e35f7e0ddb44139a
-             * qq_id : 4EE4396DF3AFA7BA7D8EC90FA47091A2
-             * weibo_id : 6027212432
+             * autograph : null
+             * weibo : null
+             * reg :
+             * qq_id : null
+             * weibo_id : null
              * liker : 0
              * followers : 0
              * comment : 0
-             * pivot : {"liker_id":3,"likeable_id":1,"liker_type":"App\\Tourist","likeable_type":"App\\Tourist","created_at":"2020-03-25 16:10:56","updated_at":"2020-03-25 16:10:56"}
-             * attention : 1
-             * content_num : 7
+             * pivot : {"likeable_id":3,"liker_id":5,"likeable_type":"App\\Tourist","liker_type":"App\\Tourist","created_at":"2020-03-24 21:34:19","updated_at":"2020-03-24 21:34:19"}
+             * attention : false
+             * attention_num : 0
+             * content_num : 2
              */
 
             private int id;
@@ -206,22 +207,23 @@ public class FansData {
             private String updated_at;
             private String tourist_id;
             private int sex;
-            private String birth;
-            private Object openid;
+            private Object birth;
+            private String openid;
             private Object headimgurl;
             private Object city;
             private Object province;
             private int cancel;
-            private String autograph;
-            private String weibo;
+            private Object autograph;
+            private Object weibo;
             private String reg;
-            private String qq_id;
-            private String weibo_id;
+            private Object qq_id;
+            private Object weibo_id;
             private int liker;
             private int followers;
             private int comment;
             private PivotBean pivot;
-            private int attention;
+            private boolean attention;
+            private int attention_num;
             private int content_num;
 
             public int getId() {
@@ -312,19 +314,19 @@ public class FansData {
                 this.sex = sex;
             }
 
-            public String getBirth() {
+            public Object getBirth() {
                 return birth;
             }
 
-            public void setBirth(String birth) {
+            public void setBirth(Object birth) {
                 this.birth = birth;
             }
 
-            public Object getOpenid() {
+            public String getOpenid() {
                 return openid;
             }
 
-            public void setOpenid(Object openid) {
+            public void setOpenid(String openid) {
                 this.openid = openid;
             }
 
@@ -360,19 +362,19 @@ public class FansData {
                 this.cancel = cancel;
             }
 
-            public String getAutograph() {
+            public Object getAutograph() {
                 return autograph;
             }
 
-            public void setAutograph(String autograph) {
+            public void setAutograph(Object autograph) {
                 this.autograph = autograph;
             }
 
-            public String getWeibo() {
+            public Object getWeibo() {
                 return weibo;
             }
 
-            public void setWeibo(String weibo) {
+            public void setWeibo(Object weibo) {
                 this.weibo = weibo;
             }
 
@@ -384,19 +386,19 @@ public class FansData {
                 this.reg = reg;
             }
 
-            public String getQq_id() {
+            public Object getQq_id() {
                 return qq_id;
             }
 
-            public void setQq_id(String qq_id) {
+            public void setQq_id(Object qq_id) {
                 this.qq_id = qq_id;
             }
 
-            public String getWeibo_id() {
+            public Object getWeibo_id() {
                 return weibo_id;
             }
 
-            public void setWeibo_id(String weibo_id) {
+            public void setWeibo_id(Object weibo_id) {
                 this.weibo_id = weibo_id;
             }
 
@@ -432,12 +434,20 @@ public class FansData {
                 this.pivot = pivot;
             }
 
-            public int getAttention() {
+            public boolean isAttention() {
                 return attention;
             }
 
-            public void setAttention(int attention) {
+            public void setAttention(boolean attention) {
                 this.attention = attention;
+            }
+
+            public int getAttention_num() {
+                return attention_num;
+            }
+
+            public void setAttention_num(int attention_num) {
+                this.attention_num = attention_num;
             }
 
             public int getContent_num() {
@@ -450,28 +460,20 @@ public class FansData {
 
             public static class PivotBean {
                 /**
-                 * liker_id : 3
-                 * likeable_id : 1
-                 * liker_type : App\Tourist
+                 * likeable_id : 3
+                 * liker_id : 5
                  * likeable_type : App\Tourist
-                 * created_at : 2020-03-25 16:10:56
-                 * updated_at : 2020-03-25 16:10:56
+                 * liker_type : App\Tourist
+                 * created_at : 2020-03-24 21:34:19
+                 * updated_at : 2020-03-24 21:34:19
                  */
 
-                private int liker_id;
                 private int likeable_id;
-                private String liker_type;
+                private int liker_id;
                 private String likeable_type;
+                private String liker_type;
                 private String created_at;
                 private String updated_at;
-
-                public int getLiker_id() {
-                    return liker_id;
-                }
-
-                public void setLiker_id(int liker_id) {
-                    this.liker_id = liker_id;
-                }
 
                 public int getLikeable_id() {
                     return likeable_id;
@@ -481,12 +483,12 @@ public class FansData {
                     this.likeable_id = likeable_id;
                 }
 
-                public String getLiker_type() {
-                    return liker_type;
+                public int getLiker_id() {
+                    return liker_id;
                 }
 
-                public void setLiker_type(String liker_type) {
-                    this.liker_type = liker_type;
+                public void setLiker_id(int liker_id) {
+                    this.liker_id = liker_id;
                 }
 
                 public String getLikeable_type() {
@@ -495,6 +497,14 @@ public class FansData {
 
                 public void setLikeable_type(String likeable_type) {
                     this.likeable_type = likeable_type;
+                }
+
+                public String getLiker_type() {
+                    return liker_type;
+                }
+
+                public void setLiker_type(String liker_type) {
+                    this.liker_type = liker_type;
                 }
 
                 public String getCreated_at() {

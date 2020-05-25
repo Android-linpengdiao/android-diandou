@@ -12,11 +12,25 @@
         android:background="@color/colorPrimary"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="43dp">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:padding="10dp"
+                android:src="@drawable/video_back"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="40dp"
             android:layout_marginRight="20dp"
             android:orientation="horizontal">
 
@@ -65,6 +79,7 @@
                         android:gravity="center"
                         android:paddingLeft="14dp"
                         android:paddingRight="14dp"
+                        android:layout_marginRight="20dp"
                         android:text="编辑资料"
                         android:textColor="#ff00c8fa"
                         android:textSize="14sp" />
@@ -73,14 +88,31 @@
                         android:id="@+id/tv_setting"
                         android:layout_width="wrap_content"
                         android:layout_height="34dp"
-                        android:layout_marginLeft="20dp"
                         android:background="@drawable/button_radius_white"
+                        android:drawableLeft="@drawable/settings"
+                        android:drawablePadding="5dp"
+                        android:layout_marginRight="20dp"
                         android:gravity="center"
                         android:paddingLeft="14dp"
                         android:paddingRight="14dp"
                         android:text="设置"
                         android:textColor="#ff00c8fa"
                         android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_is_follow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:background="@drawable/button_radius_white"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:paddingLeft="24dp"
+                        android:paddingRight="24dp"
+                        android:text="关注"
+                        android:textColor="#ff00c8fa"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -95,6 +127,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/followers_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -105,7 +138,7 @@
                     android:id="@+id/tv_followers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2398"
+                    android:text="0"
                     android:textColor="#ffffffff"
                     android:textSize="20sp" />
 
@@ -120,6 +153,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/liker_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -130,7 +164,7 @@
                     android:id="@+id/tv_liker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="32.2w"
+                    android:text="0"
                     android:textColor="#ffffffff"
                     android:textSize="20sp" />
 
@@ -145,6 +179,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/appreciate_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -154,7 +189,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="40.2w"
+                    android:text="0"
                     android:textColor="#ffffffff"
                     android:textSize="20sp" />
 

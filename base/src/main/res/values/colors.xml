@@ -4,6 +4,7 @@
     <color name="colorAppThemeDark">#d2d2d2</color>
     <color name="media_color">#fdfdfd</color>
     <color name="transparentDark">#1D000000</color>
+    <color name="transparent">#00000000</color>
 
     <color name="white">@android:color/white</color>
     <color name="black">@android:color/black</color>

@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="210dp"
             android:background="@drawable/button_radius_top"
             android:focusable="false"
             android:focusableInTouchMode="false"

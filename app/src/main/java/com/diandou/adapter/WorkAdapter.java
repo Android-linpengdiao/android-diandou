@@ -25,13 +25,14 @@ public class WorkAdapter extends BaseRecyclerAdapter<WorkData.DataBeanX.DataBean
     @Override
     protected void onBindItem(final ItemWorkLayoutBinding binding, final WorkData.DataBeanX.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            binding.title.setText(dataBean.getName());
+            binding.title.setText(dataBean.getDesc());
+            binding.assist.setText(dataBean.getAssist() + "");
             GlideLoader.LoderImage(mContext, dataBean.getImg(), binding.cover, 10);
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, WorkInfoActivity.class);
-                    intent.putExtra("id",dataBean.getId());
+                    intent.putExtra("id", dataBean.getId());
                     mContext.startActivity(intent);
                 }
             });

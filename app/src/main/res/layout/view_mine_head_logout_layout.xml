@@ -65,12 +65,15 @@
                     android:layout_height="34dp"
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/button_radius_white"
+                    android:drawableLeft="@drawable/settings"
+                    android:drawablePadding="5dp"
                     android:gravity="center"
                     android:paddingLeft="14dp"
                     android:paddingRight="14dp"
                     android:text="设置"
                     android:textColor="#ff00c8fa"
                     android:textSize="14sp" />
+
             </LinearLayout>
 
         </RelativeLayout>

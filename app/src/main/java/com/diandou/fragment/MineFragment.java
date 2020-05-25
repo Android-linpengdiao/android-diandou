@@ -12,12 +12,14 @@ import android.view.ViewGroup;
 import com.baselibrary.utils.GlideLoader;
 import com.diandou.R;
 import com.diandou.activity.EditorActivity;
+import com.diandou.activity.MineFansActivity;
+import com.diandou.activity.MineFollowActivity;
 import com.diandou.activity.SettingsActivity;
 import com.diandou.adapter.PagerAdapter;
 import com.diandou.databinding.FragmentMineBinding;
 
 public class MineFragment extends BaseFragment implements View.OnClickListener {
-
+    private static final String TAG = "MineFragment";
     private FragmentMineBinding binding;
 
     @Override
@@ -34,6 +36,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
         binding.headLoginLayout.tvEditor.setOnClickListener(this);
         binding.headLoginLayout.tvSetting.setOnClickListener(this);
+        binding.headLoginLayout.followersView.setOnClickListener(this);
+        binding.headLoginLayout.likerView.setOnClickListener(this);
+        binding.headLoginLayout.appreciateView.setOnClickListener(this);
 
         initTab();
 
@@ -73,10 +78,14 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
             binding.headLoginLayout.userName.setText(getUserInfo().getData().getName());
             binding.headLoginLayout.touristId.setText("点逗号：" + getUserInfo().getData().getTourist_id());
             GlideLoader.LoderClipImage(getActivity(), getUserInfo().getData().getAvatar(), binding.headLoginLayout.userIcon);
+            Log.i(TAG, "initView: "+getUserInfo().getData().getFollowers());
+            binding.headLoginLayout.tvFollowers.setText(getUserInfo().getData().getFollowers()+"");
+            binding.headLoginLayout.tvLiker.setText(getUserInfo().getData().getLiker()+"");
         } else {
             binding.headLogoutLayout.headLogoutView.setVisibility(View.VISIBLE);
             binding.headLoginLayout.headLoginView.setVisibility(View.GONE);
         }
+        baseInfo();
     }
 
     @Override
@@ -87,6 +96,15 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.tv_setting:
                 openActivity(SettingsActivity.class);
+                break;
+            case R.id.followers_view:
+                openActivity(MineFollowActivity.class);
+                break;
+            case R.id.liker_view:
+                openActivity(MineFansActivity.class);
+                break;
+            case R.id.appreciate_view:
+
                 break;
         }
     }

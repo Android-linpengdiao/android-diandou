@@ -15,8 +15,10 @@ import android.view.ViewGroup;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
+import com.diandou.activity.NoticeListActivity;
 import com.diandou.adapter.NoticeAdapter;
 import com.diandou.databinding.FragmentLikeBinding;
+import com.diandou.databinding.FragmentNoticeBinding;
 import com.diandou.model.MessageData;
 import com.diandou.model.NoticeData;
 import com.okhttp.SendRequest;
@@ -27,8 +29,7 @@ import okhttp3.Call;
 
 public class NoticeFragment extends BaseFragment {
 
-    private FragmentLikeBinding binding;
-    private NoticeAdapter adapter;
+    private FragmentNoticeBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,23 +39,16 @@ public class NoticeFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_like, container, false);
-        setStatusBarHeight(binding.getRoot());
-        setStatusBarDarkTheme(true);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_notice, container, false);
 
-        adapter = new NoticeAdapter(getActivity());
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.recyclerView.setAdapter(adapter);
+        initData();
 
-        binding.swipeRefreshLayout.setColorSchemeColors(Color.BLUE);
-        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.noticeView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onRefresh() {
-                initData();
+            public void onClick(View v) {
+                openActivity(NoticeListActivity.class);
             }
         });
-        binding.swipeRefreshLayout.setRefreshing(true);
-        initData();
 
         return binding.getRoot();
     }
@@ -63,14 +57,12 @@ public class NoticeFragment extends BaseFragment {
         SendRequest.commonMessage(new GenericsCallback<NoticeData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
-                binding.swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onResponse(NoticeData response, int id) {
-                binding.swipeRefreshLayout.setRefreshing(false);
                 if (response.getCode() == 200 && response.getData() != null) {
-                    adapter.refreshData(response.getData());
+
                 } else {
                     ToastUtils.showShort(getActivity(), response.getMsg());
                 }

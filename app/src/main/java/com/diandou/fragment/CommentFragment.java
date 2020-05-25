@@ -39,14 +39,12 @@ public class CommentFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_like, container, false);
-        setStatusBarHeight(binding.getRoot());
-        setStatusBarDarkTheme(true);
 
         adapter = new MessageAdapter(getActivity(), 3);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recyclerView.setAdapter(adapter);
 
-        binding.swipeRefreshLayout.setColorSchemeColors(Color.BLUE);
+        binding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -64,7 +64,7 @@ public class FollowFragment extends BaseFragment {
     }
 
     private void initData() {
-        SendRequest.centerConcern(String.valueOf(getUserInfo().getData().getId()), String.valueOf(10), String.valueOf(1), new GenericsCallback<FollowData>(new JsonGenericsSerializator()) {
+        SendRequest.centerConcern(getUserInfo().getData().getId(), 0, 1, new GenericsCallback<FollowData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 binding.swipeRefreshLayout.setRefreshing(false);

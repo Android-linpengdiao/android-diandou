@@ -10,11 +10,12 @@
         android:id="@+id/view_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
         android:orientation="horizontal"
         android:paddingLeft="30dp"
-        android:paddingTop="25dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:paddingRight="30dp">
+        android:paddingTop="15dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="10dp">
 
         <ImageView
             android:id="@+id/user_icon"

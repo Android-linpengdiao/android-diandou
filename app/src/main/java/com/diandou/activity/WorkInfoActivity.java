@@ -3,6 +3,7 @@ package com.diandou.activity;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
@@ -19,6 +20,7 @@ import com.diandou.view.GridItemDecoration;
 import com.diandou.view.OnClickListener;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
+import com.okhttp.callbacks.StringCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 
 import okhttp3.Call;
@@ -73,13 +75,55 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
         });
 
+
     }
 
     private void initView(WorkDetail.DataBean data) {
         binding.tvDesc.setText(data.getDesc());
         binding.tvAddr.setText(data.getAddr());
         binding.tvTime.setText(data.getUpdated_at());
+        binding.tvAppreciate.setText(data.getAssist() + "");
         GlideLoader.LoderImage(WorkInfoActivity.this, data.getImg(), binding.thumbnails);
+
+//        getVideos(data);
+        showContentComment(data);
+    }
+
+    private void getVideos(WorkDetail.DataBean data) {
+        SendRequest.searchWorkType(data.getNav_id(), 10, 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(WorkData response, int id) {
+                if (response.getCode() == 200) {
+                    adapter.refreshData(response.getData().getData());
+                } else {
+                    ToastUtils.showShort(WorkInfoActivity.this, response.getMsg());
+                }
+            }
+
+        });
+
+    }
+
+    private static final String TAG = "WorkInfoActivity";
+    private void showContentComment(WorkDetail.DataBean data) {
+        Log.i(TAG, "showContentComment: "+data.getId());
+        SendRequest.showContentComment(data.getId(), new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.i(TAG, "onError: "+e.getMessage());
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i(TAG, "onResponse: "+response);
+            }
+        });
+
     }
 
     @Override

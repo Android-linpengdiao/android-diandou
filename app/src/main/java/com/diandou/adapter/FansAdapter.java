@@ -1,11 +1,13 @@
 package com.diandou.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
 import com.baselibrary.utils.GlideLoader;
 import com.diandou.R;
+import com.diandou.activity.UserHomeActivity;
 import com.diandou.databinding.ItemFansLayoutBinding;
 import com.diandou.databinding.ItemMessageLayoutBinding;
 import com.diandou.model.FansData;
@@ -39,9 +41,10 @@ public class FansAdapter extends BaseRecyclerAdapter<FansData.DataBeanX.DataBean
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onClickListener != null) {
-                        onClickListener.onClick(v, position);
-                    }
+                    Intent intent = new Intent(mContext, UserHomeActivity.class);
+                    intent.putExtra("uid", dataBean.getId());
+                    intent.putExtra("isFollow", false);
+                    mContext.startActivity(intent);
                 }
             });
         }

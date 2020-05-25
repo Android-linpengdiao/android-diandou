@@ -60,8 +60,12 @@ public class WXManager {
 //    }
 
     public static void fetchToken(Callback call) {
-        String code = getCode();
-        String url = String.format(URL_GET_TOKEN, Config.WECHAT_APP_ID, Config.WECHAT_APP_SECRET, code);
+        String url = String.format(URL_GET_TOKEN, Config.WECHAT_APP_ID, Config.WECHAT_APP_SECRET, getCode());
+        OkHttpUtils.getInstance().get().url(url).build().execute(call);
+    }
+
+    public static void getUserInfo(Callback call) {
+        String url = String.format(URL_GET_USER_INFO, getToken(), getOpenid());
         OkHttpUtils.getInstance().get().url(url).build().execute(call);
     }
 

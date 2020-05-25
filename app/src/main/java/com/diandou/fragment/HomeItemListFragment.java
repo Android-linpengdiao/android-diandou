@@ -63,7 +63,7 @@ public class HomeItemListFragment extends BaseFragment implements View.OnClickLi
         binding.recyclerView.addItemDecoration(new GridItemDecoration(builder));
         binding.recyclerView.setAdapter(adapter);
 
-        SendRequest.searchWork(String.valueOf(getUserInfo().getData().getTourist_id()), type, navId, null, 10, 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
+        SendRequest.searchWork(getUserInfo().getData().getId(), type, navId, null, 10, 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 

@@ -17,13 +17,19 @@ import com.diandou.adapter.SearchHistoryAdapter;
 import com.diandou.adapter.WorkAdapter;
 import com.diandou.databinding.ActivitySearchBinding;
 import com.diandou.db.DBManager;
+import com.diandou.model.WorkData;
 import com.diandou.view.FlowLayoutManager;
 import com.diandou.view.GridItemDecoration;
 import com.diandou.view.OnClickListener;
 import com.diandou.view.SpaceItemDecoration;
+import com.okhttp.SendRequest;
+import com.okhttp.callbacks.GenericsCallback;
+import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
 
 public class SearchActivity extends BaseActivity implements View.OnClickListener {
 
@@ -94,7 +100,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private void initSearchView(String content) {
         binding.searchHistoryView.setVisibility(CommonUtil.isBlank(content) ? View.VISIBLE : View.GONE);
         binding.searchResultRecyclerView.setVisibility(CommonUtil.isBlank(content) ? View.GONE : View.VISIBLE);
-//        searchResultAdapter.refreshData(CommonUtil.isBlank(content) ? new ArrayList<String>() : CommonUtil.getImageListString());
+        searchWork(content);
     }
 
     public void onClick(View v) {
@@ -111,5 +117,25 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 initSearchView(null);
                 break;
         }
+    }
+
+    private void searchWork(String content) {
+        SendRequest.searchWorkWord(content, 10, 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(WorkData response, int id) {
+                if (response.getCode() == 200) {
+                    searchResultAdapter.refreshData(response.getData().getData());
+                } else {
+                    ToastUtils.showShort(SearchActivity.this, response.getMsg());
+                }
+            }
+
+        });
+
     }
 }
