@@ -45,8 +45,10 @@ public class APIUrls {
     //关注用户接口
     public final static String url_centerFollow = url_domain + "api/center/follow";
 
-    //
-    public final static String url_showContentComment = url_domain + "center/showContentComment";
+    //展示作品的评论
+    public final static String url_showContentComment = url_domain + "api/center/showContentComment";
+    //发布对作品的评论
+    public final static String url_publishComment = url_domain + "api/center/publishComment";
 
     //获取用户作品
     public final static String url_centerSelfWork = url_domain + "api/center/selfWork";

@@ -30,7 +30,10 @@
         <activity android:name=".activity.EditorActivity" />
         <activity android:name=".activity.SettingsActivity" />
         <activity android:name=".activity.TabTypeActivity" />
-        <activity android:name=".activity.WorkInfoActivity" />
+        <activity
+            android:name=".activity.WorkInfoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask" />
         <activity android:name=".activity.SearchActivity" />
 
         <uses-library

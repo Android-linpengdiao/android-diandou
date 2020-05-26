@@ -93,8 +93,9 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
                 try {
                     if (!CommonUtil.isBlank(response)) {
                         JSONObject jsonObject = new JSONObject(response);
-                        if (jsonObject.optInt("code") == 200) {
-
+                        if (jsonObject.optInt("code") == 200 && !CommonUtil.isBlank(jsonObject.optString("id"))) {
+                            binding.headLoginLayout.tvIsFollow.setSelected(!binding.headLoginLayout.tvIsFollow.isSelected());
+                            binding.headLoginLayout.tvIsFollow.setText(binding.headLoginLayout.tvIsFollow.isSelected() ? "已关注" : "关注");
                         } else {
 
                         }
@@ -146,6 +147,9 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.tv_is_follow:
+                if (CommonUtil.isBlank(uid)) {
+                    return;
+                }
                 String url = binding.headLoginLayout.tvIsFollow.isSelected() ? APIUrls.url_centerUnFollow : APIUrls.url_centerFollow;
                 SendRequest.centerFollow(getUserInfo().getData().getId(), uid, url, new StringCallback() {
                     @Override

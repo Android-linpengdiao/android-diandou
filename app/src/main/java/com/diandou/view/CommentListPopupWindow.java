@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -12,9 +13,11 @@ import com.baselibrary.utils.BasePopupWindow;
 import com.baselibrary.utils.CommonUtil;
 import com.diandou.R;
 import com.diandou.adapter.CommentListAdapter;
+import com.diandou.model.CommentData;
 
 public class CommentListPopupWindow extends BasePopupWindow {
 
+    private CommentData commentData;
     private OnClickListener onClickListener;
 
     public void setOnClickListener(OnClickListener onClickListener) {
@@ -25,11 +28,21 @@ public class CommentListPopupWindow extends BasePopupWindow {
         super(context);
     }
 
+    public void setCommentData(CommentData commentData) {
+        this.commentData = commentData;
+        if (commentData != null && commentData.getData() != null) {
+            adapter.refreshData(commentData.getData());
+            tvCommentNumber.setText("全部评论(" + commentData.getData().size() + ")");
+        }
+    }
+
     @Override
     protected int animationStyle() {
         return R.style.PopupAnimation;
     }
 
+    private CommentListAdapter adapter;
+    private TextView tvCommentNumber;
 
     @Override
     protected View initContentView() {
@@ -38,14 +51,15 @@ public class CommentListPopupWindow extends BasePopupWindow {
         View close = contentView.findViewById(R.id.iv_close);
         RecyclerView recyclerView = contentView.findViewById(R.id.recyclerView);
         TextView tvMessageInput = contentView.findViewById(R.id.tv_message_input);
+        tvCommentNumber = contentView.findViewById(R.id.tv_comment_number);
         tvMessageInput.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 InputDialog inputDialog = new InputDialog((Activity) context);
                 inputDialog.setmOnTextSendListener(new InputDialog.OnTextSendListener() {
                     @Override
                     public void onTextSend(String msg) {
-
+                        onClickListener.onClick(v, msg);
                     }
                 });
                 inputDialog.show();
@@ -53,29 +67,14 @@ public class CommentListPopupWindow extends BasePopupWindow {
         });
 
 
-        CommentListAdapter adapter = new CommentListAdapter(context);
+        adapter = new CommentListAdapter(context);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
-        adapter.refreshData(CommonUtil.getImageListString());
-        adapter.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view, Object object) {
-                if (onClickListener != null) {
-                    onClickListener.onClick(view, object);
-                    dismiss();
-                }
-            }
-
-            @Override
-            public void onLongClick(View view, Object object) {
-
-            }
-        });
 
         viewLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+//                dismiss();
             }
         });
         close.setOnClickListener(new View.OnClickListener() {

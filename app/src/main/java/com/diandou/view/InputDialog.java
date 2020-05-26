@@ -17,10 +17,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.baselibrary.utils.CommonUtil;
+import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
 
 
-public class InputDialog extends Dialog{
+public class InputDialog extends Dialog {
 
     private InputMethodManager mInputMethodManager;
     private EditText mEditText;
@@ -102,7 +104,10 @@ public class InputDialog extends Dialog{
     }
 
     public void sendMessage(String messageText) {
-
+        if (CommonUtil.isBlank(messageText)) {
+            ToastUtils.showShort(mActivity, "请输入内容");
+            return;
+        }
         if (mOnTextSendListener != null) {
             mOnTextSendListener.onTextSend(messageText);
             mEditText.setText("");

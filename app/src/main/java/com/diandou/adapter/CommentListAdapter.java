@@ -8,10 +8,11 @@ import com.baselibrary.utils.GlideLoader;
 import com.diandou.R;
 import com.diandou.databinding.ItemCommentListLayoutBinding;
 import com.diandou.databinding.ItemTabTypeLayoutBinding;
+import com.diandou.model.CommentData;
 import com.diandou.view.OnClickListener;
 
 
-public class CommentListAdapter extends BaseRecyclerAdapter<String, ItemCommentListLayoutBinding> {
+public class CommentListAdapter extends BaseRecyclerAdapter<CommentData.DataBean, ItemCommentListLayoutBinding> {
 
     private OnClickListener onClickListener;
 
@@ -29,9 +30,12 @@ public class CommentListAdapter extends BaseRecyclerAdapter<String, ItemCommentL
     }
 
     @Override
-    protected void onBindItem(final ItemCommentListLayoutBinding binding, final String str, final int position) {
+    protected void onBindItem(final ItemCommentListLayoutBinding binding, final CommentData.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            GlideLoader.LoderImage(mContext, CommonUtil.getImageListString().get(position), binding.userIcon, 100);
+            binding.userName.setText(dataBean.getTourist().getName());
+            binding.tvTime.setText(dataBean.getUpdated_at());
+            binding.tvComment.setText(dataBean.getBody());
+            GlideLoader.LoderImage(mContext, dataBean.getTourist().getAvatar(), binding.userIcon, 100);
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

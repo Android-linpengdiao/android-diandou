@@ -51,7 +51,7 @@
                     android:id="@+id/user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="June Amelie"
+                    android:text=""
                     android:textColor="#ffffffff"
                     android:textSize="30sp" />
 
@@ -60,7 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="点逗号：64888863"
+                    android:text="点逗号："
                     android:textColor="#ffffffff"
                     android:textSize="15sp" />
 

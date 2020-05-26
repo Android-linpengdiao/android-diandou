@@ -299,6 +299,14 @@ public class SendRequest {
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_showContentComment).build().execute(call);
     }
 
+    public static void publishComment(int tourist_id, int content_id, String body, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("content_id", String.valueOf(content_id));
+        map.put("body", body);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_publishComment).build().execute(call);
+    }
+
     /**
      * 获取作品详情
      *
