@@ -61,10 +61,10 @@ public class LoadingManager {
 
     public static void showProgress(final Activity activity, final String progress) {
         progressView = null;
-        progressView = new ProgressView(activity, R.style.LoadingDialogTheme);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                progressView = new ProgressView(activity, R.style.LoadingDialogTheme);
                 progressView.show();
                 progressView.updateProgress(progress);
             }

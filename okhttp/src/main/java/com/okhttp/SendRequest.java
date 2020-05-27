@@ -199,6 +199,17 @@ public class SendRequest {
 
     }
 
+    public static void publishWork(int tourist_id, int follow_id, String nav_name, String link, String desc, String img, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("nav_id", String.valueOf(follow_id));
+        map.put("nav_name", nav_name);
+        map.put("link", link);
+        map.put("desc", desc);
+        map.put("img", img);
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_publishWork).build().execute(call);
+    }
+
     /**
      * 重置密码
      *
@@ -484,6 +495,12 @@ public class SendRequest {
      */
     public static void fileUpload(String file, String name, Callback call) {
         OkHttpUtils.getInstance().post().addFile("file", name, new File(file)).url(APIUrls.url_fileUpload).build().execute(call);
+
+    }
+
+    public static void createSecurityToken(Callback call) {
+        Map<String, String> map = new HashMap<>();
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_createSecurityToken).build().execute(call);
 
     }
 }

@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import com.cjt2325.cameralibrary.CameraActivity;
 import com.cjt2325.cameralibrary.JCameraView;
 import com.diandou.activity.BaseActivity;
+import com.diandou.activity.ReleaseActivity;
 import com.diandou.databinding.ActivityMainBinding;
 import com.diandou.fragment.FollowFragment;
 import com.diandou.fragment.HomeFragment;

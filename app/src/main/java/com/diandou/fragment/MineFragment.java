@@ -77,7 +77,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
             binding.headLoginLayout.userName.setText(getUserInfo().getData().getName());
             binding.headLoginLayout.touristId.setText("点逗号：" + getUserInfo().getData().getTourist_id());
-            GlideLoader.LoderClipImage(getActivity(), getUserInfo().getData().getAvatar(), binding.headLoginLayout.userIcon);
+            GlideLoader.LoderCircleImage(getActivity(), getUserInfo().getData().getAvatar(), binding.headLoginLayout.userIcon);
             Log.i(TAG, "initView: "+getUserInfo().getData().getFollowers());
             binding.headLoginLayout.tvFollowers.setText(getUserInfo().getData().getFollowers()+"");
             binding.headLoginLayout.tvLiker.setText(getUserInfo().getData().getLiker()+"");

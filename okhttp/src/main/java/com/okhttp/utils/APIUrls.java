@@ -3,10 +3,14 @@ package com.okhttp.utils;
 public class APIUrls {
 
 
-    public final static String url_domain = "http://admin.udiandou.com/";
+    public final static String url_domain = "http://www.udiandou.com/";
 
     public final static String url_fileUpload = url_domain + "api/common/fileUpload";
-    public final static String url_createSecurityToken = url_domain + "http://store.chuinp.com/storage/createSecurityToken?session=";
+    public final static String url_ossFileUpload = url_domain + "api/common/ossFileUpload";
+//    public final static String url_createSecurityToken = url_domain + "api/common/token";
+    public final static String url_createSecurityToken = url_domain + "api/common/stsToken";
+    public final static String URL_STORAGE_CreateSecurityToken = "http://api.lgdama.com:10001/storage/createSecurityToken?session=";
+
 
     //用户信息
     public final static String url_phoneCode = url_domain + "api/common/phoneCode";
@@ -49,11 +53,12 @@ public class APIUrls {
     public final static String url_showContentComment = url_domain + "api/center/showContentComment";
     //发布对作品的评论
     public final static String url_publishComment = url_domain + "api/center/publishComment";
-
     //获取用户作品
     public final static String url_centerSelfWork = url_domain + "api/center/selfWork";
     //获取用户最爱的作品
     public final static String url_favouriteContent = url_domain + "api/center/favouriteContent";
+    //用户发表作品
+    public final static String url_publishWork = url_domain + "api/center/publishWork";
 
     //获取系统消息
     public final static String url_commonMessage = url_domain + "api/common/message";

@@ -131,7 +131,7 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
 
         binding.headLoginLayout.userName.setText(userInfo.getData().getName());
         binding.headLoginLayout.touristId.setText("点逗号：" + userInfo.getData().getTourist_id());
-        GlideLoader.LoderClipImage(UserHomeActivity.this, userInfo.getData().getAvatar(), binding.headLoginLayout.userIcon);
+        GlideLoader.LoderCircleImage(UserHomeActivity.this, userInfo.getData().getAvatar(), binding.headLoginLayout.userIcon);
         binding.headLoginLayout.tvFollowers.setText(getUserInfo().getData().getFollowers() + "");
         binding.headLoginLayout.tvLiker.setText(getUserInfo().getData().getLiker() + "");
 

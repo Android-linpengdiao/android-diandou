@@ -65,13 +65,13 @@ public class FileUtils {
 
     public static void compressBmpToFile(Bitmap bmp, File file, int option) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int options = 100;//个人喜欢从80开始,
+        int options = 100;
         bmp.compress(Bitmap.CompressFormat.JPEG, options, baos);
         while (baos.toByteArray().length / 1024 > option) {
             baos.reset();
-            options -= 10;
+            options -= 5;
             if (options < 0) {
-                options = 10;
+                options = 5;
                 bmp.compress(Bitmap.CompressFormat.JPEG, options, baos);
                 break;
             }

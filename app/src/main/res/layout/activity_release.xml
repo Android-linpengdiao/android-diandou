@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".activity.ReleaseActivity">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:padding="15dp"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="发布"
+                android:textColor="#ffffffff"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/padding"
+                android:paddingRight="@dimen/padding">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="视频介绍"
+                    android:textColor="#ff333333"
+                    android:textSize="17sp" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="2dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:cardUseCompatPadding="true">
+
+                    <EditText
+                        android:id="@+id/content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:gravity="left"
+                        android:hint="请输入合适的文字描述，让更多人了解..."
+                        android:minHeight="100dp"
+                        android:padding="@dimen/padding"
+                        android:textColor="#ff333333"
+                        android:textColorHint="#ff999999"
+                        android:textSize="16sp" />
+
+                </android.support.v7.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="选择分类"
+                    android:textColor="#ff333333"
+                    android:textSize="17sp" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="2dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:cardUseCompatPadding="true">
+
+                    <TextView
+                        android:id="@+id/video_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/icon_enter"
+                        android:hint="请选择视频分类"
+                        android:padding="@dimen/padding"
+                        android:textColor="#ff333333"
+                        android:textColorHint="#ff999999"
+                        android:textSize="16sp" />
+
+                </android.support.v7.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="封面图"
+                    android:textColor="#ff333333"
+                    android:textSize="17sp" />
+
+                <RelativeLayout
+                    android:layout_width="172dp"
+                    android:layout_height="97dp"
+                    android:layout_marginTop="15dp">
+
+                    <ImageView
+                        android:id="@+id/cover"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="8dp"
+                        android:text="选封面"
+                        android:textColor="#ffffffff"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="已默认选取视频画面作为封面，可重新选择封面。"
+                    android:textColor="#ff999999"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="评论权限"
+                    android:textColor="#ff333333"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:drawableLeft="@drawable/checked_n"
+                    android:drawablePadding="10dp"
+                    android:text="禁止其他用户评论"
+                    android:textColor="#ff333333"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/release_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_marginRight="@dimen/padding"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/button_radius_theme"
+            android:gravity="center"
+            android:text="发布"
+            android:textColor="#ffffffff"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</layout>

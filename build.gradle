@@ -19,6 +19,7 @@ allprojects {
         google()
         jcenter()
         maven { url "https://dl.bintray.com/thelasterstar/maven/" }
+        maven { url "https://maven.aliyun.com/nexus/content/repositories/releases" }
     }
 }
 

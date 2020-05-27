@@ -3,5 +3,6 @@ include ':app',
         ':base',
         ':camera',
         ':videocompressor',
-        ':media'
+        ':media',
+        ':cropper'
 rootProject.name = 'diandou'

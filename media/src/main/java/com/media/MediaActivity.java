@@ -565,7 +565,7 @@ public class MediaActivity extends AppCompatActivity implements View.OnClickList
 
                 String fileName = System.currentTimeMillis() + "_image.jpg";
                 File compressFile = FileUtils.createAttachmentFile(fileName);
-                FileUtils.compressBmpToFile(bitmap, compressFile, 200);
+                FileUtils.compressBmpToFile(bitmap, compressFile, 1000);
 
                 if (compressFile.exists()) {
                     imageModel.setPath(compressFile.getPath());

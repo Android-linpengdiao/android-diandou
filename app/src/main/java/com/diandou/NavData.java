@@ -1,8 +1,9 @@
 package com.diandou;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class NavData {
+public class NavData  implements Serializable {
 
     /**
      * code : 200
@@ -38,7 +39,7 @@ public class NavData {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * id : 6
          * created_at : 2019-10-14 16:03:00
@@ -54,6 +55,7 @@ public class NavData {
         private String name;
         private int sort;
         private String image;
+        private int status = 0;
 
         public int getId() {
             return id;
@@ -101,6 +103,14 @@ public class NavData {
 
         public void setImage(String image) {
             this.image = image;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
         }
     }
 }

@@ -14,8 +14,10 @@ import android.view.View;
 
 import com.baselibrary.Constants;
 import com.baselibrary.UserInfo;
+import com.baselibrary.manager.LoadingManager;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.MsgCache;
+import com.baselibrary.utils.PermissionUtils;
 import com.baselibrary.utils.StatusBarUtil;
 import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
@@ -67,6 +69,18 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    protected void showLoadingDialog() {
+        showLoadingDialog(null);
+    }
+
+    protected void showLoadingDialog(String msg) {
+        LoadingManager.showLoadingDialog(this, msg);
+    }
+
+    protected void hideLoadingDialog() {
+        LoadingManager.hideLoadingDialog(this);
+    }
+
     public void openActivity(Class<?> mClass) {
         openActivity(mClass, null);
     }
@@ -105,5 +119,16 @@ public class BaseActivity extends AppCompatActivity {
             return userinfo;
         }
         return new UserInfo();
+    }
+
+    public boolean checkPermissionsAll(String type, int code) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            boolean isAllGranted = PermissionUtils.checkPermissionAllGranted(this, type);
+            if (!isAllGranted) {
+                PermissionUtils.requestPermissions(this, type, code);
+                return false;
+            }
+        }
+        return true;
     }
 }

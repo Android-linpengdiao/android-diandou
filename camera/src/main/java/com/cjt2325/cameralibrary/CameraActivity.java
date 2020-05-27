@@ -108,9 +108,8 @@ public class CameraActivity extends Activity {
                     public void onSuccess() {
                         try {
                             LoadingManager.hideLoadingDialog(CameraActivity.this);
-                            Class crop = Class.forName("com.diandou.WebPageModule");
+                            Class crop = Class.forName("com.diandou.activity.ReleaseActivity");
                             Intent intent = new Intent(CameraActivity.this, crop);
-                            intent.putExtra("startUrl", "file:///android_asset/widget/html/shooting_release.html");
                             intent.putExtra("videoPath", destPath);
                             intent.putExtra("coverPath", path);
                             startActivity(intent);
@@ -215,9 +214,8 @@ public class CameraActivity extends Activity {
                         String videoPath = data.getStringExtra("video");
                         String coverPath = data.getStringExtra("cover");
                         try {
-                            Class crop = Class.forName("com.diandou.WebPageModule");
+                            Class crop = Class.forName("com.diandou.activity.ReleaseActivity");
                             Intent intent = new Intent(CameraActivity.this, crop);
-                            intent.putExtra("startUrl", "file:///android_asset/widget/html/shooting_release.html");
                             intent.putExtra("videoPath", videoPath);
                             intent.putExtra("coverPath", coverPath);
                             startActivity(intent);

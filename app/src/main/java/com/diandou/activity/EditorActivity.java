@@ -1,8 +1,16 @@
 package com.diandou.activity;
 
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,8 +18,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethod;
 
 import com.baselibrary.utils.CommonUtil;
+import com.baselibrary.utils.FileUtils;
 import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.LogUtil;
+import com.baselibrary.utils.PermissionUtils;
 import com.baselibrary.utils.ToastUtils;
 import com.cjt2325.cameralibrary.CameraActivity;
 import com.diandou.R;
@@ -36,8 +46,9 @@ import okhttp3.Request;
 public class EditorActivity extends BaseActivity implements View.OnClickListener {
 
     private ActivityEditorBinding binding;
-    private static final int RESULT_IMAGE = 100;
-    private static final int RESULT_NAME = 200;
+    private static final int REQUEST_NAME = 100;
+    private static final int REQUEST_IMAGE = 200;
+    private static final int REQUEST_CAMERA = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +70,7 @@ public class EditorActivity extends BaseActivity implements View.OnClickListener
 
     private void initView(String avatar, String name) {
         binding.userName.setText(name);
-        GlideLoader.LoderClipImage(this, avatar, binding.userIcon);
+        GlideLoader.LoderCircleImage(this, avatar, binding.userIcon);
     }
 
     @Override
@@ -69,27 +80,85 @@ public class EditorActivity extends BaseActivity implements View.OnClickListener
                 finish();
                 break;
             case R.id.user_icon:
-                Intent intent = new Intent(EditorActivity.this, MediaActivity.class);
-                intent.putExtra("type", ImageModel.TYPE_IMAGE);
-                intent.putExtra("number", 1);
-                startActivityForResult(intent, RESULT_IMAGE);
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(EditorActivity.this);
+                dialog.setTitle("");
+                dialog.setItems(R.array.media_list_dialog, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                if (checkPermissionsAll(PermissionUtils.STORAGE, REQUEST_IMAGE)) {
+                                    Intent intent = new Intent(EditorActivity.this, MediaActivity.class);
+                                    intent.putExtra("type", ImageModel.TYPE_IMAGE);
+                                    intent.putExtra("number", 1);
+                                    startActivityForResult(intent, REQUEST_IMAGE);
+                                }
+                                break;
+                            case 1:
+                                if (checkPermissionsAll(PermissionUtils.CAMERA, REQUEST_CAMERA)) {
+                                    openCamera();
+                                }
+                                break;
+                            case 2:
+
+                                break;
+                        }
+                    }
+                });
+                dialog.show();
                 break;
             case R.id.user_name:
                 Intent intent1 = new Intent(EditorActivity.this, UpdataNicknameActivity.class);
-                startActivityForResult(intent1, RESULT_NAME);
+                startActivityForResult(intent1, REQUEST_NAME);
                 break;
         }
     }
 
-    private static final String TAG = "EditorActivity";
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean granted = true;
+        switch (requestCode) {
+            case REQUEST_IMAGE:
+                for (int i = 0; i < PermissionUtils.storage.length; i++) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        granted = false;
+                        break;
+                    }
+                }
+                if (granted) {
+                    Intent intent = new Intent(EditorActivity.this, MediaActivity.class);
+                    intent.putExtra("type", ImageModel.TYPE_IMAGE);
+                    intent.putExtra("number", 1);
+                    startActivityForResult(intent, REQUEST_IMAGE);
+                } else {
+                    PermissionUtils.openAppDetails(EditorActivity.this, "储存");
+                }
+                break;
+            case REQUEST_CAMERA:
+                for (int i = 0; i < PermissionUtils.camera.length; i++) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        granted = false;
+                        break;
+                    }
+                }
+                if (granted) {
+                    openCamera();
+                } else {
+                    PermissionUtils.openAppDetails(EditorActivity.this, "储存和相机");
+                }
+                break;
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "onActivityResult: " + requestCode);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case RESULT_IMAGE:
+                case REQUEST_IMAGE:
                     if (data != null) {
                         String resultJson = data.getStringExtra("resultJson");
                         try {
@@ -105,7 +174,10 @@ public class EditorActivity extends BaseActivity implements View.OnClickListener
                         }
                     }
                     break;
-                case RESULT_NAME:
+                case REQUEST_CAMERA:
+                    uploadFile(outputImage.getPath());
+                    break;
+                case REQUEST_NAME:
                     if (data != null) {
                         String name = data.getStringExtra("name");
                         initView(getUserInfo().getData().getAvatar(), name);
@@ -163,5 +235,26 @@ public class EditorActivity extends BaseActivity implements View.OnClickListener
 
             }
         });
+    }
+
+    private File outputImage;
+
+    private void openCamera() {
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = FileUtils.createTempFile(fileName);
+        if (null != file && file.exists()) {
+            outputImage = file;
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            //系统7.0打开相机权限处理
+            if (Build.VERSION.SDK_INT >= 24) {
+                ContentValues contentValues = new ContentValues(1);
+                contentValues.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+                Uri uri = getApplication().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            } else {
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+            }
+            startActivityForResult(intent, REQUEST_CAMERA);
+        }
     }
 }

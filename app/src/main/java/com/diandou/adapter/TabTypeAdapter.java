@@ -33,7 +33,7 @@ public class TabTypeAdapter extends BaseRecyclerAdapter<NavData.DataBean, ItemTa
     protected void onBindItem(final ItemTabTypeLayoutBinding binding, final NavData.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
             binding.name.setText(dataBean.getName());
-            GlideLoader.LoderClipImage(mContext, dataBean.getImage(), binding.icon);
+            GlideLoader.LoderCircleImage(mContext, dataBean.getImage(), binding.icon);
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
