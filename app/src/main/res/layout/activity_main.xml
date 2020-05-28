@@ -23,20 +23,21 @@
         <RadioGroup
             android:id="@+id/radio_group_view"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="55dp"
             android:layout_alignParentBottom="true"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/radio_button_home"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:button="@null"
                 android:checked="true"
                 android:drawableTop="@drawable/navigation_drawable_home"
+                android:drawablePadding="5dp"
                 android:gravity="center"
-                android:padding="3dp"
                 android:text="首页"
                 android:textColor="@drawable/navigation_text_color"
                 android:textSize="@dimen/navigation_text_size" />
@@ -44,12 +45,12 @@
             <RadioButton
                 android:id="@+id/radio_button_follow"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:button="@null"
                 android:drawableTop="@drawable/navigation_drawable_follow"
+                android:drawablePadding="5dp"
                 android:gravity="center"
-                android:padding="3dp"
                 android:text="关注"
                 android:textColor="@drawable/navigation_text_color"
                 android:textSize="@dimen/navigation_text_size" />
@@ -64,12 +65,12 @@
             <RadioButton
                 android:id="@+id/radio_button_message"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:button="@null"
                 android:drawableTop="@drawable/navigation_drawable_message"
+                android:drawablePadding="5dp"
                 android:gravity="center"
-                android:padding="3dp"
                 android:text="消息"
                 android:textColor="@drawable/navigation_text_color"
                 android:textSize="@dimen/navigation_text_size" />
@@ -77,12 +78,12 @@
             <RadioButton
                 android:id="@+id/radio_button_mine"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:button="@null"
                 android:drawableTop="@drawable/navigation_drawable_people"
+                android:drawablePadding="5dp"
                 android:gravity="center"
-                android:padding="3dp"
                 android:text="我的"
                 android:textColor="@drawable/navigation_text_color"
                 android:textSize="@dimen/navigation_text_size" />

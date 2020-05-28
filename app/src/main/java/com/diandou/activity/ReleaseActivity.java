@@ -8,19 +8,25 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 
-import com.alibaba.sdk.android.vod.upload.VODSVideoUploadCallback;
-import com.alibaba.sdk.android.vod.upload.VODSVideoUploadClient;
-import com.alibaba.sdk.android.vod.upload.VODSVideoUploadClientImpl;
-import com.alibaba.sdk.android.vod.upload.model.SvideoInfo;
-import com.alibaba.sdk.android.vod.upload.session.VodHttpClientConfig;
-import com.alibaba.sdk.android.vod.upload.session.VodSessionCreateInfo;
+import com.alibaba.sdk.android.oss.ClientConfiguration;
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
+import com.alibaba.sdk.android.oss.common.OSSLog;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.baselibrary.Constants;
 import com.baselibrary.manager.LoadingManager;
 import com.baselibrary.utils.CommonUtil;
@@ -29,37 +35,22 @@ import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.LogUtil;
 import com.baselibrary.utils.PermissionUtils;
 import com.baselibrary.utils.ToastUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.cjt2325.cameralibrary.CameraActivity;
 import com.diandou.NavData;
 import com.diandou.R;
 import com.diandou.databinding.ActivityReleaseBinding;
-import com.edmodo.cropper.ClipPictureActivity;
 import com.media.MediaActivity;
 import com.media.image.ImageModel;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.StringCallback;
-import com.okhttp.utils.APIUrls;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
 
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Headers;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class ReleaseActivity extends BaseActivity implements View.OnClickListener {
 
@@ -71,9 +62,7 @@ public class ReleaseActivity extends BaseActivity implements View.OnClickListene
     private NavData.DataBean dataBean;
     private String videoPath;
     private String coverPath;
-
-    private VODSVideoUploadClient vodsVideoUploadClient;
-    private OkHttpClient client;
+    private String addr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,26 +76,6 @@ public class ReleaseActivity extends BaseActivity implements View.OnClickListene
 
         videoPath = getIntent().getStringExtra("videoPath");
         coverPath = getIntent().getStringExtra("coverPath");
-
-        //阿里云视频上传
-        client = new OkHttpClient.Builder()
-                .hostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        return "demo-vod.cn-shanghai.aliyuncs.com".equals(hostname);
-                    }
-                })
-                .build();
-        vodsVideoUploadClient = new VODSVideoUploadClientImpl(getApplicationContext());
-        vodsVideoUploadClient.init();
-
-//        uploadVideo("");
-
-//        try {
-//            getVodUploadInfo();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         GlideLoader.LoderLoadImage(this, coverPath, binding.cover, 10);
     }
@@ -171,33 +140,6 @@ public class ReleaseActivity extends BaseActivity implements View.OnClickListene
                 break;
         }
     }
-
-
-    private void publishWork(String coverUrl, String videoUrl) {
-        SendRequest.publishWork(getUserInfo().getData().getId(), dataBean.getId(), dataBean.getName(), videoUrl, binding.content.getText().toString().trim(), coverUrl, new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                ToastUtils.showShort(ReleaseActivity.this, "发布失败");
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if (jsonObject.optInt("code") == 200) {
-                        ToastUtils.showShort(ReleaseActivity.this, "发布成功");
-                        finish();
-                    } else {
-                        ToastUtils.showShort(ReleaseActivity.this, "发布失败 :" + jsonObject.optString("msg"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    ToastUtils.showShort(ReleaseActivity.this, "发布失败");
-                }
-            }
-        });
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -312,7 +254,6 @@ public class ReleaseActivity extends BaseActivity implements View.OnClickListene
         startActivityForResult(intent, REQUEST_CROP);
     }
 
-
     private void uploadFile(String file) {
         SendRequest.fileUpload(file, file.substring(file.lastIndexOf("/") + 1), new StringCallback() {
 
@@ -327,7 +268,7 @@ public class ReleaseActivity extends BaseActivity implements View.OnClickListene
                     JSONObject object = new JSONObject(response);
                     String url = object.optString("data");
                     if (!CommonUtil.isBlank(url)) {
-                        uploadVideo(url);
+                        createSecurityToken(url);
                     } else {
                         ToastUtils.showShort(ReleaseActivity.this, "封面上传失败");
                     }
@@ -342,7 +283,7 @@ public class ReleaseActivity extends BaseActivity implements View.OnClickListene
 
     private static final String TAG = "ReleaseActivity";
 
-    private void uploadVideo(final String coverUrl) {
+    private void createSecurityToken(final String coverUrl) {
         SendRequest.createSecurityToken(new StringCallback() {
 
             @Override
@@ -372,9 +313,7 @@ public class ReleaseActivity extends BaseActivity implements View.OnClickListene
                         String accessKeySecret = object.optString("AccessKeySecret");
                         String securityToken = object.optString("SecurityToken");
                         String expriedTime = object.optString("Expiration");
-                        String returnUrl = object.optString("returnUrl");
-                        String requestID = null;
-                        startVodsVideoUpload(accessKeyId, accessKeySecret, securityToken, expriedTime, requestID, returnUrl, coverUrl);
+                        uploadVideo(accessKeyId, accessKeySecret, securityToken, coverUrl);
                     }
 
                 } catch (Exception e) {
@@ -385,127 +324,103 @@ public class ReleaseActivity extends BaseActivity implements View.OnClickListene
 
     }
 
+    public void uploadVideo(String AccessKeyId, String SecretKeyId, String SecurityToken, final String coverUrl) {
 
-    public void getVodUploadInfo() throws Exception {
+        String endpoint = "http://oss-cn-beijing.aliyuncs.com";
 
-        long time = System.currentTimeMillis();
-        Request request = new Request.Builder()
-                .url(APIUrls.URL_STORAGE_CreateSecurityToken + time)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
+        //if null , default will be init
+        ClientConfiguration conf = new ClientConfiguration();
+        conf.setConnectionTimeout(15 * 1000); // connction time out default 15s
+        conf.setSocketTimeout(15 * 1000); // socket timeout，default 15s
+        conf.setMaxConcurrentRequest(5); // synchronous request number，default 5
+        conf.setMaxErrorRetry(2); // retry，default 2
+        OSSLog.enableLog(); //write local log file ,path is SDCard_path\OSSLog\logs.csv
 
+        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(AccessKeyId, SecretKeyId, SecurityToken);
+
+        OSS oss = new OSSClient(getApplicationContext(), endpoint, credentialProvider, conf);
+
+        // Construct an upload request
+        PutObjectRequest put = new PutObjectRequest("diandou-test", videoPath.substring(videoPath.lastIndexOf("/") + 1), videoPath);
+
+        // You can set progress callback during asynchronous upload
+        put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+            public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
+                LogUtil.d(TAG, "currentSize: " + currentSize + " totalSize: " + totalSize);
+                String temp = "" + currentSize * 100 / totalSize;
+                LoadingManager.updateProgress(ReleaseActivity.this, String.format(Constants.str_updata_wait, temp + "%"));
+            }
+        });
+
+        LoadingManager.showProgress(ReleaseActivity.this, String.format(Constants.str_updata_wait, "0%"));
+        final OSSAsyncTask task = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                LoadingManager.hideProgress(ReleaseActivity.this);
+                String videoUrl = "http://" + request.getBucketName() + ".oss-cn-beijing.aliyuncs.com/" + request.getObjectKey();
+                Log.i(TAG, "onSuccess: " + videoUrl);
+                publishWork(coverUrl, videoUrl);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                ResponseBody responseBody = response.body();
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-                Headers responseHeaders = response.headers();
-                for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+            public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+                LoadingManager.hideProgress(ReleaseActivity.this);
+                ToastUtils.showShort(ReleaseActivity.this, "上传视频失败");
+                // Request exception
+                if (clientExcepion != null) {
+                    // Local exception, such as a network exception
+                    clientExcepion.printStackTrace();
                 }
+                if (serviceException != null) {
+                    // Service exception
+                    LogUtil.d(TAG, "ErrorCode " + serviceException.getErrorCode());
+                    LogUtil.d(TAG, "RequestId " + serviceException.getRequestId());
+                    LogUtil.d(TAG, "HostId " + serviceException.getHostId());
+                    LogUtil.d(TAG, "RawMessage " + serviceException.getRawMessage());
+                }
+            }
+
+            @Override
+            protected Object clone() throws CloneNotSupportedException {
+                return super.clone();
+            }
+        });
+        LoadingManager.OnDismissListener(ReleaseActivity.this, new LoadingManager.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                task.cancel(); // Cancel the task
+            }
+        });
+
+        // task.cancel(); // Cancel the task
+        // task.waitUntilFinished(); // Wait till the task is finished
+    }
+
+    private void publishWork(String coverUrl, String videoUrl) {
+        SendRequest.publishWork(getUserInfo().getData().getId(), dataBean.getId(), dataBean.getName(), videoUrl, binding.content.getText().toString().trim(), coverUrl, addr, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtils.showShort(ReleaseActivity.this, "发布失败");
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
                 try {
-                    JSONObject jsonObject = new JSONObject(responseBody.string());
-                    LogUtil.d(TAG, "onResponse: json " + jsonObject.toString());
-                    JSONObject object = jsonObject.optJSONObject("data");
-                    if (!CommonUtil.isBlank(object)) {
-                        String accessKeyId = object.optString("AccessKeyId");
-                        String accessKeySecret = object.optString("AccessKeySecret");
-                        String securityToken = object.optString("SecurityToken");
-                        String expriedTime = object.optString("Expiration");
-                        String returnUrl = object.optString("returnUrl");
-                        String requestID = null;
-                        startVodsVideoUpload(accessKeyId, accessKeySecret, securityToken, expriedTime, requestID, returnUrl, null);
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.optInt("code") == 200) {
+                        ToastUtils.showShort(ReleaseActivity.this, "发布成功");
+                        finish();
                     } else {
+                        ToastUtils.showShort(ReleaseActivity.this, "发布失败 :" + jsonObject.optString("msg"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    ToastUtils.showShort(ReleaseActivity.this, "发布失败");
                 }
             }
         });
     }
 
-    private void startVodsVideoUpload(String accessKeyId, String accessKeySecret, String securityToken, String expriedTime, String requestID, final String returnUrl, final String coverUrl) {
-        Log.i(TAG, "startVodsVideoUpload: videoPath = " + videoPath);
-        Log.i(TAG, "startVodsVideoUpload: coverPath = " + coverPath);
-        Log.i(TAG, "startVodsVideoUpload: accessKeyId = " + accessKeyId);
-        Log.i(TAG, "startVodsVideoUpload: accessKeySecret = " + accessKeySecret);
-        Log.i(TAG, "startVodsVideoUpload: securityToken = " + securityToken);
-        Log.i(TAG, "startVodsVideoUpload: expriedTime = " + expriedTime);
-        Log.i(TAG, "startVodsVideoUpload: requestID = " + requestID);
-        Log.i(TAG, "startVodsVideoUpload: returnUrl = " + returnUrl);
-        //参数请确保存在，如不存在SDK内部将会直接将错误throw Exception
-        // 文件路径保证存在之外因为Android 6.0之后需要动态获取权限，请开发者自行实现获取"文件读写权限".
-        VodHttpClientConfig vodHttpClientConfig = new VodHttpClientConfig.Builder()
-                .setMaxRetryCount(2)
-                .setConnectionTimeout(15 * 1000)
-                .setSocketTimeout(15 * 1000)
-                .build();
-
-        SvideoInfo svideoInfo = new SvideoInfo();
-        svideoInfo.setTitle(new File(videoPath).getName());
-        svideoInfo.setDesc("");
-        svideoInfo.setCateId(1);
-        VodSessionCreateInfo vodSessionCreateInfo = new VodSessionCreateInfo.Builder()
-                .setImagePath(coverPath)
-                .setVideoPath(videoPath)
-                .setAccessKeyId(accessKeyId)
-                .setAccessKeySecret(accessKeySecret)
-                .setSecurityToken(securityToken)
-                .setRequestID(requestID)
-                .setExpriedTime(expriedTime)
-                .setIsTranscode(true)
-                .setSvideoInfo(svideoInfo)
-                .setPartSize(500 * 1024)
-                .setVodHttpClientConfig(vodHttpClientConfig)
-                .build();
-        LoadingManager.showProgress(ReleaseActivity.this, String.format(Constants.str_updata_wait, "0%"));
-        vodsVideoUploadClient.uploadWithVideoAndImg(vodSessionCreateInfo, new VODSVideoUploadCallback() {
-            @Override
-            public void onUploadSucceed(String videoId, final String imageUrl) {
-                LogUtil.i(TAG, "onUploadSucceed" + "videoId: " + videoId + "  imageUrl " + imageUrl);
-                LoadingManager.hideProgress(ReleaseActivity.this);
-                publishWork(coverUrl, returnUrl + videoId + ".mp4");
-            }
-
-            @Override
-            public void onUploadFailed(String code, String message) {
-                LogUtil.i(TAG, "onUploadFailed =  code = " + code + "  ;  message = " + message);
-                LoadingManager.hideProgress(ReleaseActivity.this);
-                ToastUtils.showShort(ReleaseActivity.this, "上传视频失败");
-            }
-
-            @Override
-            public void onUploadProgress(long uploadedSize, long totalSize) {
-                LogUtil.i(TAG, "onUploadProgress" + uploadedSize * 100 / totalSize);
-                String temp = "" + uploadedSize * 100 / totalSize;
-                LoadingManager.updateProgress(ReleaseActivity.this, String.format(Constants.str_updata_wait, temp + "%"));
-            }
-
-            @Override
-            public void onSTSTokenExpried() {
-                //STS token过期之后刷新STStoken，如正在上传将会断点续传
-                try {
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onUploadRetry(String code, String message) {
-                //上传重试的提醒
-            }
-
-            @Override
-            public void onUploadRetryResume() {
-                //上传重试成功的回调.告知用户重试成功
-            }
-        });
-    }
 
 }

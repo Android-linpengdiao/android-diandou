@@ -93,7 +93,9 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
                 try {
                     if (!CommonUtil.isBlank(response)) {
                         JSONObject jsonObject = new JSONObject(response);
-                        if (jsonObject.optInt("code") == 200 && !CommonUtil.isBlank(jsonObject.optString("id"))) {
+                        if (jsonObject.optInt("code") == 200
+                                && !CommonUtil.isBlank(jsonObject.optJSONObject("data"))
+                                && !CommonUtil.isBlank(jsonObject.optJSONObject("data").optString("id"))) {
                             binding.headLoginLayout.tvIsFollow.setSelected(!binding.headLoginLayout.tvIsFollow.isSelected());
                             binding.headLoginLayout.tvIsFollow.setText(binding.headLoginLayout.tvIsFollow.isSelected() ? "已关注" : "关注");
                         } else {

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -26,6 +27,7 @@ import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.callbacks.StringCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
+import com.okhttp.utils.APIUrls;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -119,6 +121,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         GlideLoader.LoderImage(WorkInfoActivity.this, data.getImg(), binding.thumbnails);
 
         getVideos(data);
+        contentIsAssist(data);
         showContentComment(data);
     }
 
@@ -138,6 +141,64 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
                 }
             }
 
+        });
+
+    }
+
+    private void contentIsAssist(WorkDetail.DataBean data) {
+        SendRequest.contentIsAssist(getUserInfo().getData().getId(), data.getId(), new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.optInt("code") == 200
+                            && !CommonUtil.isBlank(jsonObject.optJSONObject("data"))
+                            && !CommonUtil.isBlank(jsonObject.optJSONObject("data").optString("id"))) {
+                        binding.tvAppreciate.setSelected(true);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    private void publishContentAssist(final WorkDetail data, String assistUrl) {
+        SendRequest.publishContentAssist(getUserInfo().getData().getId(), data.getData().getId(), assistUrl, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                try {
+                    if (!CommonUtil.isBlank(response)) {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.optInt("code") == 200) {
+                            binding.tvAppreciate.setSelected(!binding.tvAppreciate.isSelected());
+                            data.getData().setAssist(binding.tvAppreciate.isSelected() ? data.getData().getAssist() + 1 : data.getData().getAssist() - 1);
+                            binding.tvAppreciate.setText(data.getData().getAssist() + "");
+                            if (binding.tvAppreciate.isSelected()) {
+                                ToastUtils.showShort(WorkInfoActivity.this, "已点赞");
+                            }
+                        } else {
+                            ToastUtils.showShort(WorkInfoActivity.this, jsonObject.optString("msg"));
+                        }
+                    } else {
+                        ToastUtils.showShort(WorkInfoActivity.this, "请求失败");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.showShort(WorkInfoActivity.this, "请求失败");
+                }
+            }
         });
 
     }
@@ -179,11 +240,12 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
             public void onResponse(String response, int id) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    ToastUtils.showShort(getApplication(), jsonObject.optString("msg"));
                     if (jsonObject.optInt("code") == 200) {
                         if (workDetail != null && workDetail.getData() != null) {
                             showContentComment(workDetail.getData());
                         }
+                    } else {
+                        ToastUtils.showShort(getApplication(), jsonObject.optString("msg"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -214,7 +276,10 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
                 binding.tvLike.setSelected(!binding.tvLike.isSelected());
                 break;
             case R.id.tv_appreciate:
-                binding.tvAppreciate.setSelected(!binding.tvAppreciate.isSelected());
+                if (workDetail != null && workDetail.getData() != null) {
+                    String url = binding.tvAppreciate.isSelected() ? APIUrls.url_publishCommentDeleteAssist : APIUrls.url_publishCommentAssist;
+                    publishContentAssist(workDetail, url);
+                }
                 break;
             case R.id.tv_comment:
                 commentListPopupWindow = new CommentListPopupWindow(WorkInfoActivity.this);
