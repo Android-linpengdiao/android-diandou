@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.baselibrary.utils.GlideLoader;
 import com.diandou.R;
+import com.diandou.activity.WorkInfoActivity;
 import com.diandou.databinding.ItemWorkLayoutBinding;
 import com.diandou.model.WorkData;
 
