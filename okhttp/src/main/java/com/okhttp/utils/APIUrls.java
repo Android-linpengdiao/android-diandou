@@ -51,6 +51,12 @@ public class APIUrls {
     //关注用户接口
     public final static String url_centerFollow = url_domain + "api/center/follow";
 
+    //查看作品是否被点赞
+    public final static String url_contentIsAssist = url_domain + "api/center/contentIsAssist";
+    //对作品取消点赞
+    public final static String url_publishCommentDeleteAssist = url_domain + "api/center/publishCommentDeleteAssist";
+    //对作品点赞
+    public final static String url_publishCommentAssist = url_domain + "api/center/publishCommentAssist";
     //展示作品的评论
     public final static String url_showContentComment = url_domain + "api/center/showContentComment";
     //发布对作品的评论

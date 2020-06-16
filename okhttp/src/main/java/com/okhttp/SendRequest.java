@@ -211,7 +211,7 @@ public class SendRequest {
 
     }
 
-    public static void publishWork(int tourist_id, int follow_id, String nav_name, String link, String desc, String img, Callback call) {
+    public static void publishWork(int tourist_id, int follow_id, String nav_name, String link, String desc, String img, String addr, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", String.valueOf(tourist_id));
         map.put("nav_id", String.valueOf(follow_id));
@@ -219,7 +219,8 @@ public class SendRequest {
         map.put("link", link);
         map.put("desc", desc);
         map.put("img", img);
-        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_publishWork).build().execute(call);
+        map.put("addr", addr);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_publishWork).build().execute(call);
     }
 
     /**
@@ -314,6 +315,19 @@ public class SendRequest {
         map.put("per_page", String.valueOf(per_page));
         map.put("page", String.valueOf(page));
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_searchWork).build().execute(call);
+    }
+
+    public static void contentIsAssist(int tourist_id, int content_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("content_id", String.valueOf(content_id));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_contentIsAssist).build().execute(call);
+    }
+    public static void publishContentAssist(int tourist_id, int content_id,String assistUrl, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("content_id", String.valueOf(content_id));
+        OkHttpUtils.getInstance().post().params(map).url(assistUrl).build().execute(call);
     }
 
     public static void showContentComment(int content_id, Callback call) {

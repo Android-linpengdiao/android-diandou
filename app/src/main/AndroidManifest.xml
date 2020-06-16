@@ -3,6 +3,8 @@
     package="com.diandou">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -35,9 +37,6 @@
         <activity android:name=".activity.EditorActivity" />
         <activity android:name=".activity.SettingsActivity" />
         <activity android:name=".activity.TabTypeActivity" />
-        <activity
-            android:name=".activity.WorkInfoActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".activity.SearchActivity" />
 
         <uses-library

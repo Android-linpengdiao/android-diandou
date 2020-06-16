@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             @Override
             public void onClick(View v) {
                 int type = JCameraView.BUTTON_STATE_ONLY_RECORDER;
-                int minTime = 90;
+                int minTime = 10;
                 int maxTime = 180;
                 CameraActivity.startCameraActivity(MainActivity.this, minTime, maxTime, "#44bf19", type, REQUEST_WXCAMERA);
             }

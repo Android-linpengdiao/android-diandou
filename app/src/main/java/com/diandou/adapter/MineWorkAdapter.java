@@ -2,16 +2,12 @@ package com.diandou.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 
 import com.baselibrary.utils.GlideLoader;
 import com.diandou.R;
-import com.diandou.activity.WorkInfoActivity;
 import com.diandou.databinding.ItemMineWorkLayoutBinding;
-import com.diandou.databinding.ItemWorkLayoutBinding;
 import com.diandou.model.MineWorkData;
-import com.diandou.model.WorkData;
 
 public class MineWorkAdapter extends BaseRecyclerAdapter<MineWorkData.DataBeanX.DataBean, ItemMineWorkLayoutBinding> {
 
