@@ -66,7 +66,7 @@ public class MineLikeFragment extends BaseFragment {
     }
 
     private void initData() {
-        SendRequest.url_favouriteContent(getUserInfo().getData().getId(), 10, 1, new GenericsCallback<MineWorkData>(new JsonGenericsSerializator()) {
+        SendRequest.favouriteContent(getUserInfo().getData().getId(), 10, 1, new GenericsCallback<MineWorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 binding.swipeRefreshLayout.setRefreshing(false);

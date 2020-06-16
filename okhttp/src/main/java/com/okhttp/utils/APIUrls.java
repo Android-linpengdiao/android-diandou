@@ -19,6 +19,8 @@ public class APIUrls {
     public final static String url_thirdLogin = url_domain + "api/common/thirdLogin";
     public final static String url_updatePasswordAndLogin = url_domain + "api/common/phoneCode";
     public final static String url_register = url_domain + "api/common/register";
+    //判断用户是否绑定过三方
+    public final static String isBindThird = url_domain + "api/center/isBindThird";
     public final static String url_forgetPassword = url_domain + "api/common/forgetPassword";
     public final static String url_cancel = url_domain + "api/center/cancel";
     public final static String url_baseInfo = url_domain + "api/center/baseInfo";

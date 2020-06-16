@@ -11,6 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.baselibrary.UserInfo;
 import com.baselibrary.utils.CommonUtil;
@@ -29,7 +30,12 @@ import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.callbacks.StringCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 import com.sina.weibo.sdk.WbSdk;
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.auth.WbAuthListener;
+import com.sina.weibo.sdk.auth.WbConnectErrorMessage;
+import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -68,6 +74,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         wxReceiver = new WechatReceiver();
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(wxReceiver, new IntentFilter(Config.wechat_get_token_success));
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        finishAllActivity();
     }
 
     @Override
@@ -154,7 +166,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                             @Override
                             public void onComplete(Object arg0) {
-                                ToastUtils.showShort(getApplication(), "QQ授权成功: Openid = " + TencentHelper.getOpenId());
+                                isBindThird("qq", TencentHelper.getOpenId());
+//                                ToastUtils.showShort(getApplication(), "QQ授权成功: Openid = " + TencentHelper.getOpenId());
 
                             }
 
@@ -174,7 +187,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.login_wb:
                 WbSdk.install(LoginActivity.this, new AuthInfo(LoginActivity.this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE));
-                openActivity(WBAuthActivity.class);
+                mSsoHandler = new SsoHandler(LoginActivity.this);
+                mSsoHandler.authorizeClientSso(new SelfWbAuthListener());
                 break;
         }
     }
@@ -276,7 +290,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 JSONObject json = new JSONObject(response);
                                 String errorCode = json.optString("errcode");
                                 if (!CommonUtil.isBlank(errorCode)) {
-                                    ToastUtils.showShort(LoginActivity.this,"授权失败");
+                                    ToastUtils.showShort(LoginActivity.this, "授权失败");
                                 } else {
                                     String openid = json.optString("openid");
                                     String nickname = json.optString("nickname");
@@ -284,7 +298,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     String sex = json.optString("sex");
                                     String city = json.optString("city");
                                     String province = json.optString("province");
-                                    WXLogin(openid,nickname,headimgurl,sex,city,province);
+                                    isBindThird("weChat", openid);
+//                                    WXLogin(openid,nickname,headimgurl,sex,city,province);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -297,7 +312,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void WXLogin(String openid, String nickname, String headimgurl, String sex, String city, String province) {
-        SendRequest.WXLogin(openid,nickname, headimgurl,sex,city,province, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
+        SendRequest.WXLogin(openid, nickname, headimgurl, sex, city, province, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 
@@ -358,8 +373,63 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 }
             });
+        }else {
+            if (mSsoHandler != null) {
+                mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    /**
+     * ****************************** 微博登录 **********************************
+     */
+
+    private SsoHandler mSsoHandler;
+
+    private class SelfWbAuthListener implements WbAuthListener {
+        @Override
+        public void onSuccess(final Oauth2AccessToken token) {
+            isBindThird("weiBo", token.getToken());
+        }
+
+        @Override
+        public void cancel() {
+            Toast.makeText(LoginActivity.this, "取消授权", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onFailure(WbConnectErrorMessage errorMessage) {
+            Toast.makeText(LoginActivity.this, errorMessage.getErrorMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    private void isBindThird(final String type, final String type_id) {
+        SendRequest.isBindThird(type, type_id, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(UserInfo response, int id) {
+                if (response.getCode() == 200) {
+                    MyApplication.getInstance().setUserInfo(response);
+                    openActivity(MainActivity.class);
+                    finish();
+                } else if (response.getCode() == 500) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("type", type);
+                    bundle.putString("type_id", type_id);
+                    openActivity(RegisterActivity.class, bundle);
+                } else {
+                    ToastUtils.showShort(LoginActivity.this, response.getMsg());
+                }
+            }
+
+        });
     }
 
     @Override

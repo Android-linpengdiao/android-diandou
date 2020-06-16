@@ -36,6 +36,8 @@ import com.tencent.tauth.UiError;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 
@@ -130,5 +132,33 @@ public class BaseActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    private static List<Activity> activityStack = new ArrayList<Activity>();
+
+    public void addActivity(Activity aty) {
+        activityStack.add(aty);
+    }
+
+    public void removeActivity(Activity aty) {
+        activityStack.remove(aty);
+    }
+
+    public static void finishActivity(Class aty) {
+        for (int i = 0, size = activityStack.size(); i < size; i++) {
+            if (null != activityStack.get(i) && null != aty
+                    && aty.getSimpleName().equals(activityStack.get(i).getClass().getSimpleName())) {
+                activityStack.get(i).finish();
+            }
+        }
+    }
+
+    public void finishAllActivity() {
+        for (int i = 0, size = activityStack.size(); i < size; i++) {
+            if (null != activityStack.get(i)) {
+                activityStack.get(i).finish();
+            }
+        }
+        activityStack.clear();
     }
 }

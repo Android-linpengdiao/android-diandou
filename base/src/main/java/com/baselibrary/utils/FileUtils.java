@@ -488,6 +488,14 @@ public class FileUtils {
         }
     }
 
+    public static void clearFile() {
+        if (clearIsFileExists(getPath())) {
+            File file = new File(getPath());
+            delete(file);
+        } else {
+        }
+    }
+
     public static boolean clearIsFileExists(String path) {
         if (CommonUtil.isBlank(path)) {
             return false;

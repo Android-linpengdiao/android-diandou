@@ -36,6 +36,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/version"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -154,12 +155,13 @@
                 android:textSize="17sp" />
 
             <TextView
+                android:id="@+id/tvFileSize"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:drawableRight="@drawable/icon_enter"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
-                android:text="0.3M"
+                android:text="0M"
                 android:textColor="#ff999999"
                 android:textSize="17sp" />
 

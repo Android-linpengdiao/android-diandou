@@ -20,22 +20,19 @@ public class SendRequest {
      * @param password
      * @param password_confirmation
      * @param authCode
-     * @param reg                   极光推送的regId
-     * @param openid
-     * @param qq_id
-     * @param weibo_id
      * @param call
      */
-    public static void register(String phone, String password, String password_confirmation, String authCode, String reg, String openid, String qq_id, String weibo_id, Callback call) {
+    public static void register(String phone, String password, String password_confirmation, String authCode, String key, String value,  Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("phone", phone);
         map.put("password", password);
         map.put("password_confirmation", password_confirmation);
         map.put("authCode", authCode);
-        map.put("reg", reg);
-        map.put("openid", openid);
-        map.put("qq_id", qq_id);
-        map.put("weibo_id", weibo_id);
+        map.put(key, value);
+//        map.put("reg", reg);
+//        map.put("openid", openid);
+//        map.put("qq_id", qq_id);
+//        map.put("weibo_id", weibo_id);
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_register).build().execute(call);
 
     }
@@ -54,7 +51,7 @@ public class SendRequest {
         map.put("phone", phone);
         map.put("password", password);
         map.put("password_confirmation", password_confirmation);
-        map.put("authCode", password_confirmation);
+        map.put("authCode", authCode);
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_register).build().execute(call);
 
     }
@@ -71,6 +68,21 @@ public class SendRequest {
         map.put("phone", phone);
         map.put("password", password);
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_login).build().execute(call);
+
+    }
+
+    /**
+     * 判断用户是否绑定过三方
+     *
+     * @param type    类型 weChat=>微信/qq=>QQ/weiBo=>微博（必填）.
+     * @param type_id 类型下的唯一标识（必填）.
+     * @param call
+     */
+    public static void isBindThird(String type, String type_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("type", type);
+        map.put("type_id", type_id);
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.isBindThird).build().execute(call);
 
     }
 
@@ -391,7 +403,7 @@ public class SendRequest {
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_centerSelfWork).build().execute(call);
     }
 
-    public static void url_favouriteContent(int tourist_id, int per_page, int page, Callback call) {
+    public static void favouriteContent(int tourist_id, int per_page, int page, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", String.valueOf(tourist_id));
         map.put("per_page", String.valueOf(per_page));

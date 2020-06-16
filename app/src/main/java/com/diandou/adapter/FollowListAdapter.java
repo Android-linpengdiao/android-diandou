@@ -25,12 +25,15 @@ public class FollowListAdapter extends BaseRecyclerAdapter<FollowData.DataBeanX.
     @Override
     protected void onBindItem(final ItemWorkLayoutBinding binding, final FollowData.DataBeanX.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            binding.title.setText(dataBean.getName());
-            GlideLoader.LoderImage(mContext, dataBean.getAvatar(), binding.cover, 10);
+            binding.title.setText(dataBean.getDesc());
+            binding.assist.setText(""+dataBean.getAssist());
+            GlideLoader.LoderImage(mContext, dataBean.getImg(), binding.cover);
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mContext.startActivity(new Intent(mContext, WorkInfoActivity.class));
+                    Intent intent = new Intent(mContext, WorkInfoActivity.class);
+                    intent.putExtra("id", dataBean.getId());
+                    mContext.startActivity(intent);
                 }
             });
         }

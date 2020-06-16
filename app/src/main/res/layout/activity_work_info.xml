@@ -27,7 +27,7 @@
                     android:id="@+id/surfaceView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/black" />
+                    android:background="@color/black"/>
 
                 <ImageView
                     android:id="@+id/thumbnails"
@@ -37,23 +37,28 @@
                 <RelativeLayout
                     android:id="@+id/player_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="5dp">
+                    android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/back"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:padding="10dp"
-                        android:src="@drawable/video_back" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:background="@drawable/player_cover_top"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/player_back"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="15dp"
+                            android:src="@drawable/back"/>
+
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:id="@+id/progress_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_alignParentBottom="true"
+                        android:background="@drawable/player_cover_bottom"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -87,15 +92,6 @@
                             android:thumb="@drawable/seek_bar_thumb" />
 
                         <TextView
-                            android:id="@+id/current_duration_full"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="00:00 / "
-                            android:textColor="#FFFFFFFF"
-                            android:textSize="12sp"
-                            android:visibility="gone" />
-
-                        <TextView
                             android:id="@+id/total_duration"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -125,6 +121,7 @@
                     android:visibility="gone" />
 
             </RelativeLayout>
+
         </RelativeLayout>
 
         <ScrollView

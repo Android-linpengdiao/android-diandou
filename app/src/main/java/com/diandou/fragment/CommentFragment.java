@@ -17,7 +17,6 @@ import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
 import com.diandou.adapter.MessageAdapter;
 import com.diandou.databinding.FragmentLikeBinding;
-import com.diandou.model.FollowData;
 import com.diandou.model.MessageData;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;

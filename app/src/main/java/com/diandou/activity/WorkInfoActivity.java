@@ -3,13 +3,21 @@ package com.diandou.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.alivc.player.AliVcMediaPlayer;
+import com.alivc.player.MediaPlayer;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.ToastUtils;
@@ -27,6 +35,7 @@ import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.callbacks.StringCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,7 +56,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_work_info);
 
-        binding.back.setOnClickListener(this);
+        binding.playerBack.setOnClickListener(this);
         binding.fullscreen.setOnClickListener(this);
         binding.tvLike.setOnClickListener(this);
         binding.tvAppreciate.setOnClickListener(this);
@@ -120,6 +129,18 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
         getVideos(data);
         showContentComment(data);
+
+        if (!CommonUtil.isBlank(data.getLink())) {
+            try {
+                JSONArray jsonArray = new JSONArray(data.getLink());
+                if (jsonArray.length() > 0) {
+                    JSONObject jsonObject = jsonArray.optJSONObject(0);
+                    playVideo(jsonObject.optString("download_link"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void getVideos(WorkDetail.DataBean data) {
@@ -198,7 +219,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.back:
+            case R.id.player_back:
                 if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     smallScreen();
@@ -240,6 +261,200 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        stop();
+        destroy();
+        stopUpdateTimer();
+        progressUpdateTimer = null;
+        super.onDestroy();
+    }
+
+    private void showVideoProgressInfo() {
+        if (mPlayer != null && !inSeek) {
+            int curPosition = mPlayer.getCurrentPosition();
+            int duration = mPlayer.getDuration();
+            int bufferPosition = mPlayer.getBufferPosition();
+            binding.currentDuration.setText(CommonUtil.Formatter.formatTime(curPosition));
+            binding.totalDuration.setText(CommonUtil.Formatter.formatTime(duration));
+            binding.progress.setMax(duration);
+            binding.progress.setSecondaryProgress(bufferPosition);
+            binding.progress.setProgress(curPosition);
+        }
+        startUpdateTimer();
+    }
+
+    private void startUpdateTimer() {
+        if (progressUpdateTimer != null) {
+            progressUpdateTimer.removeMessages(0);
+            progressUpdateTimer.sendEmptyMessageDelayed(0, 1000);
+        }
+    }
+
+    private void stopUpdateTimer() {
+        if (progressUpdateTimer != null) {
+            progressUpdateTimer.removeMessages(0);
+        }
+    }
+
+    private Handler progressUpdateTimer = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            showVideoProgressInfo();
+        }
+    };
+    private static final String TAG = "WorkInfoActivity";
+
+    private void playVideo(String videoUrl) {
+        Log.i(TAG, "playVideo: " + videoUrl);
+        binding.surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            public void surfaceCreated(SurfaceHolder holder) {
+                holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
+                holder.setKeepScreenOn(true);
+                // 对于从后台切换到前台,需要重设surface;部分手机锁屏也会做前后台切换的处理
+                if (mPlayer != null) {
+                    mPlayer.setVideoSurface(holder.getSurface());
+                }
+
+            }
+
+            public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+                if (mPlayer != null) {
+                    mPlayer.setSurfaceChanged();
+                }
+            }
+
+            public void surfaceDestroyed(SurfaceHolder holder) {
+            }
+        });
+        binding.videoPlay.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (mPlayer.isPlaying()) {
+                    binding.videoPlay.setImageResource(R.drawable.video_play);
+                    mPlayer.pause();
+                } else {
+                    binding.videoPlay.setImageResource(R.drawable.video_pause);
+                    mPlayer.play();
+                }
+            }
+        });
+
+
+        mPlayer = new AliVcMediaPlayer(WorkInfoActivity.this, binding.surfaceView);
+        mPlayer.setCirclePlay(true);
+
+        mPlayer.setPreparedListener(new MediaPlayer.MediaPlayerPreparedListener() {
+            @Override
+            public void onPrepared() {
+                binding.surfaceView.setBackgroundColor(Color.TRANSPARENT);
+                binding.loading.setVisibility(View.GONE);
+                binding.thumbnails.setVisibility(View.GONE);
+                if (mPlayer != null) {
+                    mPlayer.play();
+                }
+
+            }
+        });
+//        mPlayer.setPcmDataListener(new MyPcmDataListener(this));
+//        mPlayer.setCircleStartListener(new MyCircleStartListener(this));
+        mPlayer.setFrameInfoListener(new MediaPlayer.MediaPlayerFrameInfoListener() {
+            @Override
+            public void onFrameInfoListener() {
+                binding.videoPlay.setImageResource(R.drawable.video_pause);
+                binding.thumbnails.animate().alpha(0).setDuration(200).start();
+                showVideoProgressInfo();
+            }
+        });
+        mPlayer.setErrorListener(new MediaPlayer.MediaPlayerErrorListener() {
+            @Override
+            public void onError(int i, String s) {
+                ToastUtils.showShort(getApplicationContext(), "网络连接似乎出现问题，请重试");
+            }
+        });
+        mPlayer.setCompletedListener(new MediaPlayer.MediaPlayerCompletedListener() {
+            @Override
+            public void onCompleted() {
+                isCompleted = true;
+                showVideoProgressInfo();
+                stopUpdateTimer();
+            }
+        });
+        mPlayer.setSeekCompleteListener(new MediaPlayer.MediaPlayerSeekCompleteListener() {
+            @Override
+            public void onSeekCompleted() {
+                inSeek = false;
+            }
+        });
+        mPlayer.setStoppedListener(new MediaPlayer.MediaPlayerStoppedListener() {
+            @Override
+            public void onStopped() {
+                binding.videoPlay.setImageResource(R.drawable.video_play);
+            }
+        });
+        mPlayer.enableNativeLog();
+        if (mPlayer != null) {
+            mPlayer.setVideoScalingMode(com.alivc.player.MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
+        }
+        mPlayer.prepareToPlay(videoUrl);
+        binding.loading.setVisibility(View.VISIBLE);
+
+    }
+
+    private boolean inSeek = false;
+    private boolean isCompleted = false;
+
+    private AliVcMediaPlayer mPlayer;
+
+    private void start() {
+        if (mPlayer != null) {
+//            mPlayer.prepareToPlay(url1);
+        }
+    }
+
+    private void pause() {
+        if (mPlayer != null) {
+            mPlayer.pause();
+        }
+    }
+
+    private void stop() {
+        if (mPlayer != null) {
+            mPlayer.stop();
+        }
+    }
+
+    private void resume() {
+        if (mPlayer != null) {
+            mPlayer.play();
+        }
+    }
+
+    private void destroy() {
+        if (mPlayer != null) {
+            mPlayer.stop();
+            mPlayer.destroy();
+        }
+    }
+
+    private void replay() {
+        stop();
+        start();
+    }
+
+
     //------------------------------------全屏切换-------------------------------------------------
 
     private void toggleOrientation() {
@@ -252,13 +467,11 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-
     private void fullScreen() {
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) binding.videoContainer.getLayoutParams();
-        layoutParams.width = CommonUtil.dip2px(WorkInfoActivity.this, CommonUtil.getScreenWidth(WorkInfoActivity.this));
-        layoutParams.height = CommonUtil.dip2px(WorkInfoActivity.this, CommonUtil.getScreenHeight(WorkInfoActivity.this));
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
         binding.videoContainer.setLayoutParams(layoutParams);
-        binding.currentDurationFull.setVisibility(View.VISIBLE);
         binding.currentDuration.setVisibility(View.GONE);
         binding.fullscreen.setVisibility(View.GONE);
         hideNavigationBar();
@@ -266,19 +479,16 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
     private void smallScreen() {
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) binding.videoContainer.getLayoutParams();
-        layoutParams.width = CommonUtil.dip2px(WorkInfoActivity.this, CommonUtil.getScreenWidth(WorkInfoActivity.this));
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         layoutParams.height = CommonUtil.dip2px(WorkInfoActivity.this, 211);
         binding.videoContainer.setLayoutParams(layoutParams);
-        binding.currentDurationFull.setVisibility(View.GONE);
-        binding.currentDurationFull.setVisibility(View.GONE);
         binding.currentDuration.setVisibility(View.VISIBLE);
         binding.fullscreen.setVisibility(View.VISIBLE);
         showNavigationBar();
     }
 
     public void showNavigationBar() {
-        int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+        int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 
         if (android.os.Build.VERSION.SDK_INT >= 19) {
             uiFlags |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;  //SYSTEM_UI_FLAG_IMMERSIVE_STICKY: hide navigation bars - compatibility: building API level is lower thatn 19, use magic number directly for higher API target level

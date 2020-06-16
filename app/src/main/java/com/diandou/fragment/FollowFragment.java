@@ -49,7 +49,7 @@ public class FollowFragment extends BaseFragment {
         binding.recyclerView.addItemDecoration(new GridItemDecoration(builder));
         binding.recyclerView.setAdapter(adapter);
 
-        binding.swipeRefreshLayout.setColorSchemeColors(Color.BLUE);
+        binding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -64,7 +64,7 @@ public class FollowFragment extends BaseFragment {
     }
 
     private void initData() {
-        SendRequest.centerConcern(getUserInfo().getData().getId(), 0, 1, new GenericsCallback<FollowData>(new JsonGenericsSerializator()) {
+        SendRequest.favouriteContent(getUserInfo().getData().getId(), 10, 1, new GenericsCallback<FollowData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 binding.swipeRefreshLayout.setRefreshing(false);

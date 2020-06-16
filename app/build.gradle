@@ -11,7 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
-            abiFilters "armeabi"
+            abiFilters "armeabi-v7a"
         }
     }
     signingConfigs {
@@ -43,6 +43,10 @@ android {
     dataBinding {
         enabled = true
     }
+
+    repositories {
+        flatDir { dirs 'libs' }
+    }
 }
 
 dependencies {
@@ -67,4 +71,8 @@ dependencies {
     implementation files('libs/wechat-sdk-android-with-mta-5.3.1.jar')
     implementation 'com.sina.weibo.sdk:core:4.4.3:openDefaultRelease@aar'
     implementation 'com.aliyun.video.android:upload:1.6.0'
+    // 阿里视频播放器
+    implementation files('libs/AlivcReporter-1.2.aar')
+    implementation files('libs/AlivcPlayer-3.4.6.aar')
+    implementation files('libs/AliyunVodPlayer-3.4.6.aar')
 }

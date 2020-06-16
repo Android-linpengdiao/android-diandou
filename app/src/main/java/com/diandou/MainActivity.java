@@ -37,6 +37,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        addActivity(this);
 
         mainBinding.radioGroupView.setOnCheckedChangeListener(this);
         initDefaultFragment();

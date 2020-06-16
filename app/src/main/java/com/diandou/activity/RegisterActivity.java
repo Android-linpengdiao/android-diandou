@@ -8,15 +8,21 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 
+import com.baselibrary.UserInfo;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.ToastUtils;
+import com.diandou.MainActivity;
+import com.diandou.MyApplication;
 import com.diandou.R;
 import com.diandou.databinding.ActivityBindPhoneBinding;
 import com.diandou.databinding.ActivityRegisterBinding;
 import com.okhttp.SendRequest;
+import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.callbacks.StringCallback;
+import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,8 +30,13 @@ import org.json.JSONObject;
 import okhttp3.Call;
 
 public class RegisterActivity extends BaseActivity {
+
+    private static final String TAG = "RegisterActivity";
     private ActivityRegisterBinding binding;
     private CountDownTimer timer;
+
+    private String type = "";
+    private String type_id = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +109,13 @@ public class RegisterActivity extends BaseActivity {
             }
         });
 
+        if (getIntent().getExtras() != null) {
+            type = getIntent().getExtras().getString("type");
+            type_id = getIntent().getExtras().getString("type_id");
+            Log.i(TAG, "onCreate: type = " + type);
+            Log.i(TAG, "onCreate: type_id = " + type_id);
+        }
+
     }
 
     private void phoneCode() {
@@ -143,6 +161,12 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void register() {
+
+        if (!CommonUtil.isBlank(type)) {
+            type = type.equals("weChat") ? "openid" : type.equals("qq") ? "qq_id" : "weibo_id";
+        }
+        Log.i(TAG, "register: type " + type);
+
         String phone = binding.etPhone.getText().toString().trim();
         String authCode = binding.etCode.getText().toString().trim();
         String password = binding.etPassword.getText().toString().trim();
@@ -163,28 +187,25 @@ public class RegisterActivity extends BaseActivity {
             ToastUtils.showShort(RegisterActivity.this, "请同意用户注册协议");
             return;
         }
-        SendRequest.register(phone, password, password, authCode, new StringCallback() {
+
+        SendRequest.register(phone, password, password, authCode, type, type_id, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 
             }
 
             @Override
-            public void onResponse(String response, int id) {
-                try {
-                    JSONObject json = new JSONObject(response);
-                    int code = json.optInt("code");
-                    if (code == 200) {
-                        ToastUtils.showShort(RegisterActivity.this, "注册成功");
-                        finish();
-                    } else {
-                        String msg = json.optString("msg");
-                        ToastUtils.showShort(getApplication(), msg);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            public void onResponse(UserInfo response, int id) {
+                if (response.getCode() == 200) {
+                    MyApplication.getInstance().setUserInfo(response);
+                    openActivity(MainActivity.class);
+                    ToastUtils.showShort(RegisterActivity.this, "注册成功");
+                    finish();
+                } else {
+                    ToastUtils.showShort(getApplication(), response.getMsg());
                 }
             }
+
         });
     }
 

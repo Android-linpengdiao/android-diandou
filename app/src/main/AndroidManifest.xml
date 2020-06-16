@@ -37,8 +37,7 @@
         <activity android:name=".activity.TabTypeActivity" />
         <activity
             android:name=".activity.WorkInfoActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask" />
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".activity.SearchActivity" />
 
         <uses-library
