@@ -516,10 +516,8 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
             showVideoProgressInfo();
         }
     };
-    private static final String TAG = "WorkInfoActivity";
 
     private void playVideo(String videoUrl) {
-        Log.i(TAG, "playVideo: " + videoUrl);
         binding.surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             public void surfaceCreated(SurfaceHolder holder) {
                 holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
@@ -733,7 +731,6 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onScrollToEnd() {
-        Log.i(TAG, "onScrollToEnd: ");
         if (workDetail != null && workDetail.getData() != null) {
             getVideos(workDetail.getData());
         }
