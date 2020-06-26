@@ -64,7 +64,7 @@ public class FollowFragment extends BaseFragment {
     }
 
     private void initData() {
-        SendRequest.favouriteContent(getUserInfo().getData().getId(), 10, 1, new GenericsCallback<FollowData>(new JsonGenericsSerializator()) {
+        SendRequest.favouriteContent(getUserInfo().getData().getId(), 100, 1, new GenericsCallback<FollowData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 binding.swipeRefreshLayout.setRefreshing(false);

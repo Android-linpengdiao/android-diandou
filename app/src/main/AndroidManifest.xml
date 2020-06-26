@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".MyApplication"
@@ -48,7 +49,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="4d4d5031ca2828c5311288e72208e729" />
+            android:value="ca1967c862c0e53d861cff193f400c98" />
 
         <service android:name="com.amap.api.location.APSService" />
 

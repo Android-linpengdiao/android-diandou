@@ -72,7 +72,6 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         binding.tvAppreciate.setOnClickListener(this);
         binding.tvComment.setOnClickListener(this);
         binding.tvShare.setOnClickListener(this);
-        GlideLoader.LoderImage(this, CommonUtil.getImageListString().get(5), binding.thumbnails);
 
         adapter = new WorkAdapter(this);
         binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

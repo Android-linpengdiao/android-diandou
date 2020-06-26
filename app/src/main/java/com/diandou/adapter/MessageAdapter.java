@@ -50,7 +50,7 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageData.DataBean, It
                 binding.tvTime.setText(dataBean.getUpdated_at());
             } else if (type == 3) {
                 binding.tvDesc.setText(dataBean.getBody());
-                binding.tvTime.setText("评论了你的作品" + dataBean.getUpdated_at());
+                binding.tvTime.setText("评论了你的作品" + CommonUtil.getMeesageTime(CommonUtil.getStringToDate(dataBean.getUpdated_at())));
             }
             GlideLoader.LoderImage(mContext, dataBean.getTourist().getAvatar(), binding.userIcon, 100);
             GlideLoader.LoderImage(mContext, dataBean.getContents().getImg(), binding.cover, 2);

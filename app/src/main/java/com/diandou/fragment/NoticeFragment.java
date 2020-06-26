@@ -62,7 +62,8 @@ public class NoticeFragment extends BaseFragment {
             @Override
             public void onResponse(NoticeData response, int id) {
                 if (response.getCode() == 200 && response.getData() != null) {
-
+                    binding.tvDesc.setText(response.getData().size() > 0?response.getData().get(0).getDesc():"");
+                    binding.tvTime.setText(response.getData().size() > 0?CommonUtil.getMeesageTime(CommonUtil.getStringToDate(response.getData().get(0).getUpdated_at())):"");
                 } else {
                     ToastUtils.showShort(getActivity(), response.getMsg());
                 }

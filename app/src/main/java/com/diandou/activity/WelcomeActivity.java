@@ -26,6 +26,7 @@ public class WelcomeActivity extends BaseActivity {
     private String[] permissions = {
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE};
     private final int requestCode = 100;

@@ -51,7 +51,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_weight="1"
                     android:singleLine="true"
-                    android:text="本周日本平台将会举行视频大..."
+                    android:text=""
                     android:textColor="#ff999999"
                     android:textSize="14sp" />
 
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="·04-27"
+                    android:text=""
                     android:textColor="#ff999999"
                     android:textSize="14sp" />
             </LinearLayout>

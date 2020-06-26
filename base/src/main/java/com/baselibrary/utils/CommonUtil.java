@@ -24,39 +24,42 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class CommonUtil {
 
-    public static List<String> getImageListString() {
-        String url1 = "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2836123484,3030068744&fm=26&gp=0.jpg";
-        String url2 = "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1789569952,4029204763&fm=26&gp=0.jpg";
-        String url3 = "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3580978037,2393601368&fm=26&gp=0.jpg";
-        String url4 = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1556616674,3087626701&fm=26&gp=0.jpg";
-        String url5 = "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4001861342,3804929732&fm=26&gp=0.jpg";
-        String url6 = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3600014478,753553017&fm=26&gp=0.jpg";
-        String url7 = "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2024758634,1516103747&fm=26&gp=0.jpg";
-        String url8 = "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2334656353,474671771&fm=26&gp=0.jpg";
-        String url9 = "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2334656353,474671771&fm=26&gp=0.jpg";
-        String url10 = "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2334656353,474671771&fm=26&gp=0.jpg";
-        String url11 = "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2334656353,474671771&fm=26&gp=0.jpg";
-        String url12 = "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2334656353,474671771&fm=26&gp=0.jpg";
-        String url13 = "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2334656353,474671771&fm=26&gp=0.jpg";
-        String url14 = "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2334656353,474671771&fm=26&gp=0.jpg";
-        String url15 = "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2334656353,474671771&fm=26&gp=0.jpg";
-        String url16 = "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2334656353,474671771&fm=26&gp=0.jpg";
-        return new ArrayList<String>(Arrays.asList(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16));
+    public static String getStringToDate(String time) {
+        String timeStamp = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date d;
+        try {
+            d = sdf.parse(time);
+            long l = d.getTime();
+            timeStamp = String.valueOf(l);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return timeStamp;
     }
 
-    public static List<String> getTextTabListString() {
-        return new ArrayList<String>(Arrays.asList("热门", "音乐", "棋类","故事", "运动", "美术", "书法", "曲艺", "方言", "国学", "心声", "街舞"));
+    public static String getDateToString(String time) {
+        long lcc = Long.valueOf(time);
+        Date d = new Date(lcc);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdr.format(d);
     }
 
-    public static List<String> getTextListString() {
-        return new ArrayList<String>(Arrays.asList("这里是话题标题这里是话题标题这里是话题标题", "事做不做得到", "说了不一定有机会，但不说一定没机会", "让你的员工为共同的目标工作"));
+    public static String getMeesageTime(String time) {
+        long lcc = Long.valueOf(time);
+        Date d = new Date(lcc);
+        SimpleDateFormat sdr = new SimpleDateFormat("MM-dd");
+        return sdr.format(d);
     }
 
     /**

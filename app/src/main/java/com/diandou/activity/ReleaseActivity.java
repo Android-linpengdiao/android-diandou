@@ -59,13 +59,15 @@ import java.util.Date;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class ReleaseActivity extends BaseActivity implements AMapLocationListener,View.OnClickListener {
+public class ReleaseActivity extends BaseActivity implements AMapLocationListener, View.OnClickListener {
 
     private ActivityReleaseBinding binding;
     private static final int REQUEST_TYPE = 100;
     private static final int REQUEST_IMAGE = 200;
     private static final int REQUEST_CAMERA = 300;
     private static final int REQUEST_CROP = 400;
+    private final static int REQUEST_LOCATION = 500;
+    private static final int REQUEST_LOCATION_SETTING = 600;
     private NavData.DataBean dataBean;
     private String videoPath;
     private String coverPath;
@@ -86,7 +88,16 @@ public class ReleaseActivity extends BaseActivity implements AMapLocationListene
 
         GlideLoader.LoderLoadImage(this, coverPath, binding.cover, 10);
 
+        if (checkPermissionsAll(PermissionUtils.LOCATION, REQUEST_LOCATION)) {
+            //如果未开启定位服务，提示用户去开启
+            if (CommonUtil.isLocationEnabled(ReleaseActivity.this)) {
+                initLocation();
+            } else {
+                CommonUtil.toOpenGPS(ReleaseActivity.this, REQUEST_LOCATION_SETTING);
+            }
+        }
         initLocation();
+
     }
 
     @Override
@@ -184,6 +195,17 @@ public class ReleaseActivity extends BaseActivity implements AMapLocationListene
                     PermissionUtils.openAppDetails(ReleaseActivity.this, "储存和相机");
                 }
                 break;
+            case REQUEST_LOCATION:
+                for (int i = 0; i < PermissionUtils.location.length; i++) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        granted = false;
+                        break;
+                    }
+                }
+                if (granted) {
+                    initLocation();
+                }
+                break;
         }
     }
 
@@ -225,6 +247,14 @@ public class ReleaseActivity extends BaseActivity implements AMapLocationListene
                     if (data != null) {
                         dataBean = (NavData.DataBean) data.getSerializableExtra("nav");
                         binding.videoType.setText(dataBean.getName());
+                    }
+                    break;
+            }
+        } else {
+            switch (requestCode) {
+                case REQUEST_LOCATION_SETTING:
+                    if (CommonUtil.isLocationEnabled(ReleaseActivity.this)) {
+                        initLocation();
                     }
                     break;
             }
@@ -471,6 +501,7 @@ public class ReleaseActivity extends BaseActivity implements AMapLocationListene
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date(amapLocation.getTime());
                 df.format(date);//定位时间
+                addr = amapLocation.getAddress();
                 LogUtil.e(TAG, "onLocationChanged: " + amapLocation.getAddress());
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。

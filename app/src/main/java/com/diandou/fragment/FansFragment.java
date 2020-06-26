@@ -54,7 +54,7 @@ public class FansFragment extends BaseFragment {
     }
 
     private void initData() {
-        SendRequest.centerAttention(getUserInfo().getData().getId(), 10, 1, new GenericsCallback<FansData>(new JsonGenericsSerializator()) {
+        SendRequest.centerAttention(getUserInfo().getData().getId(), 100, 1, new GenericsCallback<FansData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 binding.swipeRefreshLayout.setRefreshing(false);
