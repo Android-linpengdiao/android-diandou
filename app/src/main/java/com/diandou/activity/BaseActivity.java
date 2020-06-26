@@ -21,7 +21,12 @@ import com.baselibrary.utils.PermissionUtils;
 import com.baselibrary.utils.StatusBarUtil;
 import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
+import com.diandou.manager.TencentHelper;
+import com.diandou.manager.WXManager;
 import com.diandou.model.MineWorkData;
+import com.diandou.view.OnClickListener;
+import com.diandou.view.SharePopupWindow;
+import com.diandou.weibo.WBShareActivity;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.callbacks.StringCallback;
@@ -93,6 +98,71 @@ public class BaseActivity extends AppCompatActivity {
             intent.putExtras(mBundle);
         }
         startActivity(intent);
+    }
+
+    public SharePopupWindow shareView(final Activity activity) {
+        return shareView(activity, null);
+    }
+
+    public SharePopupWindow shareView(final Activity activity, final OnClickListener onClickListener) {
+        SharePopupWindow sharePopupWindow = new SharePopupWindow(activity);
+        sharePopupWindow.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View view, Object object) {
+                switch (view.getId()) {
+                    case R.id.shareWx:
+                        // scene 0代表好友   1代表朋友圈
+                        WXManager.send(activity, 0);
+
+                        break;
+                    case R.id.shareWxMoment:
+                        WXManager.send(activity, 1);
+
+                        break;
+                    case R.id.shareQQ:
+                        TencentHelper.shareToQQ(activity, "https://www.baidu.com/", "title", "desc", null, new IUiListener() {
+                            @Override
+                            public void onComplete(Object o) {
+                            }
+
+                            @Override
+
+                            public void onError(UiError uiError) {
+
+                            }
+
+                            @Override
+                            public void onCancel() {
+
+                            }
+                        });
+
+                        break;
+                    case R.id.shareWeibo:
+                        WbSdk.install(activity, new AuthInfo(activity, com.diandou.weibo.Constants.APP_KEY, com.diandou.weibo.Constants.REDIRECT_URL, com.diandou.weibo.Constants.SCOPE));
+
+                        SsoHandler mSsoHandler = new SsoHandler(activity);
+
+                        WbShareHandler shareHandler = new WbShareHandler(activity);
+                        shareHandler.registerApp();
+
+                        Intent intent = new Intent(activity, WBShareActivity.class);
+                        intent.putExtra(WBShareActivity.KEY_SHARE_TYPE, WBShareActivity.SHARE_CLIENT);
+                        File file = new File("xxxx");
+                        intent.setData(Uri.parse(file.getPath()));
+                        startActivity(intent);
+                        break;
+                }
+            }
+
+            @Override
+            public void onLongClick(View view, Object object) {
+
+            }
+        });
+        sharePopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+        return sharePopupWindow;
     }
 
     public void baseInfo() {

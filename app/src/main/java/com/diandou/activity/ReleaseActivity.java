@@ -27,6 +27,10 @@ import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.baselibrary.Constants;
 import com.baselibrary.manager.LoadingManager;
 import com.baselibrary.utils.CommonUtil;
@@ -34,6 +38,7 @@ import com.baselibrary.utils.FileUtils;
 import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.LogUtil;
 import com.baselibrary.utils.PermissionUtils;
+import com.baselibrary.utils.SharedPreferencesUtils;
 import com.baselibrary.utils.ToastUtils;
 import com.diandou.NavData;
 import com.diandou.R;
@@ -48,11 +53,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class ReleaseActivity extends BaseActivity implements View.OnClickListener {
+public class ReleaseActivity extends BaseActivity implements AMapLocationListener,View.OnClickListener {
 
     private ActivityReleaseBinding binding;
     private static final int REQUEST_TYPE = 100;
@@ -78,6 +85,8 @@ public class ReleaseActivity extends BaseActivity implements View.OnClickListene
         coverPath = getIntent().getStringExtra("coverPath");
 
         GlideLoader.LoderLoadImage(this, coverPath, binding.cover, 10);
+
+        initLocation();
     }
 
     @Override
@@ -324,7 +333,7 @@ public class ReleaseActivity extends BaseActivity implements View.OnClickListene
 
     }
 
-    public void uploadVideo(String AccessKeyId, String SecretKeyId, String SecurityToken, final String coverUrl) {
+    private void uploadVideo(String AccessKeyId, String SecretKeyId, String SecurityToken, final String coverUrl) {
 
         String endpoint = "http://oss-cn-beijing.aliyuncs.com";
 
@@ -423,4 +432,52 @@ public class ReleaseActivity extends BaseActivity implements View.OnClickListene
     }
 
 
+    private AMapLocationClient mlocationClient;
+    //声明mLocationOption对象
+    public AMapLocationClientOption mLocationOption = null;
+
+    private void initLocation() {
+        mlocationClient = new AMapLocationClient(ReleaseActivity.this);
+        //初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+        //设置返回地址信息，默认为true
+        mLocationOption.setNeedAddress(true);
+        //设置定位监听
+        mlocationClient.setLocationListener(this);
+        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(2000);
+        mLocationOption.setOnceLocation(true);
+        //设置定位参数
+        mlocationClient.setLocationOption(mLocationOption);
+        // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+        // 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+        // 在定位结束后，在合适的生命周期调用onDestroy()方法
+        // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+        // 启动定位
+        mlocationClient.startLocation();
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation amapLocation) {
+        if (amapLocation != null) {
+            if (amapLocation.getErrorCode() == 0) {
+                //定位成功回调信息，设置相关消息
+                amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+                amapLocation.getLatitude();//获取纬度
+                amapLocation.getLongitude();//获取经度
+                amapLocation.getAccuracy();//获取精度信息
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date(amapLocation.getTime());
+                df.format(date);//定位时间
+                LogUtil.e(TAG, "onLocationChanged: " + amapLocation.getAddress());
+            } else {
+                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                LogUtil.e(TAG, "AmapError: " + "location Error, ErrCode:"
+                        + amapLocation.getErrorCode() + ", errInfo:"
+                        + amapLocation.getErrorInfo());
+            }
+        }
+    }
 }

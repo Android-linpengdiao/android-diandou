@@ -9,11 +9,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 
 import com.alivc.player.AliVcMediaPlayer;
@@ -24,6 +29,7 @@ import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
 import com.diandou.adapter.WorkAdapter;
 import com.diandou.databinding.ActivityWorkInfoBinding;
+import com.diandou.model.BaseData;
 import com.diandou.model.CommentData;
 import com.diandou.model.WorkData;
 import com.diandou.model.WorkDetail;
@@ -52,6 +58,9 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
     private WorkDetail workDetail;
     private CommentData commentData;
 
+    private GestureDetector detector;
+    ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +68,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
         binding.playerBack.setOnClickListener(this);
         binding.fullscreen.setOnClickListener(this);
-        binding.tvLike.setOnClickListener(this);
+        binding.tvFollower.setOnClickListener(this);
         binding.tvAppreciate.setOnClickListener(this);
         binding.tvComment.setOnClickListener(this);
         binding.tvShare.setOnClickListener(this);
@@ -74,7 +83,90 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         binding.recyclerView.addItemDecoration(new GridItemDecoration(builder));
         binding.recyclerView.setAdapter(adapter);
 
+        // 手势
+        detector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+                                    float distanceY) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                                   float velocityY) {
+                try {
+                    float XFrom = e1.getX();
+                    float XTo = e2.getX();
+                    float YFrom = e1.getY();
+                    float YTo = e2.getY();
+                    // 左右滑动的X轴幅度大于100，并且X轴方向的速度大于100
+                    if (Math.abs(YFrom - YTo) > 100.0f && Math.abs(velocityY) > 100.0f) {
+                        // X轴幅度大于Y轴的幅度
+                        if (Math.abs(YFrom - YTo) >= Math.abs(XFrom - XTo)) {
+                            if (YFrom > YTo) {
+                                if (binding.bottomView.isShown()) {
+                                    binding.bottomView.setVisibility(View.GONE);
+                                    Animation animationExit = AnimationUtils.loadAnimation(getApplication(), R.anim.bottom_exit);
+                                    LinearInterpolator lin = new LinearInterpolator();
+                                    animationExit.setInterpolator(lin);
+                                    animationExit.setRepeatCount(-1);
+                                    binding.bottomView.startAnimation(animationExit);
+                                }
+                            } else {
+                                if (!binding.bottomView.isShown()) {
+                                    binding.bottomView.setVisibility(View.VISIBLE);
+                                    Animation animationEnter = AnimationUtils.loadAnimation(getApplication(), R.anim.bottom_enter);
+                                    LinearInterpolator lin = new LinearInterpolator();
+                                    animationEnter.setInterpolator(lin);
+                                    animationEnter.setRepeatCount(-1);
+                                    binding.bottomView.startAnimation(animationEnter);
+                                }
+                            }
+                        }
+                    } else {
+                        return false;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return false;
+            }
+
+            @Override
+            public boolean onDown(MotionEvent e) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+        });
+
         initData();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        detector.onTouchEvent(event);
+        return super.dispatchTouchEvent(event);
     }
 
     @Override
@@ -90,7 +182,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         } else {
             finish();
         }
-        SendRequest.workDetail(id, new GenericsCallback<WorkDetail>(new JsonGenericsSerializator()) {
+        SendRequest.workDetail(getUserInfo().getData() != null ? getUserInfo().getData().getId() : -1, id, new GenericsCallback<WorkDetail>(new JsonGenericsSerializator()) {
 
             @Override
             public void onBefore(Request request, int id) {
@@ -117,6 +209,20 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         });
     }
 
+    private void playTime() {
+        SendRequest.playTime(id, new GenericsCallback<BaseData>(new JsonGenericsSerializator()) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(BaseData response, int id) {
+
+            }
+        });
+    }
+
     private void initView(WorkDetail.DataBean data) {
 
         binding.viewLayout.setVisibility(View.VISIBLE);
@@ -125,11 +231,13 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         binding.tvDesc.setText(data.getDesc());
         binding.tvAddr.setText(data.getAddr());
         binding.tvTime.setText(data.getUpdated_at());
-        binding.tvAppreciate.setText(data.getAssist() + "");
+        binding.tvFollower.setText(String.valueOf(data.getFollower_num()));
+        binding.tvFollower.setSelected(data.isFollower_status());
+        binding.tvAppreciate.setText(String.valueOf(data.getAssist_num()));
+        binding.tvAppreciate.setSelected(data.isAssist_status());
         GlideLoader.LoderImage(WorkInfoActivity.this, data.getImg(), binding.thumbnails);
 
         getVideos(data);
-        contentIsAssist(data);
         showContentComment(data);
 
         if (!CommonUtil.isBlank(data.getLink())) {
@@ -165,8 +273,8 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-    private void contentIsAssist(WorkDetail.DataBean data) {
-        SendRequest.contentIsAssist(getUserInfo().getData().getId(), data.getId(), new StringCallback() {
+    private void centerFollow(final WorkDetail data, String followUrl) {
+        SendRequest.centerFollow(getUserInfo().getData().getId(), data.getData().getTourist_id(), followUrl, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
 
@@ -175,15 +283,26 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onResponse(String response, int id) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if (jsonObject.optInt("code") == 200
-                            && !CommonUtil.isBlank(jsonObject.optJSONObject("data"))
-                            && !CommonUtil.isBlank(jsonObject.optJSONObject("data").optString("id"))) {
-                        binding.tvAppreciate.setSelected(true);
+                    if (!CommonUtil.isBlank(response)) {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.optInt("code") == 200) {
+                            binding.tvFollower.setSelected(!binding.tvFollower.isSelected());
+                            data.getData().setFollower_num(binding.tvFollower.isSelected() ? data.getData().getFollower_num() + 1 : data.getData().getFollower_num() - 1);
+                            binding.tvFollower.setText(data.getData().getFollower_num() + "");
+                            if (binding.tvFollower.isSelected()) {
+                                ToastUtils.showShort(WorkInfoActivity.this, "已关注");
+                            }
+                        } else {
+                            ToastUtils.showShort(WorkInfoActivity.this, jsonObject.optString("msg"));
+                        }
+                    } else {
+                        ToastUtils.showShort(WorkInfoActivity.this, "请求失败");
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    ToastUtils.showShort(WorkInfoActivity.this, "请求失败");
                 }
+
             }
         });
 
@@ -292,35 +411,51 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
             case R.id.fullscreen:
                 toggleOrientation();
                 break;
-            case R.id.tv_like:
-                binding.tvLike.setSelected(!binding.tvLike.isSelected());
+            case R.id.tv_follower:
+                if (getUserInfo().getData() != null) {
+                    if (workDetail != null && workDetail.getData() != null) {
+                        String url = binding.tvFollower.isSelected() ? APIUrls.url_centerUnFollow : APIUrls.url_centerFollow;
+                        centerFollow(workDetail, url);
+                    }
+                } else {
+                    openActivity(LoginActivity.class);
+                }
                 break;
             case R.id.tv_appreciate:
-                if (workDetail != null && workDetail.getData() != null) {
-                    String url = binding.tvAppreciate.isSelected() ? APIUrls.url_publishCommentDeleteAssist : APIUrls.url_publishCommentAssist;
-                    publishContentAssist(workDetail, url);
+                if (getUserInfo().getData() != null) {
+                    if (workDetail != null && workDetail.getData() != null) {
+                        String url = binding.tvAppreciate.isSelected() ? APIUrls.url_publishCommentDeleteAssist : APIUrls.url_publishCommentAssist;
+                        publishContentAssist(workDetail, url);
+                    }
+                } else {
+                    openActivity(LoginActivity.class);
                 }
                 break;
             case R.id.tv_comment:
-                commentListPopupWindow = new CommentListPopupWindow(WorkInfoActivity.this);
-                commentListPopupWindow.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View view, Object object) {
-                        if (workDetail != null && workDetail.getData() != null) {
-                            publishComment(workDetail.getData(), (String) object);
+                if (getUserInfo().getData() != null) {
+                    commentListPopupWindow = new CommentListPopupWindow(WorkInfoActivity.this);
+                    commentListPopupWindow.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View view, Object object) {
+                            if (workDetail != null && workDetail.getData() != null) {
+                                publishComment(workDetail.getData(), (String) object);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onLongClick(View view, Object object) {
+                        @Override
+                        public void onLongClick(View view, Object object) {
 
-                    }
-                });
-                commentListPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
-                commentListPopupWindow.setCommentData(commentData);
+                        }
+                    });
+                    commentListPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+                    commentListPopupWindow.setCommentData(commentData);
+
+                } else {
+                    openActivity(LoginActivity.class);
+                }
                 break;
             case R.id.tv_share:
-
+                shareView(WorkInfoActivity.this);
                 break;
         }
     }
@@ -428,6 +563,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
                 binding.thumbnails.setVisibility(View.GONE);
                 if (mPlayer != null) {
                     mPlayer.play();
+                    playTime();
                 }
 
             }

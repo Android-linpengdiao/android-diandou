@@ -2,19 +2,18 @@ package com.diandou.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 
 import com.baselibrary.utils.GlideLoader;
 import com.diandou.R;
 import com.diandou.activity.WorkInfoActivity;
 import com.diandou.databinding.ItemMineWorkLayoutBinding;
+import com.diandou.model.MineLikeWorkData;
 import com.diandou.model.MineWorkData;
 import com.diandou.view.OnClickListener;
 
-public class MineWorkAdapter extends BaseRecyclerAdapter<MineWorkData.DataBeanX.DataBean, ItemMineWorkLayoutBinding> {
+public class MineLikeWorkAdapter extends BaseRecyclerAdapter<MineLikeWorkData.DataBeanX.DataBean, ItemMineWorkLayoutBinding> {
 
-    private static final String TAG = "MineWorkAdapter";
     private boolean isSelection = false;
     private OnClickListener onClickListener;
 
@@ -27,7 +26,7 @@ public class MineWorkAdapter extends BaseRecyclerAdapter<MineWorkData.DataBeanX.
         notifyDataSetChanged();
     }
 
-    public MineWorkAdapter(Context context) {
+    public MineLikeWorkAdapter(Context context) {
         super(context);
     }
 
@@ -37,17 +36,17 @@ public class MineWorkAdapter extends BaseRecyclerAdapter<MineWorkData.DataBeanX.
     }
 
     @Override
-    protected void onBindItem(final ItemMineWorkLayoutBinding binding, final MineWorkData.DataBeanX.DataBean dataBean, final int position) {
+    protected void onBindItem(final ItemMineWorkLayoutBinding binding, final MineLikeWorkData.DataBeanX.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            binding.tvAssist.setText("" + dataBean.getAssist());
-            GlideLoader.LoderImage(mContext, dataBean.getImg(), binding.cover);
-            binding.selection.setSelected(dataBean.isSelection());
+            binding.tvAssist.setText(""+dataBean.getContent().getAssist());
+            GlideLoader.LoderImage(mContext, dataBean.getContent().getImg(), binding.cover);
+            binding.selection.setSelected(dataBean.getContent().isSelection());
             binding.selection.setVisibility(isSelection ? View.VISIBLE : View.GONE);
             binding.selection.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dataBean.setSelection(!dataBean.isSelection());
-                    binding.selection.setSelected(dataBean.isSelection());
+                    dataBean.getContent().setSelection(!dataBean.getContent().isSelection());
+                    binding.selection.setSelected(dataBean.getContent().isSelection());
                     notifyItemChanged(position);
                 }
             });
@@ -55,7 +54,7 @@ public class MineWorkAdapter extends BaseRecyclerAdapter<MineWorkData.DataBeanX.
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, WorkInfoActivity.class);
-                    intent.putExtra("id", dataBean.getId());
+                    intent.putExtra("id", dataBean.getContent_id());
                     mContext.startActivity(intent);
                 }
             });

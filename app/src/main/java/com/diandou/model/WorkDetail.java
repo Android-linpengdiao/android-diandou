@@ -5,7 +5,7 @@ public class WorkDetail {
     /**
      * code : 200
      * msg : 成功
-     * data : {"id":26,"created_at":"2020-04-06 19:08:12","updated_at":"2020-05-23 09:39:26","status":1,"tourist_id":6,"nav_id":6,"nav_name":"音乐","desc":"号楼","link":"[{\"download_link\":\"https:\\/\\/diandou-test.oss-cn-beijing.aliyuncs.com\\/62020461987storageemulated0Androiddatacom.diandoufilesJCameravideo_1586171204200.mp4\",\"original_name\":\"62020461987storageemulated0Androiddatacom.diandoufilesJCameravideo_1586171204200.mp4\"}]","tourist_name":"O9Cm8J","addr":"北京市海淀区农大南路88号","play_time":35,"assist":1,"img":"upload/20200406070809ZJjln.jpg","hot":1,"recommend":2,"tourist":{"id":6,"name":"O9Cm8J","phone":"18611001339","avatar":"users/default.png","password":"$2y$10$juBfS1JzvkT6B6kl7O8R9uvWh/8aNK0yqFF.ZKXpIHpTy3HdiyPee","remember_token":null,"settings":null,"created_at":"2020-03-25 21:10:55","updated_at":"2020-03-25 21:23:10","tourist_id":"75567584","sex":1,"birth":null,"openid":"oH48X07cqrOuB_KLDXZbvgUk3wi4","headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"","qq_id":"73775B2E666798A1482423132B0E9CD2","weibo_id":null,"liker":0,"followers":0,"comment":0}}
+     * data : {"id":26,"created_at":"2020-04-06 19:08:12","updated_at":"2020-06-24 09:14:04","status":1,"tourist_id":6,"nav_id":6,"nav_name":"音乐","desc":"号楼","link":"[{\"download_link\":\"https:\\/\\/diandou-test.oss-cn-beijing.aliyuncs.com\\/62020461987storageemulated0Androiddatacom.diandoufilesJCameravideo_1586171204200.mp4\",\"original_name\":\"62020461987storageemulated0Androiddatacom.diandoufilesJCameravideo_1586171204200.mp4\"}]","tourist_name":"O9Cm8J","addr":"北京市海淀区农大南路88号","play_time":36,"assist":2,"img":"upload/20200406070809ZJjln.jpg","hot":1,"recommend":2,"assist_status":false,"follower_status":false,"assist_num":2,"follower_num":2,"tourist":{"id":6,"name":"O9Cm8J","phone":"18611001339","avatar":"users/default.png","password":"$2y$10$juBfS1JzvkT6B6kl7O8R9uvWh/8aNK0yqFF.ZKXpIHpTy3HdiyPee","remember_token":null,"settings":null,"created_at":"2020-03-25 21:10:55","updated_at":"2020-03-25 21:23:10","tourist_id":"75567584","sex":1,"birth":null,"openid":"oH48X07cqrOuB_KLDXZbvgUk3wi4","headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"","qq_id":"73775B2E666798A1482423132B0E9CD2","weibo_id":null,"liker":0,"followers":0,"comment":0}}
      */
 
     private int code;
@@ -40,7 +40,7 @@ public class WorkDetail {
         /**
          * id : 26
          * created_at : 2020-04-06 19:08:12
-         * updated_at : 2020-05-23 09:39:26
+         * updated_at : 2020-06-24 09:14:04
          * status : 1
          * tourist_id : 6
          * nav_id : 6
@@ -49,11 +49,15 @@ public class WorkDetail {
          * link : [{"download_link":"https:\/\/diandou-test.oss-cn-beijing.aliyuncs.com\/62020461987storageemulated0Androiddatacom.diandoufilesJCameravideo_1586171204200.mp4","original_name":"62020461987storageemulated0Androiddatacom.diandoufilesJCameravideo_1586171204200.mp4"}]
          * tourist_name : O9Cm8J
          * addr : 北京市海淀区农大南路88号
-         * play_time : 35
-         * assist : 1
+         * play_time : 36
+         * assist : 2
          * img : upload/20200406070809ZJjln.jpg
          * hot : 1
          * recommend : 2
+         * assist_status : false
+         * follower_status : false
+         * assist_num : 2
+         * follower_num : 2
          * tourist : {"id":6,"name":"O9Cm8J","phone":"18611001339","avatar":"users/default.png","password":"$2y$10$juBfS1JzvkT6B6kl7O8R9uvWh/8aNK0yqFF.ZKXpIHpTy3HdiyPee","remember_token":null,"settings":null,"created_at":"2020-03-25 21:10:55","updated_at":"2020-03-25 21:23:10","tourist_id":"75567584","sex":1,"birth":null,"openid":"oH48X07cqrOuB_KLDXZbvgUk3wi4","headimgurl":null,"city":null,"province":null,"cancel":1,"autograph":null,"weibo":null,"reg":"","qq_id":"73775B2E666798A1482423132B0E9CD2","weibo_id":null,"liker":0,"followers":0,"comment":0}
          */
 
@@ -73,6 +77,10 @@ public class WorkDetail {
         private String img;
         private int hot;
         private int recommend;
+        private boolean assist_status;
+        private boolean follower_status;
+        private int assist_num;
+        private int follower_num;
         private TouristBean tourist;
 
         public int getId() {
@@ -201,6 +209,38 @@ public class WorkDetail {
 
         public void setRecommend(int recommend) {
             this.recommend = recommend;
+        }
+
+        public boolean isAssist_status() {
+            return assist_status;
+        }
+
+        public void setAssist_status(boolean assist_status) {
+            this.assist_status = assist_status;
+        }
+
+        public boolean isFollower_status() {
+            return follower_status;
+        }
+
+        public void setFollower_status(boolean follower_status) {
+            this.follower_status = follower_status;
+        }
+
+        public int getAssist_num() {
+            return assist_num;
+        }
+
+        public void setAssist_num(int assist_num) {
+            this.assist_num = assist_num;
+        }
+
+        public int getFollower_num() {
+            return follower_num;
+        }
+
+        public void setFollower_num(int follower_num) {
+            this.follower_num = follower_num;
         }
 
         public TouristBean getTourist() {

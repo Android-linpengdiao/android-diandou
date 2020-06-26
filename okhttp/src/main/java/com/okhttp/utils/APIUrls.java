@@ -38,6 +38,12 @@ public class APIUrls {
     public final static String url_searchWork = url_domain + "api/center/searchWork";
     //获取作品详情
     public final static String url_workDetail = url_domain + "api/center/workDetail";
+    //删除自己作品
+    public final static String url_deleteContent = url_domain + "api/center/deleteContent";
+    //删除点赞作品
+    public final static String url_deleteAssist = url_domain + "api/center/deleteAssist";
+    //增加播放次数
+    public final static String url_playTime = url_domain + "api/center/playTime";
     //获取我关注的人
     public final static String url_centerConcern = url_domain + "api/center/concern";
     //查看谁评论了我
@@ -67,6 +73,8 @@ public class APIUrls {
     public final static String url_favouriteContent = url_domain + "api/center/favouriteContent";
     //用户发表作品
     public final static String url_publishWork = url_domain + "api/center/publishWork";
+    //获取用户的点赞
+    public final static String url_centerAssist = url_domain + "api/center/assist";
 
     //获取系统消息
     public final static String url_commonMessage = url_domain + "api/common/message";

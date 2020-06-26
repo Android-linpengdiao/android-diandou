@@ -29,12 +29,14 @@
                 android:padding="2dp" />
 
             <TextView
+                android:id="@+id/loginView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_alignTop="@+id/user_icon"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/user_icon"
+                android:paddingTop="10dp"
                 android:text="您好，请登录"
                 android:textColor="#ffffffff"
                 android:textSize="20sp" />

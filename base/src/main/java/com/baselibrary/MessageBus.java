@@ -178,6 +178,10 @@ public class MessageBus {
     }
 
     //消息ID
+    public static final String msgId_workSelection = "workSelection";
+    public static final String msgId_workDelete = "workDelete";
+    public static final String msgId_workConfirm = "workConfirm";
+
     public static final String msgId_playTime = "playTime";
     public static final String msgId_closePlay = "closePlay";
     public static final String msgId_fullScreen = "fullScreen";

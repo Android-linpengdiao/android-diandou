@@ -20,13 +20,21 @@
             android:background="@drawable/image"
             android:padding="0.5dp" />
 
+        <ImageView
+            android:id="@+id/selection"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/selection"
+            android:padding="10dp"
+            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/tv_assist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_margin="10dp"
-            android:drawableLeft="@drawable/praise"
+            android:drawableLeft="@drawable/appreciatefill"
             android:drawablePadding="6dp"
             android:text="100"
             android:textColor="#ffffffff"

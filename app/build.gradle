@@ -61,6 +61,7 @@ dependencies {
     implementation externalAndroidMultiDex
     implementation externalEasypermissions
     implementation externalBanner
+    implementation externalAndroidXRecyclerview
     implementation project(':base')
     implementation project(':okhttp')
     implementation project(':camera')

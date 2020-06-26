@@ -93,6 +93,15 @@ public class MineWorkData {
             private int assist;
             private String img;
             private String tourist_name;
+            private boolean selection = false;
+
+            public boolean isSelection() {
+                return selection;
+            }
+
+            public void setSelection(boolean selection) {
+                this.selection = selection;
+            }
 
             public int getId() {
                 return id;

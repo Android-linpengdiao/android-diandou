@@ -187,6 +187,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_assist_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"

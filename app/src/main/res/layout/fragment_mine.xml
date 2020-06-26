@@ -23,25 +23,73 @@
             layout="@layout/view_mine_head_login_layout"
             android:visibility="gone" />
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:paddingTop="13dp"
-            android:paddingBottom="13dp"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="@color/colorPrimary"
-            app:tabIndicatorFullWidth="false"
-            app:tabIndicatorHeight="3dp"
-            app:tabMaxWidth="200dp"
-            app:tabMinWidth="20dp"
-            app:tabMode="fixed"
-            app:tabPaddingEnd="20dp"
-            app:tabPaddingStart="20dp"
-            app:tabRippleColor="@android:color/transparent"
-            app:tabSelectedTextColor="@color/colorPrimary"
-            app:tabTextAppearance="@style/TabLayoutTextSize15"
-            app:tabTextColor="#999999" />
+            android:layout_height="60dp">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/colorPrimary"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorHeight="3dp"
+                app:tabMode="fixed"
+                app:tabRippleColor="@android:color/transparent"
+                app:tabSelectedTextColor="@color/colorPrimary"
+                app:tabTextAppearance="@style/TabLayoutTextSize15"
+                app:tabTextColor="#999999" />
+
+            <LinearLayout
+                android:id="@+id/work_delete_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/padding"
+                android:paddingRight="@dimen/padding"
+                android:background="@color/white"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_tag"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="作品 0"
+                    android:textColor="#ff333333"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:background="@drawable/button_radius_red"
+                    android:gravity="center"
+                    android:paddingLeft="14dp"
+                    android:paddingRight="14dp"
+                    android:text="删除作品"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_confirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/button_radius_theme"
+                    android:gravity="center"
+                    android:minWidth="83dp"
+                    android:paddingLeft="14dp"
+                    android:paddingRight="14dp"
+                    android:text="完成"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+        </RelativeLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"

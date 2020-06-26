@@ -79,7 +79,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onResume() {
         super.onResume();
-        finishAllActivity();
+//        finishAllActivity();
     }
 
     @Override
@@ -167,7 +167,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             @Override
                             public void onComplete(Object arg0) {
                                 isBindThird("qq", TencentHelper.getOpenId());
-//                                ToastUtils.showShort(getApplication(), "QQ授权成功: Openid = " + TencentHelper.getOpenId());
 
                             }
 
@@ -220,7 +219,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onResponse(UserInfo response, int id) {
                 if (response.getCode() == 200) {
                     MyApplication.getInstance().setUserInfo(response);
-                    openActivity(MainActivity.class);
+                    //openActivity(MainActivity.class);
                     finish();
                 } else {
                     ToastUtils.showShort(LoginActivity.this, response.getMsg());
@@ -257,7 +256,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onResponse(UserInfo response, int id) {
                 if (response.getCode() == 200) {
                     MyApplication.getInstance().setUserInfo(response);
-                    openActivity(MainActivity.class);
+                    //openActivity(MainActivity.class);
                     finish();
                 } else {
                     ToastUtils.showShort(LoginActivity.this, response.getMsg());
@@ -299,7 +298,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     String city = json.optString("city");
                                     String province = json.optString("province");
                                     isBindThird("weChat", openid);
-//                                    WXLogin(openid,nickname,headimgurl,sex,city,province);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -309,27 +307,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }
             }
         }
-    }
-
-    private void WXLogin(String openid, String nickname, String headimgurl, String sex, String city, String province) {
-        SendRequest.WXLogin(openid, nickname, headimgurl, sex, city, province, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-
-            }
-
-            @Override
-            public void onResponse(UserInfo response, int id) {
-                if (response.getCode() == 200) {
-                    MyApplication.getInstance().setUserInfo(response);
-                    openActivity(MainActivity.class);
-                    finish();
-                } else {
-                    ToastUtils.showShort(LoginActivity.this, response.getMsg());
-                }
-            }
-
-        });
     }
 
     /**
@@ -417,7 +394,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onResponse(UserInfo response, int id) {
                 if (response.getCode() == 200) {
                     MyApplication.getInstance().setUserInfo(response);
-                    openActivity(MainActivity.class);
+                    //openActivity(MainActivity.class);
                     finish();
                 } else if (response.getCode() == 500) {
                     Bundle bundle = new Bundle();

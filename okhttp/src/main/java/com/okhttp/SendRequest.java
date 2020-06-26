@@ -22,7 +22,7 @@ public class SendRequest {
      * @param authCode
      * @param call
      */
-    public static void register(String phone, String password, String password_confirmation, String authCode, String key, String value,  Callback call) {
+    public static void register(String phone, String password, String password_confirmation, String authCode, String key, String value, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("phone", phone);
         map.put("password", password);
@@ -323,7 +323,8 @@ public class SendRequest {
         map.put("content_id", String.valueOf(content_id));
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_contentIsAssist).build().execute(call);
     }
-    public static void publishContentAssist(int tourist_id, int content_id,String assistUrl, Callback call) {
+
+    public static void publishContentAssist(int tourist_id, int content_id, String assistUrl, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", String.valueOf(tourist_id));
         map.put("content_id", String.valueOf(content_id));
@@ -350,10 +351,50 @@ public class SendRequest {
      * @param content_id 作品ID
      * @param call
      */
-    public static void workDetail(int content_id, Callback call) {
+    public static void workDetail(int tourist_id, int content_id, Callback call) {
         Map<String, String> map = new HashMap<>();
+        if (tourist_id != -1) {
+            map.put("tourist_id", String.valueOf(tourist_id));
+        }
         map.put("content_id", String.valueOf(content_id));
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_workDetail).build().execute(call);
+
+    }
+
+    /**
+     * 删除自己作品
+     *
+     * @param tourist_id
+     * @param contentIds
+     * @param call
+     */
+    public static void deleteContent(int tourist_id, String contentIds, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("content_ids", contentIds);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_deleteContent).build().execute(call);
+
+    }
+
+    /**
+     * 删除点赞作品
+     *
+     * @param tourist_id
+     * @param contentIds
+     * @param call
+     */
+    public static void deleteAssist(int tourist_id, String contentIds, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("content_ids", contentIds);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_deleteAssist).build().execute(call);
+
+    }
+
+    public static void playTime(int content_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("content_id", String.valueOf(content_id));
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_playTime).build().execute(call);
 
     }
 
@@ -444,6 +485,13 @@ public class SendRequest {
         OkHttpUtils.getInstance().post().params(map).url(followUrl).build().execute(call);
     }
 
+    public static void centerAssist(int tourist_id, int per_page, int page, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("per_page", String.valueOf(per_page));
+        map.put("page", String.valueOf(page));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_centerAssist).build().execute(call);
+    }
 
     /**
      * 修改个人信息

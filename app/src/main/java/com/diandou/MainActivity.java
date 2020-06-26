@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import com.cjt2325.cameralibrary.CameraActivity;
 import com.cjt2325.cameralibrary.JCameraView;
 import com.diandou.activity.BaseActivity;
+import com.diandou.activity.LoginActivity;
 import com.diandou.activity.ReleaseActivity;
 import com.diandou.databinding.ActivityMainBinding;
 import com.diandou.fragment.FollowFragment;
@@ -45,10 +46,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mainBinding.radioButtonRelease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int type = JCameraView.BUTTON_STATE_ONLY_RECORDER;
-                int minTime = 10;
-                int maxTime = 180;
-                CameraActivity.startCameraActivity(MainActivity.this, minTime, maxTime, "#44bf19", type, REQUEST_WXCAMERA);
+                if (getUserInfo().getData() != null) {
+                    int type = JCameraView.BUTTON_STATE_ONLY_RECORDER;
+                    int minTime = 10;
+                    int maxTime = 180;
+                    CameraActivity.startCameraActivity(MainActivity.this, minTime, maxTime, "#44bf19", type, REQUEST_WXCAMERA);
+                } else {
+                    openActivity(LoginActivity.class);
+                }
             }
         });
 
@@ -73,13 +78,21 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 replaceContentFragment(HomeFragment.class);
                 break;
             case R.id.radio_button_follow:
-                replaceContentFragment(FollowFragment.class);
+                if (getUserInfo().getData() != null) {
+                    replaceContentFragment(FollowFragment.class);
+                } else {
+                    openActivity(LoginActivity.class);
+                }
                 break;
 //            case R.id.radio_button_release:
 //                replaceContentFragment(ReleaseFragment.class);
 //                break;
             case R.id.radio_button_message:
-                replaceContentFragment(MessageFragment.class);
+                if (getUserInfo().getData() != null) {
+                    replaceContentFragment(MessageFragment.class);
+                } else {
+                    openActivity(LoginActivity.class);
+                }
                 break;
             case R.id.radio_button_mine:
                 replaceContentFragment(MineFragment.class);

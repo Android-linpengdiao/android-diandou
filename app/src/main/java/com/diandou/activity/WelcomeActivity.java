@@ -48,14 +48,7 @@ public class WelcomeActivity extends BaseActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent;
-                    if (CommonUtil.isBlank(getUserInfo().getData())) {
-                        Log.i(TAG, "run: 1");
-                        intent = new Intent(WelcomeActivity.this, LoginActivity.class);
-                    } else {
-                        Log.i(TAG, "run: 2");
-                        intent = new Intent(WelcomeActivity.this, MainActivity.class);
-                    }
+                    Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
