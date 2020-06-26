@@ -24,7 +24,11 @@ public class DBManager {
         ContentValues values = new ContentValues();
         values.put("userId", userId);
         values.put("search_content", content);
-        db.insert(DBHelper.TABLE_NAME, null, values);
+        Cursor cursor = db.query(DBHelper.TABLE_NAME, null, "userId = ? and search_content = ?",
+                new String[]{String.valueOf(userId),content}, null, null, "_id DESC");
+        if (!cursor.moveToNext()) {
+            db.insert(DBHelper.TABLE_NAME, null, values);
+        }
         db.close();
     }
 

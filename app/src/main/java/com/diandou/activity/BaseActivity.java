@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,17 +18,14 @@ import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.MsgCache;
 import com.baselibrary.utils.PermissionUtils;
 import com.baselibrary.utils.StatusBarUtil;
-import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
 import com.diandou.manager.TencentHelper;
 import com.diandou.manager.WXManager;
-import com.diandou.model.MineWorkData;
+import com.diandou.manager.WbManager;
 import com.diandou.view.OnClickListener;
 import com.diandou.view.SharePopupWindow;
-import com.diandou.weibo.WBShareActivity;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
-import com.okhttp.callbacks.StringCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -38,9 +34,6 @@ import com.sina.weibo.sdk.share.WbShareHandler;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 
-import org.json.JSONObject;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,11 +140,7 @@ public class BaseActivity extends AppCompatActivity {
                         WbShareHandler shareHandler = new WbShareHandler(activity);
                         shareHandler.registerApp();
 
-                        Intent intent = new Intent(activity, WBShareActivity.class);
-                        intent.putExtra(WBShareActivity.KEY_SHARE_TYPE, WBShareActivity.SHARE_CLIENT);
-                        File file = new File("xxxx");
-                        intent.setData(Uri.parse(file.getPath()));
-                        startActivity(intent);
+                        WbManager.sendMultiMessage(shareHandler,true,true);
                         break;
                 }
             }

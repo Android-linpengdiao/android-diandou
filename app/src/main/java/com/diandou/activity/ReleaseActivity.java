@@ -82,6 +82,7 @@ public class ReleaseActivity extends BaseActivity implements AMapLocationListene
         binding.releaseConfirm.setOnClickListener(this);
         binding.cover.setOnClickListener(this);
         binding.videoType.setOnClickListener(this);
+        binding.tvComment.setOnClickListener(this);
 
         videoPath = getIntent().getStringExtra("videoPath");
         coverPath = getIntent().getStringExtra("coverPath");
@@ -103,6 +104,9 @@ public class ReleaseActivity extends BaseActivity implements AMapLocationListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_comment:
+                binding.tvComment.setSelected(!binding.tvComment.isSelected());
+                break;
             case R.id.back:
                 finish();
                 break;

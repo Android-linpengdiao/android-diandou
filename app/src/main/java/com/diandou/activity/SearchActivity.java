@@ -4,6 +4,9 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -33,6 +36,7 @@ import okhttp3.Call;
 
 public class SearchActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final String TAG = "SearchActivity";
     private ActivitySearchBinding binding;
     private SearchHistoryAdapter searchHistoryAdapter;
     private WorkAdapter searchResultAdapter;
@@ -64,7 +68,10 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         searchHistoryAdapter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view, Object object) {
-                binding.etSearch.setText((String) object);
+                String content = (String) object;
+                binding.etSearch.setText(content);
+                binding.etSearch.setSelection(content.length());
+                initSearchView(content);
             }
 
             @Override
@@ -72,7 +79,22 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
             }
         });
+        binding.etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (CommonUtil.isBlank(charSequence.toString())) {
+                    initSearchView(charSequence.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
         binding.etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId,
@@ -100,6 +122,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private void initSearchView(String content) {
         binding.searchHistoryView.setVisibility(CommonUtil.isBlank(content) ? View.VISIBLE : View.GONE);
         binding.searchResultRecyclerView.setVisibility(CommonUtil.isBlank(content) ? View.GONE : View.VISIBLE);
+        binding.emptyView.setVisibility(CommonUtil.isBlank(content) ? View.GONE : View.VISIBLE);
         searchWork(content);
     }
 
@@ -120,6 +143,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void searchWork(String content) {
+        if (CommonUtil.isBlank(content)) {
+            return;
+        }
         SendRequest.searchWorkWord(content, 10, 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -130,6 +156,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(WorkData response, int id) {
                 if (response.getCode() == 200) {
                     searchResultAdapter.refreshData(response.getData().getData());
+                    binding.emptyView.setVisibility(response.getData().getData().size() > 0 ? View.GONE : View.VISIBLE);
                 } else {
                     ToastUtils.showShort(SearchActivity.this, response.getMsg());
                 }

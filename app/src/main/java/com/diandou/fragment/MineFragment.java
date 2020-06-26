@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.baselibrary.MessageBus;
 import com.baselibrary.UserInfo;
+import com.baselibrary.manager.DialogManager;
 import com.baselibrary.utils.GlideLoader;
 import com.diandou.R;
 import com.diandou.activity.EditorActivity;
@@ -161,21 +162,29 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        MessageBus.Builder builder;
-        MessageBus messageBus;
         switch (v.getId()) {
             case R.id.tv_delete:
-                builder = new MessageBus.Builder();
-                messageBus = builder
-                        .codeType(MessageBus.msgId_workDelete)
-                        .message(tag)
-                        .build();
-                EventBus.getDefault().post(messageBus);
-                binding.workDeleteView.setVisibility(View.GONE);
+                DialogManager.showConfirmDialog(getActivity(), "确定要删除该作品？", new DialogManager.Listener() {
+                    @Override
+                    public void onItemLeft() {
+
+                    }
+
+                    @Override
+                    public void onItemRight() {
+                        MessageBus.Builder builder = new MessageBus.Builder();
+                        MessageBus messageBus = builder
+                                .codeType(MessageBus.msgId_workDelete)
+                                .message(tag)
+                                .build();
+                        EventBus.getDefault().post(messageBus);
+                        binding.workDeleteView.setVisibility(View.GONE);
+                    }
+                });
                 break;
             case R.id.tv_confirm:
-                builder = new MessageBus.Builder();
-                messageBus = builder
+                MessageBus.Builder builder = new MessageBus.Builder();
+                MessageBus messageBus = builder
                         .codeType(MessageBus.msgId_workConfirm)
                         .message(tag)
                         .build();

@@ -282,7 +282,7 @@ public class SendRequest {
      */
     public static void searchWork(int tourist_id, int type, int nav_id, String word, int per_page, int page, Callback call) {
         Map<String, String> map = new HashMap<>();
-        if (!CommonUtil.isBlank(String.valueOf(type))) {
+        if (!CommonUtil.isBlank(String.valueOf(tourist_id))) {
             map.put("tourist_id", String.valueOf(tourist_id));
         }
         if (!CommonUtil.isBlank(String.valueOf(type))) {
@@ -294,6 +294,16 @@ public class SendRequest {
         if (!CommonUtil.isBlank(word)) {
             map.put("word", word);
         }
+        map.put("per_page", String.valueOf(per_page));
+        map.put("page", String.valueOf(page));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_searchWork).build().execute(call);
+
+    }
+
+    public static void searchWorkHome(int type, int nav_id, int per_page, int page, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("type", String.valueOf(type));
+        map.put("nav_id", String.valueOf(nav_id));
         map.put("per_page", String.valueOf(per_page));
         map.put("page", String.valueOf(page));
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_searchWork).build().execute(call);

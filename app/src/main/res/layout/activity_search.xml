@@ -109,11 +109,36 @@
                 android:id="@+id/search_result_recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:overScrollMode="never"
                 android:paddingLeft="@dimen/padding"
-                android:layout_marginTop="10dp"
                 android:paddingRight="10dp"
                 android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/emptyView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/kulian" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="抱歉暂无该内容"
+                    android:textColor="#ff00c7f9"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 

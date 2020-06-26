@@ -155,15 +155,6 @@ public class OkHttpUtils {
             public void run() {
                 callback.onAfter(id);
                 callback.onResponse(object, id);
-                try {
-                    JSONObject json = new JSONObject(object.toString());
-                    boolean success = json.optBoolean("success");
-                    int code = json.optInt("code");
-                    if (!success && code == 400) {
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
         });
     }

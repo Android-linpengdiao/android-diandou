@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
+import com.baselibrary.Constants;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.ToastUtils;
@@ -35,6 +36,7 @@ import com.diandou.model.WorkData;
 import com.diandou.model.WorkDetail;
 import com.diandou.view.CommentListPopupWindow;
 import com.diandou.view.GridItemDecoration;
+import com.diandou.view.ObservableScrollView;
 import com.diandou.view.OnClickListener;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
@@ -49,7 +51,7 @@ import org.json.JSONObject;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class WorkInfoActivity extends BaseActivity implements View.OnClickListener {
+public class WorkInfoActivity extends BaseActivity implements View.OnClickListener, ObservableScrollView.ScrollViewListener {
 
     private ActivityWorkInfoBinding binding;
     private WorkAdapter adapter;
@@ -57,9 +59,9 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
     private WorkDetail workDetail;
     private CommentData commentData;
+    private WorkData workData;
 
     private GestureDetector detector;
-    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,6 +226,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
     private void initView(WorkDetail.DataBean data) {
 
+        binding.viewLayout.setScrollViewListener(this);
         binding.viewLayout.setVisibility(View.VISIBLE);
         binding.bottomView.setVisibility(View.VISIBLE);
 
@@ -253,7 +256,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void getVideos(WorkDetail.DataBean data) {
-        SendRequest.searchWorkType(data.getNav_id(), 10, 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
+        SendRequest.searchWorkType(data.getNav_id(), Constants.perPage, workData != null ? workData.getData().getCurrent_page() + 1 : 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 
@@ -261,8 +264,9 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onResponse(WorkData response, int id) {
+                workData = response;
                 if (response.getCode() == 200) {
-                    adapter.refreshData(response.getData().getData());
+                    adapter.loadMoreData(response.getData().getData());
                 } else {
                     ToastUtils.showShort(WorkInfoActivity.this, response.getMsg());
                 }
@@ -720,5 +724,18 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
+
+    }
+
+    @Override
+    public void onScrollToEnd() {
+        Log.i(TAG, "onScrollToEnd: ");
+        if (workDetail != null && workDetail.getData() != null) {
+            getVideos(workDetail.getData());
+        }
     }
 }
