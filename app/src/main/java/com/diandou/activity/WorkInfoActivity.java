@@ -256,7 +256,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void getVideos(WorkDetail.DataBean data) {
-        SendRequest.searchWorkType(data.getNav_id(), Constants.perPage, workData != null ? workData.getData().getCurrent_page() + 1 : 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
+        SendRequest.searchWorkType(data.getNav_id(), Constants.perPage, workData != null && workData.getData() != null ? workData.getData().getCurrent_page() + 1 : 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 

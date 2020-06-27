@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baselibrary.Constants;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
@@ -68,8 +69,10 @@ public class HomeItemListFragment extends BaseFragment implements View.OnClickLi
         return binding.getRoot();
     }
 
+    private WorkData workData;
+
     private void searchWork() {
-        SendRequest.searchWorkHome(type, navId, 100, 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
+        SendRequest.searchWorkHome(type, navId, Constants.perPage, workData != null && workData.getData() != null ? workData.getData().getCurrent_page() + 1 : 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 
@@ -77,8 +80,9 @@ public class HomeItemListFragment extends BaseFragment implements View.OnClickLi
 
             @Override
             public void onResponse(WorkData response, int id) {
+                workData = response;
                 if (response.getCode() == 200) {
-                    adapter.refreshData(response.getData().getData());
+                    adapter.loadMoreData(response.getData().getData());
                 } else {
                     ToastUtils.showShort(getActivity(), response.getMsg());
                 }
