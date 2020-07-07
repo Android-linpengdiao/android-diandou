@@ -40,6 +40,7 @@ import okhttp3.Call;
 public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "HomeFragment";
     private FragmentHomeBinding binding;
+    private PagerAdapter mainHomePagerAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +65,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onResponse(NavData response, int id) {
                 if (response.getCode() == 200 && response.getData() != null) {
-                    PagerAdapter mainHomePagerAdapter = new PagerAdapter(getChildFragmentManager());
+                    mainHomePagerAdapter = new PagerAdapter(getChildFragmentManager());
+                    mainHomePagerAdapter.addFragment("热门", HomeItemFragment.newInstance(0));
                     for (int i = 0; i < response.getData().size(); i++) {
                         mainHomePagerAdapter.addFragment(response.getData().get(i).getName(), HomeItemFragment.newInstance(response.getData().get(i).getId()));
                     }

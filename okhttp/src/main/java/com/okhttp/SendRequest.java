@@ -303,7 +303,7 @@ public class SendRequest {
     public static void searchWorkHome(int type, int nav_id, int per_page, int page, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("type", String.valueOf(type));
-        map.put("nav_id", String.valueOf(nav_id));
+        map.put("nav_id", nav_id == 0 ? "hot" : String.valueOf(nav_id));
         map.put("per_page", String.valueOf(per_page));
         map.put("page", String.valueOf(page));
         OkHttpUtils.getInstance().get().params(map).url(APIUrls.url_searchWork).build().execute(call);

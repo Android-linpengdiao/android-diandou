@@ -39,7 +39,7 @@ public class MineLikeWorkAdapter extends BaseRecyclerAdapter<MineLikeWorkData.Da
     @Override
     protected void onBindItem(final ItemMineWorkLayoutBinding binding, final MineLikeWorkData.DataBeanX.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            binding.tvAssist.setText(!CommonUtil.isBlank(dataBean.getContent())?dataBean.getContent().getAssist():0);
+            binding.tvAssist.setText(!CommonUtil.isBlank(dataBean.getContent())?String.valueOf(dataBean.getContent().getAssist()):String.valueOf(0));
             GlideLoader.LoderImage(mContext, !CommonUtil.isBlank(dataBean.getContent())?dataBean.getContent().getImg():"", binding.cover);
             binding.selection.setSelected(!CommonUtil.isBlank(dataBean.getContent())?dataBean.getContent().isSelection():false);
             binding.selection.setVisibility(isSelection ? View.VISIBLE : View.GONE);
