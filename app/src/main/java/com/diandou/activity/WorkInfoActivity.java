@@ -256,19 +256,35 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void getVideos(WorkDetail.DataBean data) {
-        SendRequest.searchWorkType(data.getNav_id(), Constants.perPage, workData != null && workData.getData() != null ? workData.getData().getCurrent_page() + 1 : 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
+//        SendRequest.searchWorkType(data.getNav_id(), Constants.perPage, workData != null && workData.getData() != null ? workData.getData().getCurrent_page() + 1 : 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
+//            @Override
+//            public void onError(Call call, Exception e, int id) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(WorkData response, int id) {
+//                workData = response;
+//                if (response.getCode() == 200) {
+//                    adapter.loadMoreData(response.getData().getData());
+//                } else {
+//                    ToastUtils.showShort(WorkInfoActivity.this, response.getMsg());
+//                }
+//            }
+//
+//        });
+
+        SendRequest.centerSelfWork(data.getTourist().getId(), new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
-
             }
 
             @Override
             public void onResponse(WorkData response, int id) {
-                workData = response;
-                if (response.getCode() == 200) {
-                    adapter.loadMoreData(response.getData().getData());
+                if (response.getCode() == 200 && response.getData() != null && response.getData().getData() != null) {
+                    adapter.refreshData(response.getData().getData());
                 } else {
-                    ToastUtils.showShort(WorkInfoActivity.this, response.getMsg());
+                    ToastUtils.showShort(getApplication(), response.getMsg());
                 }
             }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
 import com.diandou.R;
 import com.diandou.activity.WorkInfoActivity;
@@ -38,16 +39,18 @@ public class MineLikeWorkAdapter extends BaseRecyclerAdapter<MineLikeWorkData.Da
     @Override
     protected void onBindItem(final ItemMineWorkLayoutBinding binding, final MineLikeWorkData.DataBeanX.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            binding.tvAssist.setText(""+dataBean.getContent().getAssist());
-            GlideLoader.LoderImage(mContext, dataBean.getContent().getImg(), binding.cover);
-            binding.selection.setSelected(dataBean.getContent().isSelection());
+            binding.tvAssist.setText(!CommonUtil.isBlank(dataBean.getContent())?dataBean.getContent().getAssist():0);
+            GlideLoader.LoderImage(mContext, !CommonUtil.isBlank(dataBean.getContent())?dataBean.getContent().getImg():"", binding.cover);
+            binding.selection.setSelected(!CommonUtil.isBlank(dataBean.getContent())?dataBean.getContent().isSelection():false);
             binding.selection.setVisibility(isSelection ? View.VISIBLE : View.GONE);
             binding.selection.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dataBean.getContent().setSelection(!dataBean.getContent().isSelection());
-                    binding.selection.setSelected(dataBean.getContent().isSelection());
-                    notifyItemChanged(position);
+                    if (!CommonUtil.isBlank(dataBean.getContent())) {
+                        dataBean.getContent().setSelection(!dataBean.getContent().isSelection());
+                        binding.selection.setSelected(dataBean.getContent().isSelection());
+                        notifyItemChanged(position);
+                    }
                 }
             });
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
