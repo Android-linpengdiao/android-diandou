@@ -22,8 +22,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.VideoTypeActivity"
-            android:theme="@style/WelcomeTheme">
-        </activity>
+            android:theme="@style/WelcomeTheme"></activity>
         <activity
             android:name=".activity.ClipImageActivity"
             android:theme="@style/ImageActivityTheme" />
@@ -67,7 +66,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

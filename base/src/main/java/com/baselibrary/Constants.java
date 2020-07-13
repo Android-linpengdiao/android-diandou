@@ -7,6 +7,6 @@ public class Constants {
     public static final String str_download_wait = "正在下载%s";
     public static final String BuglyAppID = "0219c90857";
 
-    public static final int perPage = 10;
+    public static final int perPage = 100;
 
 }

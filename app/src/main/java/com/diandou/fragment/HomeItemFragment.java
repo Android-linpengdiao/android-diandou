@@ -55,12 +55,11 @@ public class HomeItemFragment extends BaseFragment implements View.OnClickListen
         if (navId==0) {
             pagerAdapter.addFragment("最热", HomeItemListFragment.newInstance(navId, 1));
             pagerAdapter.addFragment("推荐", HomeItemListFragment.newInstance(navId, 2));
-            binding.viewPager.setCurrentItem(0);
         }else {
-            pagerAdapter.addFragment("推荐", HomeItemListFragment.newInstance(navId, 2));
             pagerAdapter.addFragment("最新", HomeItemListFragment.newInstance(navId, 3));
-            binding.viewPager.setCurrentItem(1);
+            pagerAdapter.addFragment("推荐", HomeItemListFragment.newInstance(navId, 2));
         }
+        binding.viewPager.setCurrentItem(0);
         binding.viewPager.setAdapter(pagerAdapter);
         binding.viewPager.setOffscreenPageLimit(1);
         binding.tabLayout.setupWithViewPager(binding.viewPager);

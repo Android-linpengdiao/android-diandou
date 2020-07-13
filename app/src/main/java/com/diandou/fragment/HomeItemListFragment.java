@@ -61,6 +61,7 @@ public class HomeItemListFragment extends BaseFragment implements View.OnClickLi
         GridItemDecoration.Builder builder = new GridItemDecoration.Builder(getActivity());
         builder.color(R.color.transparent);
         builder.size(CommonUtil.dip2px(getActivity(), 10));
+        binding.recyclerView.setNestedScrollingEnabled(false);
         binding.recyclerView.addItemDecoration(new GridItemDecoration(builder));
         binding.recyclerView.setAdapter(adapter);
 
@@ -72,7 +73,7 @@ public class HomeItemListFragment extends BaseFragment implements View.OnClickLi
     private WorkData workData;
 
     private void searchWork() {
-        SendRequest.searchWorkHome(type, navId, Constants.perPage, workData != null && workData.getData() != null ? workData.getData().getCurrent_page() + 1 : 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
+        SendRequest.searchWorkHome(type, navId, Constants.perPage, 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 
