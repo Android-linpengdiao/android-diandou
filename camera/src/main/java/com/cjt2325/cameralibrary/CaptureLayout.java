@@ -6,15 +6,21 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.baselibrary.utils.CommonUtil;
+import com.baselibrary.utils.ToastUtils;
 import com.cjt2325.cameralibrary.listener.CaptureListener;
 import com.cjt2325.cameralibrary.listener.ClickListener;
 import com.cjt2325.cameralibrary.listener.ReturnListener;
@@ -50,7 +56,9 @@ public class CaptureLayout extends FrameLayout {
         this.returnListener = returnListener;
     }
 
-    private CaptureButton btn_capture;      //拍照按钮
+    private ProgressBar progressBar;
+    private ImageView btn_capture;      //拍照按钮
+    //    private CaptureButton btn_capture;      //拍照按钮
     private TypeButton btn_confirm;         //确认按钮
     private TypeButton btn_cancel;          //取消按钮
     private ReturnButton btn_return;        //返回按钮
@@ -67,16 +75,21 @@ public class CaptureLayout extends FrameLayout {
 
     private boolean isFirst = true;
 
+    private Context context;
+
     public CaptureLayout(Context context) {
         this(context, null);
+        this.context = context;
     }
 
     public CaptureLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+        this.context = context;
     }
 
     public CaptureLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
 
         WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -115,9 +128,9 @@ public class CaptureLayout extends FrameLayout {
             btn_return.setVisibility(GONE);
         if (this.iconRight != 0)
             iv_custom_right.setVisibility(GONE);
-        btn_capture.setVisibility(GONE);
-        btn_cancel.setVisibility(VISIBLE);
-        btn_confirm.setVisibility(VISIBLE);
+//        btn_capture.setVisibility(GONE);
+//        btn_cancel.setVisibility(VISIBLE);
+//        btn_confirm.setVisibility(VISIBLE);
         btn_cancel.setClickable(false);
         btn_confirm.setClickable(false);
         ObjectAnimator animator_cancel = ObjectAnimator.ofFloat(btn_cancel, "translationX", layout_width / 4, 0);
@@ -129,69 +142,103 @@ public class CaptureLayout extends FrameLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                btn_cancel.setClickable(true);
-                btn_confirm.setClickable(true);
+//                btn_cancel.setClickable(true);
+//                btn_confirm.setClickable(true);
+
+                if (typeLisenter != null) {
+                    typeLisenter.confirm();
+                }
+                startAlphaAnimation();
             }
         });
         set.setDuration(200);
         set.start();
     }
 
+    private static final String TAG = "CaptureLayout";
 
     private void initView() {
         setWillNotDraw(false);
         //拍照按钮
-        btn_capture = new CaptureButton(getContext(), button_size);
-        LayoutParams btn_capture_param = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        btn_capture_param.gravity = Gravity.CENTER;
+
+        btn_capture = new ImageView(getContext());
+        btn_capture.setImageResource(R.drawable.capture);
+        LayoutParams btn_capture_param = new LayoutParams(CommonUtil.dip2px(context, 82), CommonUtil.dip2px(context, 82));
+        btn_capture_param.gravity = Gravity.CENTER_VERTICAL;
+        btn_capture_param.setMargins((layout_width / 2) - CommonUtil.dip2px(context, 82) / 2, 0, 0, 0);
         btn_capture.setLayoutParams(btn_capture_param);
-        btn_capture.setCaptureLisenter(new CaptureListener() {
+        btn_capture.setOnClickListener(new OnClickListener() {
             @Override
-            public void takePictures() {
-                if (captureLisenter != null) {
-                    captureLisenter.takePictures();
-                }
-            }
-
-            @Override
-            public void recordShort(long time) {
-                if (captureLisenter != null) {
-                    captureLisenter.recordShort(time);
-                }
-                startAlphaAnimation();
-            }
-
-            @Override
-            public void recordStart() {
-                if (captureLisenter != null) {
-                    captureLisenter.recordStart();
-                }
-                startAlphaAnimation();
-            }
-
-            @Override
-            public void recordEnd(long time) {
-                if (captureLisenter != null) {
-                    captureLisenter.recordEnd(time);
-                }
-                startAlphaAnimation();
-                startTypeBtnAnimator();
-            }
-
-            @Override
-            public void recordZoom(float zoom) {
-                if (captureLisenter != null) {
-                    captureLisenter.recordZoom(zoom);
-                }
-            }
-
-            @Override
-            public void recordError() {
-                if (captureLisenter != null) {
-                    captureLisenter.recordError();
+            public void onClick(View v) {
+                btn_capture.setSelected(!btn_capture.isSelected());
+                if (btn_capture.isSelected()) {
+                    if (captureLisenter != null) {
+                        captureLisenter.recordStart();
+                        startUpdateTimer();
+                    }
+                    startAlphaAnimation();
+                } else {
+                    if (captureLisenter != null) {
+                        captureLisenter.recordEnd(0);
+                        stopUpdateTimer();
+                    }
+                    startAlphaAnimation();
+                    startTypeBtnAnimator();
                 }
             }
         });
+
+//        btn_capture = new CaptureButton(getContext(), button_size);
+//        LayoutParams btn_capture_param = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+//        btn_capture_param.gravity = Gravity.CENTER;
+//        btn_capture.setLayoutParams(btn_capture_param);
+//        btn_capture.setCaptureLisenter(new CaptureListener() {
+//            @Override
+//            public void takePictures() {
+//                if (captureLisenter != null) {
+//                    captureLisenter.takePictures();
+//                }
+//            }
+//
+//            @Override
+//            public void recordShort(long time) {
+//                if (captureLisenter != null) {
+//                    captureLisenter.recordShort(time);
+//                }
+//                startAlphaAnimation();
+//            }
+//
+//            @Override
+//            public void recordStart() {
+//                if (captureLisenter != null) {
+//                    captureLisenter.recordStart();
+//                }
+//                startAlphaAnimation();
+//            }
+//
+//            @Override
+//            public void recordEnd(long time) {
+//                if (captureLisenter != null) {
+//                    captureLisenter.recordEnd(time);
+//                }
+//                startAlphaAnimation();
+//                startTypeBtnAnimator();
+//            }
+//
+//            @Override
+//            public void recordZoom(float zoom) {
+//                if (captureLisenter != null) {
+//                    captureLisenter.recordZoom(zoom);
+//                }
+//            }
+//
+//            @Override
+//            public void recordError() {
+//                if (captureLisenter != null) {
+//                    captureLisenter.recordError();
+//                }
+//            }
+//        });
 
         //取消按钮
         btn_cancel = new TypeButton(getContext(), TypeButton.TYPE_CANCEL, button_size);
@@ -265,8 +312,12 @@ public class CaptureLayout extends FrameLayout {
         iv_custom_right.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (rightClickListener != null) {
-                    rightClickListener.onClick();
+                if (captureTime >= minDuration) {
+                    if (rightClickListener != null) {
+                        rightClickListener.onClick();
+                    }
+                } else {
+                    ToastUtils.showShort(context, "最低录制" + minDuration + "s");
                 }
             }
         });
@@ -291,10 +342,10 @@ public class CaptureLayout extends FrameLayout {
         this.addView(btn_confirm);
         this.addView(btn_return);
         this.addView(iv_custom_left);
-//        this.addView(iv_custom_right);
+        this.addView(iv_custom_right);
         this.addView(txt_tip);
         this.addView(txt_time);
-        btn_capture.setTxtTime(txt_time);
+//        btn_capture.setTxtTime(txt_time);
 
     }
 
@@ -302,7 +353,7 @@ public class CaptureLayout extends FrameLayout {
      * 对外提供的API                      *
      **************************************************/
     public void resetCaptureLayout() {
-        btn_capture.resetState();
+//        btn_capture.resetState();
         btn_cancel.setVisibility(GONE);
         btn_confirm.setVisibility(GONE);
         btn_capture.setVisibility(VISIBLE);
@@ -331,20 +382,70 @@ public class CaptureLayout extends FrameLayout {
         animator_txt_tip.start();
     }
 
-    public void setDuration(int duration) {
-        btn_capture.setDuration(duration);
+    private void startUpdateTimer() {
+        iv_custom_left.setVisibility(GONE);
+        iv_custom_right.setVisibility(GONE);
+        if (progressUpdateTimer != null) {
+            progressUpdateTimer.removeMessages(0);
+            progressUpdateTimer.sendEmptyMessageDelayed(0, 1000);
+        }
     }
 
+    private void stopUpdateTimer() {
+        iv_custom_left.setVisibility(VISIBLE);
+        if (captureTime >= minDuration) {
+            iv_custom_right.setVisibility(VISIBLE);
+        }
+        if (progressUpdateTimer != null) {
+            progressUpdateTimer.removeMessages(0);
+        }
+    }
+
+    private int captureTime = 0;
+
+    private Handler progressUpdateTimer = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (progressBar != null) {
+                captureTime++;
+                if (captureTime < duration) {
+                    progressBar.setProgress(captureTime);
+                    startUpdateTimer();
+                } else {
+                    if (captureLisenter != null) {
+                        captureLisenter.recordEnd(0);
+                        stopUpdateTimer();
+                    }
+                    startAlphaAnimation();
+                    startTypeBtnAnimator();
+                }
+            }
+        }
+    };
+
+    public void setProgressBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;
+    }
+
+    private int duration ;
+    public void setDuration(int duration) {
+        this.duration = duration;
+//        btn_capture.setDuration(duration);
+    }
+
+    private int minDuration;
+
     public void setMinDuration(int duration) {
-        btn_capture.setMinDuration(duration);
+        this.minDuration = duration;
+//        btn_capture.setMinDuration(duration);
     }
 
     public void setColor(String color) {
-        btn_capture.setColor(color);
+//        btn_capture.setColor(color);
     }
 
     public void setButtonFeatures(int state) {
-        btn_capture.setButtonFeatures(state);
+//        btn_capture.setButtonFeatures(state);
     }
 
     public void setTip(String tip) {

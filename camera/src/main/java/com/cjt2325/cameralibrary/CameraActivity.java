@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.baselibrary.utils.ToastUtils;
 import com.cjt2325.cameralibrary.listener.ClickListener;
 import com.cjt2325.cameralibrary.listener.ErrorListener;
 import com.cjt2325.cameralibrary.listener.JCameraListener;
@@ -22,6 +23,8 @@ import com.vincent.videocompressor.VideoCompress;
 import java.io.File;
 import java.io.FileInputStream;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CameraActivity extends Activity {
 
@@ -35,10 +38,12 @@ public class CameraActivity extends Activity {
 
     private static final int RESULT_VIDEO = 100;
 
+    private List<String> list = new ArrayList<>();
+
     public static void startCameraActivity(Activity activity, int minTime, int maxTime, String color, int stateType, int requestCode) {
         Intent intent = new Intent(activity, CameraActivity.class);
-        intent.putExtra(CameraActivity.MIN_TIME, minTime * 1000);
-        intent.putExtra(CameraActivity.MAX_TIME, maxTime * 1000);
+        intent.putExtra(CameraActivity.MIN_TIME, minTime);
+        intent.putExtra(CameraActivity.MAX_TIME, maxTime );
         intent.putExtra(CameraActivity.COLOR, color);
         intent.putExtra(CameraActivity.STATE_TYPE, stateType);
         activity.startActivityForResult(intent, requestCode);
@@ -57,8 +62,8 @@ public class CameraActivity extends Activity {
         jCameraView.setFeatures(getIntent().getIntExtra(STATE_TYPE, JCameraView.BUTTON_STATE_BOTH));
         jCameraView.setTip("拍摄时间90s-180s");
         jCameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
-        jCameraView.setDuration(getIntent().getIntExtra(MAX_TIME, 60 * 1000));
-        jCameraView.setMinDuration(getIntent().getIntExtra(MIN_TIME, 3 * 1000));
+        jCameraView.setDuration(getIntent().getIntExtra(MAX_TIME, 60 ));
+        jCameraView.setMinDuration(getIntent().getIntExtra(MIN_TIME, 3 ));
         jCameraView.setColor(getIntent().getStringExtra(COLOR));
         jCameraView.setErrorLisenter(new ErrorListener() {
             @Override
@@ -96,48 +101,50 @@ public class CameraActivity extends Activity {
                 //获取视频路径
                 final String path = FileUtil.saveBitmap("JCamera", firstFrame);
                 Log.i(TAG, " recordSuccess: url = " + url + ", Bitmap = " + path);
+                list.add(path);
+                Log.i(TAG, "recordSuccess: size = " + list.size());
 
-                final String destPath = getExternalFilesDir(null) + File.separator + "JCamera" + File.separator + "video_" + System.currentTimeMillis() + ".mp4";
-                final VideoCompress.VideoCompressTask task = VideoCompress.compressVideoLow(url, destPath, new VideoCompress.CompressListener() {
-                    @Override
-                    public void onStart() {
-                        LoadingManager.showProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), "0.00%"));
-                    }
-
-                    @Override
-                    public void onSuccess() {
-                        try {
-                            LoadingManager.hideLoadingDialog(CameraActivity.this);
-                            Class crop = Class.forName("com.diandou.activity.ReleaseActivity");
-                            Intent intent = new Intent(CameraActivity.this, crop);
-                            intent.putExtra("videoPath", destPath);
-                            intent.putExtra("coverPath", path);
-                            startActivity(intent);
-                            finish();
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFail() {
-                        LoadingManager.hideProgress(CameraActivity.this);
-                    }
-
-                    @Override
-                    public void onProgress(float percent) {
-                        Log.i(TAG, "onProgress: "+String.valueOf(percent) + "%");
-                        DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                        String strPercent = decimalFormat.format(percent);
-                        LoadingManager.updateProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), strPercent + "%"));
-                    }
-                });
-                LoadingManager.OnDismissListener(CameraActivity.this, new LoadingManager.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        task.cancel(true);
-                    }
-                });
+//                final String destPath = getExternalFilesDir(null) + File.separator + "JCamera" + File.separator + "video_" + System.currentTimeMillis() + ".mp4";
+//                final VideoCompress.VideoCompressTask task = VideoCompress.compressVideoLow(url, destPath, new VideoCompress.CompressListener() {
+//                    @Override
+//                    public void onStart() {
+//                        LoadingManager.showProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), "0.00%"));
+//                    }
+//
+//                    @Override
+//                    public void onSuccess() {
+//                        try {
+//                            LoadingManager.hideLoadingDialog(CameraActivity.this);
+//                            Class crop = Class.forName("com.diandou.activity.ReleaseActivity");
+//                            Intent intent = new Intent(CameraActivity.this, crop);
+//                            intent.putExtra("videoPath", destPath);
+//                            intent.putExtra("coverPath", path);
+//                            startActivity(intent);
+//                            finish();
+//                        } catch (ClassNotFoundException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFail() {
+//                        LoadingManager.hideProgress(CameraActivity.this);
+//                    }
+//
+//                    @Override
+//                    public void onProgress(float percent) {
+//                        Log.i(TAG, "onProgress: "+String.valueOf(percent) + "%");
+//                        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+//                        String strPercent = decimalFormat.format(percent);
+//                        LoadingManager.updateProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), strPercent + "%"));
+//                    }
+//                });
+//                LoadingManager.OnDismissListener(CameraActivity.this, new LoadingManager.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss() {
+//                        task.cancel(true);
+//                    }
+//                });
 
 
             }
@@ -159,6 +166,11 @@ public class CameraActivity extends Activity {
         jCameraView.setRightClickListener(new ClickListener() {
             @Override
             public void onClick() {
+                if (list.size() > 0) {
+
+                } else {
+                    ToastUtils.showShort(CameraActivity.this, "请录制视频");
+                }
             }
         });
 

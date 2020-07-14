@@ -13,17 +13,18 @@
         app:duration_max="60000"
         app:iconLeft="@drawable/ic_photo"
         app:iconMargin="20dp"
-        app:iconRight="@null"
+        app:iconRight="@drawable/roundcheckfill"
         app:iconSize="30dp"
-        app:iconSrc="@drawable/ic_camera" />
+        app:iconSrc="@drawable/ic_camera" >
 
-    <ImageView
-        android:id="@+id/back"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_back"
-        android:padding="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"/>
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_back" />
+    </com.cjt2325.cameralibrary.JCameraView>
 
 </RelativeLayout>

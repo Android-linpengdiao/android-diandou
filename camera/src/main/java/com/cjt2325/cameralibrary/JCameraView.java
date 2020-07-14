@@ -20,6 +20,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.VideoView;
 
 import com.cjt2325.cameralibrary.listener.CaptureListener;
@@ -84,6 +85,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     private ClickListener rightClickListener;
 
     private Context mContext;
+    private ProgressBar progressBar;
     private VideoView mVideoView;
     private ImageView mPhoto;
     private ImageView mSwitchCamera;
@@ -151,11 +153,13 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     private void initView() {
         setWillNotDraw(false);
         View view = LayoutInflater.from(mContext).inflate(R.layout.camera_view, this);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         mVideoView = (VideoView) view.findViewById(R.id.video_preview);
         mPhoto = (ImageView) view.findViewById(R.id.image_photo);
         mSwitchCamera = (ImageView) view.findViewById(R.id.image_switch);
         mSwitchCamera.setImageResource(iconSrc);
         mFlashLamp = (ImageView) view.findViewById(R.id.image_flash);
+        progressBar.setMax(180);
         setFlashRes();
         mFlashLamp.setOnClickListener(new OnClickListener() {
             @Override
@@ -265,10 +269,12 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
                 }
             }
         });
+        mCaptureLayout.setProgressBar(progressBar);
         foucsView();
     }
 
     private int CAMERA_FACING = 0;
+
     private void foucsView() {
         CAMERA_FACING = CameraInterface.getInstance().getSelectedCamera();
         switch (CAMERA_FACING) {

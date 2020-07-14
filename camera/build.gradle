@@ -28,5 +28,6 @@ dependencies {
     implementation externalAndroidAppCompatV7
     // 视频压缩库
     implementation project(':videocompressor')
+    implementation project(':base')
 }
 
