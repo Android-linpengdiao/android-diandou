@@ -112,17 +112,13 @@ public class FileUtils {
     public static File createTempFile(String fileName) {
         if (!CommonUtil.isBlank(fileName)) {
             try {
-                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                    File file = new File(getTempPath() + fileName);
-                    file.getParentFile().mkdirs();
-                    if (file.exists()) {
-                        file.delete();
-                    }
-                    file.createNewFile();
-                    return file;
-                } else {
-                    return null;
+                File file = new File(getTempPath() + fileName);
+                file.getParentFile().mkdirs();
+                if (file.exists()) {
+                    file.delete();
                 }
+                file.createNewFile();
+                return file;
             } catch (Exception e) {
                 e.printStackTrace();
             }

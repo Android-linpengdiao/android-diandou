@@ -12,16 +12,19 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.baselibrary.utils.FileUtils;
 import com.baselibrary.utils.ToastUtils;
 import com.cjt2325.cameralibrary.listener.ClickListener;
 import com.cjt2325.cameralibrary.listener.ErrorListener;
 import com.cjt2325.cameralibrary.listener.JCameraListener;
+import com.cjt2325.cameralibrary.mp4parse.video.Mp4ParseUtil;
 import com.cjt2325.cameralibrary.util.DeviceUtil;
 import com.cjt2325.cameralibrary.util.FileUtil;
 import com.vincent.videocompressor.VideoCompress;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +41,7 @@ public class CameraActivity extends Activity {
 
     private static final int RESULT_VIDEO = 100;
 
-    private List<String> list = new ArrayList<>();
+    private List<String> mp4PathList = new ArrayList<>();
 
     public static void startCameraActivity(Activity activity, int minTime, int maxTime, String color, int stateType, int requestCode) {
         Intent intent = new Intent(activity, CameraActivity.class);
@@ -101,8 +104,8 @@ public class CameraActivity extends Activity {
                 //获取视频路径
                 final String path = FileUtil.saveBitmap("JCamera", firstFrame);
                 Log.i(TAG, " recordSuccess: url = " + url + ", Bitmap = " + path);
-                list.add(path);
-                Log.i(TAG, "recordSuccess: size = " + list.size());
+                mp4PathList.add(path);
+                Log.i(TAG, "recordSuccess: size = " + mp4PathList.size());
 
 //                final String destPath = getExternalFilesDir(null) + File.separator + "JCamera" + File.separator + "video_" + System.currentTimeMillis() + ".mp4";
 //                final VideoCompress.VideoCompressTask task = VideoCompress.compressVideoLow(url, destPath, new VideoCompress.CompressListener() {
@@ -166,8 +169,14 @@ public class CameraActivity extends Activity {
         jCameraView.setRightClickListener(new ClickListener() {
             @Override
             public void onClick() {
-                if (list.size() > 0) {
-
+                if (mp4PathList.size() > 0) {
+                    try {
+                        String videoPath = FileUtils.createTempFile("output_appendMp4.mp4").getPath();
+                        Log.i(TAG, "onClick: videoPath = "+videoPath);
+                        Mp4ParseUtil.appendMp4List(mp4PathList, videoPath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     ToastUtils.showShort(CameraActivity.this, "请录制视频");
                 }
