@@ -104,52 +104,8 @@ public class CameraActivity extends Activity {
                 //获取视频路径
                 final String path = FileUtil.saveBitmap("JCamera", firstFrame);
                 Log.i(TAG, " recordSuccess: url = " + url + ", Bitmap = " + path);
-                mp4PathList.add(path);
+                mp4PathList.add(url);
                 Log.i(TAG, "recordSuccess: size = " + mp4PathList.size());
-
-//                final String destPath = getExternalFilesDir(null) + File.separator + "JCamera" + File.separator + "video_" + System.currentTimeMillis() + ".mp4";
-//                final VideoCompress.VideoCompressTask task = VideoCompress.compressVideoLow(url, destPath, new VideoCompress.CompressListener() {
-//                    @Override
-//                    public void onStart() {
-//                        LoadingManager.showProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), "0.00%"));
-//                    }
-//
-//                    @Override
-//                    public void onSuccess() {
-//                        try {
-//                            LoadingManager.hideLoadingDialog(CameraActivity.this);
-//                            Class crop = Class.forName("com.diandou.activity.ReleaseActivity");
-//                            Intent intent = new Intent(CameraActivity.this, crop);
-//                            intent.putExtra("videoPath", destPath);
-//                            intent.putExtra("coverPath", path);
-//                            startActivity(intent);
-//                            finish();
-//                        } catch (ClassNotFoundException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFail() {
-//                        LoadingManager.hideProgress(CameraActivity.this);
-//                    }
-//
-//                    @Override
-//                    public void onProgress(float percent) {
-//                        Log.i(TAG, "onProgress: "+String.valueOf(percent) + "%");
-//                        DecimalFormat decimalFormat = new DecimalFormat("0.00");
-//                        String strPercent = decimalFormat.format(percent);
-//                        LoadingManager.updateProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), strPercent + "%"));
-//                    }
-//                });
-//                LoadingManager.OnDismissListener(CameraActivity.this, new LoadingManager.OnDismissListener() {
-//                    @Override
-//                    public void onDismiss() {
-//                        task.cancel(true);
-//                    }
-//                });
-
-
             }
         });
 
@@ -172,8 +128,12 @@ public class CameraActivity extends Activity {
                 if (mp4PathList.size() > 0) {
                     try {
                         String videoPath = FileUtils.createTempFile("output_appendMp4.mp4").getPath();
-                        Log.i(TAG, "onClick: videoPath = "+videoPath);
+                        LoadingManager.showLoadingDialog(CameraActivity.this,"视频合成中");
                         Mp4ParseUtil.appendMp4List(mp4PathList, videoPath);
+                        LoadingManager.hideLoadingDialog(CameraActivity.this);
+
+                        compressVideoLow(videoPath);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -189,6 +149,51 @@ public class CameraActivity extends Activity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+    }
+
+    private void compressVideoLow(String videoPath) {
+        final File thumbnailFile = FileUtils.createVideoThumbnailFile(new File(videoPath));
+        final String destPath = getExternalFilesDir(null) + File.separator + "JCamera" + File.separator + "video_" + System.currentTimeMillis() + ".mp4";
+        final VideoCompress.VideoCompressTask task = VideoCompress.compressVideoLow(videoPath, destPath, new VideoCompress.CompressListener() {
+            @Override
+            public void onStart() {
+                LoadingManager.showProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), "0.00%"));
+            }
+
+            @Override
+            public void onSuccess() {
+                try {
+                    LoadingManager.hideLoadingDialog(CameraActivity.this);
+                    Class crop = Class.forName("com.diandou.activity.PreviewVideoActivity");
+                    Intent intent = new Intent(CameraActivity.this, crop);
+                    intent.putExtra("videoPath", destPath);
+                    intent.putExtra("coverPath", thumbnailFile.getPath());
+                    startActivity(intent);
+                    finish();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFail() {
+                LoadingManager.hideProgress(CameraActivity.this);
+            }
+
+            @Override
+            public void onProgress(float percent) {
+                Log.i(TAG, "onProgress: " + String.valueOf(percent) + "%");
+                DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                String strPercent = decimalFormat.format(percent);
+                LoadingManager.updateProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), strPercent + "%"));
+            }
+        });
+        LoadingManager.OnDismissListener(CameraActivity.this, new LoadingManager.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                task.cancel(true);
             }
         });
     }

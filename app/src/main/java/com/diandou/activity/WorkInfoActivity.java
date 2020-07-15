@@ -20,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
@@ -48,11 +49,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 import okhttp3.Call;
 import okhttp3.Request;
 
 public class WorkInfoActivity extends BaseActivity implements View.OnClickListener, ObservableScrollView.ScrollViewListener {
 
+    private static final String TAG = "WorkInfoActivity";
     private ActivityWorkInfoBinding binding;
     private WorkAdapter adapter;
     private int id;
@@ -74,6 +78,23 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         binding.tvAppreciate.setOnClickListener(this);
         binding.tvComment.setOnClickListener(this);
         binding.tvShare.setOnClickListener(this);
+        binding.progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (mPlayer != null) {
+                    mPlayer.seekTo(seekBar.getProgress());
+                }
+            }
+        });
 
         adapter = new WorkAdapter(this);
         binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

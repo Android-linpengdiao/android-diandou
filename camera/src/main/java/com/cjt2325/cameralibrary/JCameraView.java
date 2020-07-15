@@ -160,6 +160,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         mSwitchCamera.setImageResource(iconSrc);
         mFlashLamp = (ImageView) view.findViewById(R.id.image_flash);
         progressBar.setMax(180);
+        progressBar.setProgress(0);
         setFlashRes();
         mFlashLamp.setOnClickListener(new OnClickListener() {
             @Override

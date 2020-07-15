@@ -21,11 +21,11 @@ android {
 }
 
 dependencies {
-    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(dir: 'libs', include: ['*.jar'])
     androidTestImplementation externalAndroidTestRunner
     androidTestImplementation externalAndroidTestEspressoCore
     testImplementation externalJunit
     implementation externalAndroidAppCompatV7
-    compileOnly files('libs/isoparser-1.0.6.jar')
-    compileOnly files('libs/aspectjrt-1.7.3.jar')
+    api files('libs/isoparser-1.0.6.jar')
+    api files('libs/aspectjrt-1.7.3.jar')
 }

@@ -291,7 +291,7 @@ public class FileUtils {
 
     // 创建一个附件文件
     public static File createAttachmentFile(String fileName) {
-        String path = getChatPath() + fileName;
+        String path = getTempPath() + fileName;
         File file = new File(path);
         file.getParentFile().mkdirs();
         try {

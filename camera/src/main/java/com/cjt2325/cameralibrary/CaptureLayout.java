@@ -133,6 +133,7 @@ public class CaptureLayout extends FrameLayout {
 //        btn_confirm.setVisibility(VISIBLE);
         btn_cancel.setClickable(false);
         btn_confirm.setClickable(false);
+        btn_capture.setClickable(false);
         ObjectAnimator animator_cancel = ObjectAnimator.ofFloat(btn_cancel, "translationX", layout_width / 4, 0);
         ObjectAnimator animator_confirm = ObjectAnimator.ofFloat(btn_confirm, "translationX", -layout_width / 4, 0);
 
@@ -144,6 +145,7 @@ public class CaptureLayout extends FrameLayout {
                 super.onAnimationEnd(animation);
 //                btn_cancel.setClickable(true);
 //                btn_confirm.setClickable(true);
+                btn_capture.setClickable(true);
 
                 if (typeLisenter != null) {
                     typeLisenter.confirm();

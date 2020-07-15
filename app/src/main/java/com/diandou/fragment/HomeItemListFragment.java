@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,25 +66,31 @@ public class HomeItemListFragment extends BaseFragment implements View.OnClickLi
         binding.recyclerView.addItemDecoration(new GridItemDecoration(builder));
         binding.recyclerView.setAdapter(adapter);
 
+        binding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                searchWork();
+            }
+        });
         searchWork();
 
         return binding.getRoot();
     }
 
-    private WorkData workData;
-
     private void searchWork() {
+        binding.swipeRefreshLayout.setRefreshing(true);
         SendRequest.searchWorkHome(type, navId, Constants.perPage, 1, new GenericsCallback<WorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
-
+                binding.swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onResponse(WorkData response, int id) {
-                workData = response;
+                binding.swipeRefreshLayout.setRefreshing(false);
                 if (response.getCode() == 200) {
-                    adapter.loadMoreData(response.getData().getData());
+                    adapter.refreshData(response.getData().getData());
                 } else {
                     ToastUtils.showShort(getActivity(), response.getMsg());
                 }
