@@ -142,7 +142,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 case 100:
                     if (data != null) {
                         int position = data.getIntExtra("position", 0);
-                        binding.viewPager.setCurrentItem(position);
+                        binding.viewPager.setCurrentItem(position + 1);
                     }
                     break;
             }

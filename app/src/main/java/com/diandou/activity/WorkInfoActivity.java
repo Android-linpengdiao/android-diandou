@@ -30,11 +30,14 @@ import com.aliyun.player.AliPlayerFactory;
 import com.aliyun.player.IPlayer;
 import com.aliyun.player.bean.ErrorInfo;
 import com.aliyun.player.bean.InfoBean;
+import com.aliyun.player.bean.InfoCode;
+import com.aliyun.player.nativeclass.CacheConfig;
 import com.aliyun.player.nativeclass.PlayerConfig;
 import com.aliyun.player.nativeclass.TrackInfo;
 import com.aliyun.player.source.UrlSource;
 import com.baselibrary.Constants;
 import com.baselibrary.utils.CommonUtil;
+import com.baselibrary.utils.FileUtils;
 import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.ToastUtils;
 import com.diandou.R;
@@ -72,7 +75,6 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
     private WorkDetail workDetail;
     private CommentData commentData;
-    private WorkData workData;
 
     private GestureDetector detector;
 
@@ -80,6 +82,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_work_info);
+        setStatusBarDarkTheme(false);
 
         binding.playerBack.setOnClickListener(this);
         binding.videoPlay.setOnClickListener(this);
@@ -101,7 +104,6 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (aliyunVodPlayer != null) {
-//                    mPlayer.seekTo(seekBar.getProgress());
                     aliyunVodPlayer.seekTo(seekBar.getProgress());
                 }
             }
@@ -241,6 +243,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
             }
 
         });
+
     }
 
     private void playTime() {
@@ -267,13 +270,16 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         binding.tvAddr.setText(data.getAddr());
         binding.tvTime.setText(data.getUpdated_at());
         binding.tvFollower.setText(String.valueOf(data.getFollower_num()));
-        binding.tvFollower.setSelected(data.isFollower_status());
+//        binding.tvFollower.setSelected(data.isFollower_status());
         binding.tvAppreciate.setText(String.valueOf(data.getAssist_num()));
         binding.tvAppreciate.setSelected(data.isAssist_status());
         GlideLoader.LoderImage(WorkInfoActivity.this, data.getImg(), binding.thumbnails);
 
-        getVideos(data);
-        showContentComment(data);
+//        getVideos(data);
+//        showContentComment(data);
+        if (getUserInfo().getData() != null && data != null && data.getTourist() != null) {
+            isFollow(data);
+        }
 
         if (!CommonUtil.isBlank(data.getLink())) {
             try {
@@ -327,6 +333,34 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
         });
 
+    }
+
+    private void isFollow(final WorkDetail.DataBean data) {
+        SendRequest.isFollow(getUserInfo().getData().getId(), data.getTourist().getId(), new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                try {
+                    if (!CommonUtil.isBlank(response)) {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.optInt("code") == 200
+                                && !CommonUtil.isBlank(jsonObject.optJSONObject("data"))
+                                && !CommonUtil.isBlank(jsonObject.optJSONObject("data").optString("id"))) {
+                            binding.tvFollower.setSelected(true);
+                            binding.tvFollower.setText(String.valueOf(data.getFollower_num()));
+                        } else {
+
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void centerFollow(final WorkDetail data, String followUrl) {
@@ -543,44 +577,8 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         if (aliyunVodPlayer != null) {
             aliyunVodPlayer.release();
         }
-//        stopUpdateTimer();
-//        progressUpdateTimer = null;
         super.onDestroy();
     }
-
-//    private boolean inSeek = false;
-//
-//    private void showVideoProgressInfo() {
-//        if (aliyunVodPlayer != null && !inSeek) {
-//            long curPosition = 0;
-//            long duration = aliyunVodPlayer.getDuration();
-//            binding.currentDuration.setText(CommonUtil.Formatter.formatTime((int) curPosition));
-//            binding.totalDuration.setText(CommonUtil.Formatter.formatTime((int) duration));
-//            binding.progress.setMax((int) duration);
-//            binding.progress.setProgress((int) curPosition);
-//        }
-//        startUpdateTimer();
-//    }
-//
-//    private void startUpdateTimer() {
-//        if (progressUpdateTimer != null) {
-//            progressUpdateTimer.removeMessages(0);
-//            progressUpdateTimer.sendEmptyMessageDelayed(0, 1000);
-//        }
-//    }
-//
-//    private void stopUpdateTimer() {
-//        if (progressUpdateTimer != null) {
-//            progressUpdateTimer.removeMessages(0);
-//        }
-//    }
-//
-//    private Handler progressUpdateTimer = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            showVideoProgressInfo();
-//        }
-//    };
 
 
     /**
@@ -614,9 +612,10 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
             public void onCompletion() {
                 //播放完成事件
                 binding.videoPlay.setSelected(false);
-                aliyunVodPlayer.reset();
+//                aliyunVodPlayer.reset();
                 binding.currentDuration.setText(CommonUtil.Formatter.formatTime(0));
                 binding.progress.setProgress(0);
+                aliyunVodPlayer.seekTo(1);
             }
         });
         aliyunVodPlayer.setOnErrorListener(new IPlayer.OnErrorListener() {
@@ -656,10 +655,12 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onInfo(InfoBean infoBean) {
                 //其他信息的事件，type包括了：循环播放开始，缓冲位置，当前播放位置，自动播放开始等
-                binding.currentDuration.setText(CommonUtil.Formatter.formatTime((int) infoBean.getExtraValue()));
-                binding.totalDuration.setText(CommonUtil.Formatter.formatTime((int) aliyunVodPlayer.getDuration()));
-                binding.progress.setProgress((int) infoBean.getExtraValue());
-                binding.progress.setMax((int) aliyunVodPlayer.getDuration());
+                if (infoBean.getCode() == InfoCode.CurrentPosition) {
+                    binding.currentDuration.setText(CommonUtil.Formatter.formatTime((int) infoBean.getExtraValue()));
+                    binding.totalDuration.setText(CommonUtil.Formatter.formatTime((int) aliyunVodPlayer.getDuration()));
+                    binding.progress.setProgress((int) infoBean.getExtraValue());
+                    binding.progress.setMax((int) aliyunVodPlayer.getDuration());
+                }
             }
 
         });
@@ -729,9 +730,10 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         PlayerConfig config = aliyunVodPlayer.getConfig();
         //设置referer
         config.mStartBufferDuration = 1;
-        //其他设置
         //设置配置给播放器
         aliyunVodPlayer.setConfig(config);
+        //循环播放
+        aliyunVodPlayer.setLoop(true);
 
 
 //        //创建UrlSource
@@ -803,147 +805,6 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-
-//    private void playVideo(String videoUrl) {
-//        binding.surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-//            public void surfaceCreated(SurfaceHolder holder) {
-//                holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
-//                holder.setKeepScreenOn(true);
-//                // 对于从后台切换到前台,需要重设surface;部分手机锁屏也会做前后台切换的处理
-//                if (mPlayer != null) {
-//                    mPlayer.setVideoSurface(holder.getSurface());
-//                }
-//
-//            }
-//
-//            public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-//                if (mPlayer != null) {
-//                    mPlayer.setSurfaceChanged();
-//                }
-//            }
-//
-//            public void surfaceDestroyed(SurfaceHolder holder) {
-//            }
-//        });
-//        binding.videoPlay.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                if (mPlayer.isPlaying()) {
-//                    binding.videoPlay.setImageResource(R.drawable.video_play);
-//                    mPlayer.pause();
-//                } else {
-//                    binding.videoPlay.setImageResource(R.drawable.video_pause);
-//                    mPlayer.play();
-//                }
-//            }
-//        });
-//
-//
-//        mPlayer = new AliVcMediaPlayer(WorkInfoActivity.this, binding.surfaceView);
-//        mPlayer.setCirclePlay(true);
-//
-//        mPlayer.setPreparedListener(new MediaPlayer.MediaPlayerPreparedListener() {
-//            @Override
-//            public void onPrepared() {
-//                binding.surfaceView.setBackgroundColor(Color.TRANSPARENT);
-//                binding.loading.setVisibility(View.GONE);
-//                binding.thumbnails.setVisibility(View.GONE);
-//                if (mPlayer != null) {
-//                    mPlayer.play();
-//                    playTime();
-//                }
-//
-//            }
-//        });
-////        mPlayer.setPcmDataListener(new MyPcmDataListener(this));
-////        mPlayer.setCircleStartListener(new MyCircleStartListener(this));
-//        mPlayer.setFrameInfoListener(new MediaPlayer.MediaPlayerFrameInfoListener() {
-//            @Override
-//            public void onFrameInfoListener() {
-//                binding.videoPlay.setImageResource(R.drawable.video_pause);
-//                binding.thumbnails.animate().alpha(0).setDuration(200).start();
-//                showVideoProgressInfo();
-//            }
-//        });
-//        mPlayer.setErrorListener(new MediaPlayer.MediaPlayerErrorListener() {
-//            @Override
-//            public void onError(int i, String s) {
-//                ToastUtils.showShort(getApplicationContext(), "网络连接似乎出现问题，请重试");
-//            }
-//        });
-//        mPlayer.setCompletedListener(new MediaPlayer.MediaPlayerCompletedListener() {
-//            @Override
-//            public void onCompleted() {
-//                isCompleted = true;
-//                showVideoProgressInfo();
-//                stopUpdateTimer();
-//            }
-//        });
-//        mPlayer.setSeekCompleteListener(new MediaPlayer.MediaPlayerSeekCompleteListener() {
-//            @Override
-//            public void onSeekCompleted() {
-//                inSeek = false;
-//            }
-//        });
-//        mPlayer.setStoppedListener(new MediaPlayer.MediaPlayerStoppedListener() {
-//            @Override
-//            public void onStopped() {
-//                binding.videoPlay.setImageResource(R.drawable.video_play);
-//            }
-//        });
-//        mPlayer.enableNativeLog();
-//        if (mPlayer != null) {
-//            mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
-//        }
-//        mPlayer.prepareToPlay(videoUrl);
-//        binding.loading.setVisibility(View.VISIBLE);
-//
-//    }
-//
-//    private boolean inSeek = false;
-//    private boolean isCompleted = false;
-//
-//    private AliVcMediaPlayer mPlayer;
-//
-//    private void start() {
-//        if (mPlayer != null) {
-////            mPlayer.prepareToPlay(url1);
-//        }
-//    }
-//
-//    private void pause() {
-//        if (mPlayer != null) {
-//            mPlayer.pause();
-//        }
-//    }
-//
-//    private void stop() {
-//        if (mPlayer != null) {
-//            mPlayer.stop();
-//        }
-//    }
-//
-//    private void resume() {
-//        if (mPlayer != null) {
-//            mPlayer.play();
-//        }
-//    }
-//
-//    private void destroy() {
-//        if (mPlayer != null) {
-//            mPlayer.stop();
-//            mPlayer.destroy();
-//        }
-//    }
-//
-//    private void replay() {
-//        stop();
-//        start();
-//    }
-
-
-    //------------------------------------全屏切换-------------------------------------------------
 
     private void toggleOrientation() {
         if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {

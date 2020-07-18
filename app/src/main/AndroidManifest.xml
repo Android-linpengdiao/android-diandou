@@ -29,7 +29,8 @@
             android:theme="@style/ImageActivityTheme" />
         <activity
             android:name=".activity.WorkInfoActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/WorkInfoActivityTheme"/>
         <activity android:name=".activity.ReleaseActivity" />
         <activity android:name=".activity.NoticeListActivity" />
         <activity android:name=".activity.UserHomeActivity" />
