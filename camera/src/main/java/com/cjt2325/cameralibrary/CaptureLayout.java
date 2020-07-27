@@ -25,6 +25,7 @@ import com.cjt2325.cameralibrary.listener.CaptureListener;
 import com.cjt2325.cameralibrary.listener.ClickListener;
 import com.cjt2325.cameralibrary.listener.ReturnListener;
 import com.cjt2325.cameralibrary.listener.TypeListener;
+import com.cjt2325.cameralibrary.view.CameraOnClickListener;
 
 
 /**
@@ -169,9 +170,9 @@ public class CaptureLayout extends FrameLayout {
         btn_capture_param.gravity = Gravity.CENTER_VERTICAL;
         btn_capture_param.setMargins((layout_width / 2) - CommonUtil.dip2px(context, 82) / 2, 0, 0, 0);
         btn_capture.setLayoutParams(btn_capture_param);
-        btn_capture.setOnClickListener(new OnClickListener() {
+        btn_capture.setOnClickListener(new CameraOnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void OnClickListener(View view) {
                 btn_capture.setSelected(!btn_capture.isSelected());
                 if (btn_capture.isSelected()) {
                     if (captureLisenter != null) {
@@ -189,6 +190,26 @@ public class CaptureLayout extends FrameLayout {
                 }
             }
         });
+//        btn_capture.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                btn_capture.setSelected(!btn_capture.isSelected());
+//                if (btn_capture.isSelected()) {
+//                    if (captureLisenter != null) {
+//                        captureLisenter.recordStart();
+//                        startUpdateTimer();
+//                    }
+//                    startAlphaAnimation();
+//                } else {
+//                    if (captureLisenter != null) {
+//                        captureLisenter.recordEnd(0);
+//                        stopUpdateTimer();
+//                    }
+//                    startAlphaAnimation();
+//                    startTypeBtnAnimator();
+//                }
+//            }
+//        });
 
 //        btn_capture = new CaptureButton(getContext(), button_size);
 //        LayoutParams btn_capture_param = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);

@@ -27,7 +27,7 @@
                     android:id="@+id/surfaceView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/black"/>
+                    android:background="@color/black" />
 
                 <ImageView
                     android:id="@+id/thumbnails"
@@ -41,15 +41,41 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:background="@drawable/player_cover_top"
-                        android:layout_height="wrap_content">
+                        android:layout_height="50dp"
+                        android:background="@drawable/player_cover_top">
 
                         <ImageView
                             android:id="@+id/player_back"
                             android:layout_width="40dp"
                             android:layout_height="wrap_content"
                             android:padding="15dp"
-                            android:src="@drawable/back"/>
+                            android:src="@drawable/back" />
+
+                        <LinearLayout
+                            android:id="@+id/tousuView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingRight="@dimen/padding"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/tousu" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="5dp"
+                                android:gravity="center"
+                                android:text="投诉"
+                                android:textColor="#ffffffff"
+                                android:textSize="16sp" />
+                        </LinearLayout>
 
                     </RelativeLayout>
 
@@ -117,7 +143,7 @@
                     style="@android:style/Widget.Holo.ProgressBar.Large"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true" />
 
             </RelativeLayout>
 

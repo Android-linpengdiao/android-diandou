@@ -75,6 +75,8 @@ public class APIUrls {
     public final static String url_publishWork = url_domain + "api/center/publishWork";
     //获取用户的点赞
     public final static String url_centerAssist = url_domain + "api/center/assist";
+    // 作品投诉
+    public final static String url_centerTip = url_domain + "api/center/tip";
 
     //获取系统消息
     public final static String url_commonMessage = url_domain + "api/common/message";

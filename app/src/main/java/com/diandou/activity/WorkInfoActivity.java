@@ -262,6 +262,13 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
     private void initView(WorkDetail.DataBean data) {
 
+        if (CommonUtil.isBlank(getUserInfo().getData()) || !CommonUtil.isBlank(getUserInfo().getData()) && data.getTourist_id() != getUserInfo().getData().getId()) {
+            binding.tousuView.setVisibility(View.VISIBLE);
+        } else {
+            binding.tousuView.setVisibility(View.GONE);
+        }
+
+        binding.tousuView.setOnClickListener(this);
         binding.viewLayout.setScrollViewListener(this);
         binding.viewLayout.setVisibility(View.VISIBLE);
         binding.bottomView.setVisibility(View.VISIBLE);
@@ -275,8 +282,8 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         binding.tvAppreciate.setSelected(data.isAssist_status());
         GlideLoader.LoderImage(WorkInfoActivity.this, data.getImg(), binding.thumbnails);
 
-//        getVideos(data);
-//        showContentComment(data);
+        getVideos(data);
+        showContentComment(data);
         if (getUserInfo().getData() != null && data != null && data.getTourist() != null) {
             isFollow(data);
         }
@@ -378,7 +385,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
                         if (jsonObject.optInt("code") == 200) {
                             binding.tvFollower.setSelected(!binding.tvFollower.isSelected());
                             data.getData().setFollower_num(binding.tvFollower.isSelected() ? data.getData().getFollower_num() + 1 : data.getData().getFollower_num() - 1);
-                            binding.tvFollower.setText(data.getData().getFollower_num() + "");
+                            binding.tvFollower.setText((data.getData().getFollower_num()>0?data.getData().getFollower_num():0) + "");
                             if (binding.tvFollower.isSelected()) {
                                 ToastUtils.showShort(WorkInfoActivity.this, "已关注");
                             }
@@ -508,6 +515,17 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.fullscreen:
                 toggleOrientation();
+                break;
+            case R.id.tousuView:
+                if (getUserInfo().getData() != null) {
+                    if (workDetail != null && workDetail.getData() != null) {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("id",id);
+                        openActivity(TousuActivity.class,bundle);
+                    }
+                } else {
+                    openActivity(LoginActivity.class);
+                }
                 break;
             case R.id.tv_follower:
                 if (getUserInfo().getData() != null) {

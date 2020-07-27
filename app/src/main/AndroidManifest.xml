@@ -20,7 +20,10 @@
         android:roundIcon="@mipmap/ic_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.PreviewVideoActivity"></activity>
+
+        <activity android:name=".activity.TousuActivity"></activity>
+        <activity android:name=".activity.BannerInfoActivity" />
+        <activity android:name=".activity.PreviewVideoActivity" />
         <activity
             android:name=".activity.VideoTypeActivity"
             android:theme="@style/WelcomeTheme" />

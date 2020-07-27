@@ -504,6 +504,22 @@ public class SendRequest {
     }
 
     /**
+     * @param tourist_id 用户id（必填）
+     * @param content_id 视频id（必填）
+     * @param report     投诉内容（必填）
+     * @param img        投诉图片 多个，拼接（必填）
+     * @param call
+     */
+    public static void centerTip(int tourist_id, int content_id, String report, String img, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("content_id", String.valueOf(content_id));
+        map.put("report", report);
+        map.put("img", img);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_centerTip).build().execute(call);
+    }
+
+    /**
      * 修改个人信息
      *
      * @param avatar

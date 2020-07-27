@@ -1,13 +1,14 @@
 package com.diandou.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class BannerData {
+public class BannerData implements Serializable {
 
     /**
      * code : 200
      * msg : 成功
-     * data : [{"id":1,"created_at":"2019-09-23 23:40:00","updated_at":"2020-03-27 17:46:16","title":"欢迎来到U点逗","desc":"<p>欢迎来到U点逗的大家庭里。<\/p>\r\n<p>希望每一个视频都给你们带来欢乐。<\/p>\r\n<p>在大家庭里能找到你们想要的视频内容，<\/p>\r\n<p>如：想要看儿童讲完整一个自编的故事，<\/p>\r\n<p>&nbsp; &nbsp; &nbsp; 想看儿童每天学习的成果，<\/p>\r\n<p>&nbsp; &nbsp; &nbsp; 想看儿童讲的每一个旅游景点历史，<\/p>\r\n<p>&nbsp; &nbsp; &nbsp; 想看儿童说出的心里话，<\/p>\r\n<p>在这里都可以找到你们想要的视频。<\/p>","img":"banners/March2020/U77FPc3zu4KtZpVHal77.jpg","href":"https://www.baidu.com","type":1},{"id":2,"created_at":"2019-10-14 15:53:00","updated_at":"2020-03-27 17:29:47","title":"鼠年开心","desc":"<p>在新的鼠年里，欢迎来到U点逗的大家庭。<\/p>\r\n<p>祝愿视频里面的每个儿童天天微笑。<\/p>\r\n<p>祝愿来到大家庭的每一个成员，在观看每一个微笑的视频同时也为你们带来欢乐。<\/p>","img":"banners/March2020/YZkCrhbZVTW4zVbLo18j.jpg","href":"https://www.baidu.com","type":1}]
+     * data : [{"id":1,"created_at":"2019-09-23 23:40:00","updated_at":"2020-03-27 17:46:16","title":"欢迎来到U点逗","desc":"<p>欢迎来到U点逗的大家庭里。<\/p>\r\n<p>希望每一个视频都给你们带来欢乐。<\/p>\r\n<p>在大家庭里能找到你们想要的视频内容，<\/p>\r\n<p>如：想要看儿童讲完整一个自编的故事，<\/p>\r\n<p>&nbsp; &nbsp; &nbsp; 想看儿童每天学习的成果，<\/p>\r\n<p>&nbsp; &nbsp; &nbsp; 想看儿童讲的每一个旅游景点历史，<\/p>\r\n<p>&nbsp; &nbsp; &nbsp; 想看儿童说出的心里话，<\/p>\r\n<p>在这里都可以找到你们想要的视频。<\/p>","img":"banners/March2020/U77FPc3zu4KtZpVHal77.jpg","href":"https://www.baidu.com","type":1,"content_id":null,"link_type":2}]
      */
 
     private int code;
@@ -38,7 +39,7 @@ public class BannerData {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * id : 1
          * created_at : 2019-09-23 23:40:00
@@ -55,6 +56,8 @@ public class BannerData {
          * img : banners/March2020/U77FPc3zu4KtZpVHal77.jpg
          * href : https://www.baidu.com
          * type : 1
+         * content_id : null
+         * link_type : 2
          */
 
         private int id;
@@ -65,6 +68,8 @@ public class BannerData {
         private String img;
         private String href;
         private int type;
+        private int content_id;
+        private int link_type;
 
         public int getId() {
             return id;
@@ -128,6 +133,22 @@ public class BannerData {
 
         public void setType(int type) {
             this.type = type;
+        }
+
+        public int getContent_id() {
+            return content_id;
+        }
+
+        public void setContent_id(int content_id) {
+            this.content_id = content_id;
+        }
+
+        public int getLink_type() {
+            return link_type;
+        }
+
+        public void setLink_type(int link_type) {
+            this.link_type = link_type;
         }
     }
 }

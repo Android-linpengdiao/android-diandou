@@ -18,9 +18,11 @@ import com.diandou.MainActivity;
 import com.diandou.MyApplication;
 import com.diandou.NavData;
 import com.diandou.R;
+import com.diandou.activity.BannerInfoActivity;
 import com.diandou.activity.LoginActivity;
 import com.diandou.activity.SearchActivity;
 import com.diandou.activity.TabTypeActivity;
+import com.diandou.activity.WorkInfoActivity;
 import com.diandou.adapter.PagerAdapter;
 import com.diandou.databinding.FragmentHomeBinding;
 import com.diandou.model.BannerData;
@@ -101,7 +103,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         return binding.getRoot();
     }
 
-    private void initBanner(List<BannerData.DataBean> data) {
+    private void initBanner(final List<BannerData.DataBean> data) {
         binding.banner.setImageLoader(new GlideImageLoader(10));
         binding.banner.setDelayTime(5000);
         List<String> list = new ArrayList<>();
@@ -113,10 +115,20 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 .setOnBannerListener(new OnBannerListener() {
                     @Override
                     public void OnBannerClick(int position) {
+                        // 1视频 2详情
+                        if (data.get(position).getLink_type() == 1) {
+                            Intent intent = new Intent(getActivity(), WorkInfoActivity.class);
+                            intent.putExtra("id", data.get(position).getContent_id());
+                            startActivity(intent);
+                        } else if (data.get(position).getLink_type() == 2) {
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("dataBean", data.get(position));
+                            openActivity(BannerInfoActivity.class, bundle);
+                        }
 
                     }
-                })
-                .start();
+                }).start();
+
     }
 
     @Override
