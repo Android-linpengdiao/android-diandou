@@ -841,7 +841,6 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
         binding.videoContainer.setLayoutParams(layoutParams);
-        binding.currentDuration.setVisibility(View.GONE);
         binding.fullscreen.setVisibility(View.GONE);
         hideNavigationBar();
     }
