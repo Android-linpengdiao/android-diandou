@@ -96,7 +96,7 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
                         if (jsonObject.optInt("code") == 200
                                 && !CommonUtil.isBlank(jsonObject.optJSONObject("data"))
                                 && !CommonUtil.isBlank(jsonObject.optJSONObject("data").optString("id"))) {
-                            binding.headLoginLayout.tvIsFollow.setSelected(!binding.headLoginLayout.tvIsFollow.isSelected());
+                            binding.headLoginLayout.tvIsFollow.setSelected(true);
                             binding.headLoginLayout.tvIsFollow.setText(binding.headLoginLayout.tvIsFollow.isSelected() ? "已关注" : "关注");
                         } else {
 
@@ -134,8 +134,8 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
         binding.headLoginLayout.userName.setText(userInfo.getData().getName());
         binding.headLoginLayout.touristId.setText("点逗号：" + userInfo.getData().getTourist_id());
         GlideLoader.LoderCircleImage(UserHomeActivity.this, userInfo.getData().getAvatar(), binding.headLoginLayout.userIcon);
-        binding.headLoginLayout.tvFollowers.setText(getUserInfo().getData().getFollowers() + "");
-        binding.headLoginLayout.tvLiker.setText(getUserInfo().getData().getLiker() + "");
+        binding.headLoginLayout.tvFollowers.setText(userInfo.getData().getConcern() + "");
+        binding.headLoginLayout.tvLiker.setText(userInfo.getData().getLiker() + "");
 
         binding.headLoginLayout.tvIsFollow.setSelected(isFollow);
         binding.headLoginLayout.tvIsFollow.setText(isFollow ? "已关注" : "关注");
