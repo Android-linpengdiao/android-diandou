@@ -1,6 +1,8 @@
 package com.diandou.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.callbacks.StringCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
+import com.okhttp.utils.APIUrls;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,6 +62,15 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 register();
+            }
+        });
+        binding.tvProtocol.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setData(Uri.parse(APIUrls.url_protocol));
+                intent.setAction(Intent.ACTION_VIEW);
+                startActivity(intent);
             }
         });
 

@@ -9,7 +9,7 @@ public class APIUrls {
     public final static String url_ossFileUpload = url_domain + "api/common/ossFileUpload";
 //    public final static String url_createSecurityToken = url_domain + "api/common/token";
     public final static String url_createSecurityToken = url_domain + "api/common/stsToken";
-    public final static String URL_STORAGE_CreateSecurityToken = "http://api.lgdama.com:10001/storage/createSecurityToken?session=";
+    public final static String url_protocol = url_domain + "upload/20200808092346og6bK.html";
 
 
     //用户信息
