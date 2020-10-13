@@ -3,7 +3,7 @@ package com.okhttp.utils;
 public class APIUrls {
 
 
-    public final static String url_domain = "http://www.udiandou.com/";
+    public final static String url_domain = "https://www.udiandou.com/";
 
     public final static String url_fileUpload = url_domain + "api/common/fileUpload";
     public final static String url_ossFileUpload = url_domain + "api/common/ossFileUpload";

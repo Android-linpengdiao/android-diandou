@@ -3,9 +3,9 @@ package com.diandou;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RadioGroup;
@@ -15,16 +15,18 @@ import com.cjt2325.cameralibrary.CameraActivity;
 import com.cjt2325.cameralibrary.JCameraView;
 import com.diandou.activity.BaseActivity;
 import com.diandou.activity.LoginActivity;
-import com.diandou.activity.ReleaseActivity;
 import com.diandou.databinding.ActivityMainBinding;
 import com.diandou.fragment.FollowFragment;
 import com.diandou.fragment.HomeFragment;
 import com.diandou.fragment.MessageFragment;
 import com.diandou.fragment.MineFragment;
-import com.diandou.fragment.ReleaseFragment;
 import com.diandou.utils.ViewUtils;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.StringCallback;
+
+import org.json.JSONObject;
+
+import java.io.File;
 
 import okhttp3.Call;
 
