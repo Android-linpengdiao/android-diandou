@@ -5,7 +5,7 @@ public class Config {
 
     // 微信
     public final static String WECHAT_APP_ID = "wxa3e9ac5c702215be";
-    public final static String WECHAT_APP_SECRET = "b26394d61138ac310bdc9798b96ee55c";
+    public final static String WECHAT_APP_SECRET = "7135c8428aa5e7d7fb69a6afc73d47ff";
 
     // QQ
     public final static String QQ_APP_ID = "101808553";
