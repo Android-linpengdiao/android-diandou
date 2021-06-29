@@ -20,7 +20,7 @@ import com.cjt2325.cameralibrary.listener.JCameraListener;
 import com.cjt2325.cameralibrary.mp4parse.video.Mp4ParseUtil;
 import com.cjt2325.cameralibrary.util.DeviceUtil;
 import com.cjt2325.cameralibrary.util.FileUtil;
-import com.vincent.videocompressor.VideoCompress;
+//import com.vincent.videocompressor.VideoCompress;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -132,9 +132,21 @@ public class CameraActivity extends Activity {
                         Mp4ParseUtil.appendMp4List(mp4PathList, videoPath);
                         LoadingManager.hideLoadingDialog(CameraActivity.this);
 
-                        compressVideoLow(videoPath);
+                        final File thumbnailFile = FileUtils.createVideoThumbnailFile(new File(videoPath));
+
+                        LoadingManager.hideLoadingDialog(CameraActivity.this);
+                        Class crop = Class.forName("com.diandou.activity.PreviewVideoActivity");
+                        Intent intent = new Intent(CameraActivity.this, crop);
+                        intent.putExtra("videoPath", videoPath);
+                        intent.putExtra("coverPath", thumbnailFile.getPath());
+                        startActivity(intent);
+                        finish();
+
+//                        compressVideoLow(videoPath);
 
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    }catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
                 } else {
@@ -153,50 +165,50 @@ public class CameraActivity extends Activity {
         });
     }
 
-    private void compressVideoLow(String videoPath) {
-        final File thumbnailFile = FileUtils.createVideoThumbnailFile(new File(videoPath));
-        final String destPath = getExternalFilesDir(null) + File.separator + "JCamera" + File.separator + "video_" + System.currentTimeMillis() + ".mp4";
-        final VideoCompress.VideoCompressTask task = VideoCompress.compressVideoLow(videoPath, destPath, new VideoCompress.CompressListener() {
-            @Override
-            public void onStart() {
-                LoadingManager.showProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), "0.00%"));
-            }
-
-            @Override
-            public void onSuccess() {
-                try {
-                    LoadingManager.hideLoadingDialog(CameraActivity.this);
-                    Class crop = Class.forName("com.diandou.activity.PreviewVideoActivity");
-                    Intent intent = new Intent(CameraActivity.this, crop);
-                    intent.putExtra("videoPath", destPath);
-                    intent.putExtra("coverPath", thumbnailFile.getPath());
-                    startActivity(intent);
-                    finish();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFail() {
-                LoadingManager.hideProgress(CameraActivity.this);
-            }
-
-            @Override
-            public void onProgress(float percent) {
-                Log.i(TAG, "onProgress: " + String.valueOf(percent) + "%");
-                DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                String strPercent = decimalFormat.format(percent);
-                LoadingManager.updateProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), strPercent + "%"));
-            }
-        });
-        LoadingManager.OnDismissListener(CameraActivity.this, new LoadingManager.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                task.cancel(true);
-            }
-        });
-    }
+//    private void compressVideoLow(String videoPath) {
+//        final File thumbnailFile = FileUtils.createVideoThumbnailFile(new File(videoPath));
+//        final String destPath = getExternalFilesDir(null) + File.separator + "JCamera" + File.separator + "video_" + System.currentTimeMillis() + ".mp4";
+//        final VideoCompress.VideoCompressTask task = VideoCompress.compressVideoLow(videoPath, destPath, new VideoCompress.CompressListener() {
+//            @Override
+//            public void onStart() {
+//                LoadingManager.showProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), "0.00%"));
+//            }
+//
+//            @Override
+//            public void onSuccess() {
+//                try {
+//                    LoadingManager.hideLoadingDialog(CameraActivity.this);
+//                    Class crop = Class.forName("com.diandou.activity.PreviewVideoActivity");
+//                    Intent intent = new Intent(CameraActivity.this, crop);
+//                    intent.putExtra("videoPath", destPath);
+//                    intent.putExtra("coverPath", thumbnailFile.getPath());
+//                    startActivity(intent);
+//                    finish();
+//                } catch (ClassNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFail() {
+//                LoadingManager.hideProgress(CameraActivity.this);
+//            }
+//
+//            @Override
+//            public void onProgress(float percent) {
+//                Log.i(TAG, "onProgress: " + String.valueOf(percent) + "%");
+//                DecimalFormat decimalFormat = new DecimalFormat("0.00");
+//                String strPercent = decimalFormat.format(percent);
+//                LoadingManager.updateProgress(CameraActivity.this, String.format(getResources().getString(R.string.str_updata_wait), strPercent + "%"));
+//            }
+//        });
+//        LoadingManager.OnDismissListener(CameraActivity.this, new LoadingManager.OnDismissListener() {
+//            @Override
+//            public void onDismiss() {
+//                task.cancel(true);
+//            }
+//        });
+//    }
 
     @Override
     protected void onStart() {

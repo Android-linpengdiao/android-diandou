@@ -42,7 +42,7 @@ import com.media.utils.FileUtils;
 import com.media.utils.LoadingManager;
 import com.media.utils.MediaCommonUtil;
 import com.media.utils.ToastUtils;
-import com.vincent.videocompressor.VideoCompress;
+//import com.vincent.videocompressor.VideoCompress;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -465,41 +465,47 @@ public class MediaActivity extends AppCompatActivity implements View.OnClickList
                     } else if (type.equals(ImageModel.TYPE_VIDEO)) {
                         for (final ImageModel imageModel : selecImageList) {
                             final File thumbnailFile = FileUtils.createVideoThumbnailFile(new File(imageModel.getPath()));
-                            String destPath = getExternalFilesDir(null) + File.separator + "JCamera" + File.separator + "video_" + System.currentTimeMillis() + ".mp4";
-                            final VideoCompress.VideoCompressTask task = VideoCompress.compressVideoLow(imageModel.getPath(), destPath, new VideoCompress.CompressListener() {
-                                @Override
-                                public void onStart() {
-                                    LoadingManager.showProgress(MediaActivity.this, String.format(getResources().getString(R.string.str_updata_wait), "0.00%"));
-                                }
 
-                                @Override
-                                public void onSuccess() {
-                                    LoadingManager.hideProgress(MediaActivity.this);
-                                    imageModel.setPath(imageModel.getPath());
-                                    imageModel.setThumb(thumbnailFile.getPath());
-                                    sendList.add(imageModel);
-                                    sendMedias();
-                                }
+                            imageModel.setPath(imageModel.getPath());
+                            imageModel.setThumb(thumbnailFile.getPath());
+                            sendList.add(imageModel);
+                            sendMedias();
 
-                                @Override
-                                public void onFail() {
-                                    LoadingManager.hideProgress(MediaActivity.this);
-                                }
-
-                                @Override
-                                public void onProgress(float percent) {
-                                    Log.i(TAG, "onProgress: " + String.valueOf(percent) + "%");
-                                    DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                                    String strPercent = decimalFormat.format(percent);
-                                    LoadingManager.updateProgress(MediaActivity.this, String.format(getResources().getString(R.string.str_updata_wait), strPercent + "%"));
-                                }
-                            });
-                            LoadingManager.OnDismissListener(MediaActivity.this, new LoadingManager.OnDismissListener() {
-                                @Override
-                                public void onDismiss() {
-                                    task.cancel(true);
-                                }
-                            });
+//                            String destPath = getExternalFilesDir(null) + File.separator + "JCamera" + File.separator + "video_" + System.currentTimeMillis() + ".mp4";
+//                            final VideoCompress.VideoCompressTask task = VideoCompress.compressVideoLow(imageModel.getPath(), destPath, new VideoCompress.CompressListener() {
+//                                @Override
+//                                public void onStart() {
+//                                    LoadingManager.showProgress(MediaActivity.this, String.format(getResources().getString(R.string.str_updata_wait), "0.00%"));
+//                                }
+//
+//                                @Override
+//                                public void onSuccess() {
+//                                    LoadingManager.hideProgress(MediaActivity.this);
+//                                    imageModel.setPath(imageModel.getPath());
+//                                    imageModel.setThumb(thumbnailFile.getPath());
+//                                    sendList.add(imageModel);
+//                                    sendMedias();
+//                                }
+//
+//                                @Override
+//                                public void onFail() {
+//                                    LoadingManager.hideProgress(MediaActivity.this);
+//                                }
+//
+//                                @Override
+//                                public void onProgress(float percent) {
+//                                    Log.i(TAG, "onProgress: " + String.valueOf(percent) + "%");
+//                                    DecimalFormat decimalFormat = new DecimalFormat("0.00");
+//                                    String strPercent = decimalFormat.format(percent);
+//                                    LoadingManager.updateProgress(MediaActivity.this, String.format(getResources().getString(R.string.str_updata_wait), strPercent + "%"));
+//                                }
+//                            });
+//                            LoadingManager.OnDismissListener(MediaActivity.this, new LoadingManager.OnDismissListener() {
+//                                @Override
+//                                public void onDismiss() {
+//                                    task.cancel(true);
+//                                }
+//                            });
                         }
                     }
                 }

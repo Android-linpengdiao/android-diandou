@@ -277,7 +277,7 @@ public class WorkInfoActivity extends BaseActivity implements View.OnClickListen
 
         binding.tvDesc.setText(data.getDesc());
         binding.tvAddr.setText(data.getAddr());
-        binding.tvTime.setText(data.getUpdated_at());
+        binding.tvTime.setText(data.getCreated_at());
         binding.tvFollower.setText(String.valueOf(data.getFollower_num()));
 //        binding.tvFollower.setSelected(data.isFollower_status());
         binding.tvAppreciate.setText(String.valueOf(data.getAssist_num()));
